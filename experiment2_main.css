@@ -1,0 +1,113 @@
+.page {
+    overflow-x: hidden;
+  }
+
+.exptwoslider {
+    width: 100%;
+    margin: auto;
+    position: relative;
+}
+.slider {
+  -webkit-appearance: none;
+  width: 800px;
+  height: 7px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+  right : 0;
+}
+  
+  /* 
+  #hello {
+      width: 60%;
+      height: 100%;
+  } */
+  
+  column {
+    /* display: inline-block; */
+    margin: auto;
+    display: flex;
+  }
+  .gsearch {
+    width: 1%;
+  }
+  
+  .modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+  }
+  
+  /* #mainC {
+      width: 40% !important;
+      height: 40% !important;
+   display: inline-block !important;
+  } */
+  
+  .v-datalist-container {
+    height: 800px;
+  }
+  
+  .v-slider-full {
+    width: 80%;
+  }
+  
+  .input-form {
+    display: none;
+    color: black;
+  }
+  
+  .add {
+    font-size: 0.9rem;
+  }
+  
+  .left {
+    clear: both;
+  }
+  
+  .exp {
+    clear: both;
+    /* width: 60% !important; */
+  }
+  
+  .right {
+    clear: both;
+  }
+  
+  @media screen and (max-width: 1023px) {
+    .left {
+      clear: both;
+    }
+  
+    .right {
+      clear: both;
+    }
+  
+    .exp {
+      clear: both;
+      /* width: 100% !important; */
+    }
+  }
+  
+  #top-border {
+    border-top: 1px solid black;
+  }
+  
