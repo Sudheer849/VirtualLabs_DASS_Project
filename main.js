@@ -316,13 +316,14 @@ function Rotate(event) {
   console.log(variable);
 }
 
-ModelAdd.onclick = function () {
+document.getElementById("myBtn").onclick = function () {
   Model1.style.display = "block";
   modelbutton2.addEventListener("click", () => {
     var xcoord = document.getElementById("x1").value;
     var ycoord = document.getElementById("y1").value;
     var zcoord = document.getElementById("z1").value;
     // alert(document.getElementById("hi").value);
+    no_of_shapes++;
     if (document.getElementById("hi").value == "Cube") {
       createCube(xcoord, ycoord, zcoord);
       // createCube(xcoord, ycoord, zcoord);
@@ -356,7 +357,9 @@ var shift = new THREE.Vector3(); // distance between position of an object and p
 var isDragging = false;
 var dragObject;
 var point = [];
+var shapevertex = [];
 var dott = [];
+var no_of_shapes = 0;
 function SelectShape(e) {
   document.getElementById("Add-shape").value = e.target.value;
 }
@@ -369,38 +372,67 @@ function ondblclick(event) {
   raycaster1.setFromCamera(mouse, camera);
   var intersects = raycaster1.intersectObjects(shapes);
   if (intersects.length > 0) {
-    Model.style.display = "block";
-    deletebutton.addEventListener("click", () => {
+    console.log(
+      intersects[0].object.position.x,
+      intersects[0].object.position.y,
+      intersects[0].object.position.z
+    );
+    const geometry = new THREE.SphereGeometry(1, 32, 16);
+    const edges = new THREE.EdgesGeometry(geometry);
+    const line = new THREE.LineSegments(
+      edges,
+      new THREE.LineBasicMaterial({ color: 0xffffff })
+    );
+    line.position.set(
+      intersects[0].object.position.x,
+      intersects[0].object.position.y,
+      intersects[0].object.position.z
+    );
+    scene.add(line);
+    document.getElementById("deleteShape").onclick = function () {
+      console.log("Hi");
+      scene.remove(line);
       for (let i = 0; i < intersects.length; i++) {
         scene.remove(intersects[i].object);
+        no_of_shapes--;
+        console.log(no_of_shapes);
       }
-      var PointGeometry = Dot();
-      con = 0;
-      Model.style.display = "none";
-    });
-    modelbutton1.addEventListener("click", () => {
-      for (let i = 0; i < intersects.length; i++) {
-        scene.remove(intersects[i].object);
+      if (no_of_shapes == 0) {
+        con = 0;
+        scene.add(dott[0]);
       }
-      var xcoord = document.getElementById("x").value;
-      var ycoord = document.getElementById("y").value;
-      var zcoord = document.getElementById("z").value;
-      // alert(document.querySelector("select").value);
-      if (document.querySelector("select").value == "Cube") {
-        createCube(xcoord, ycoord, zcoord);
-        // createCube(xcoord, ycoord, zcoord);
-      }
-      if (document.querySelector("select").value == "Tetrahedron") {
-        createTetrahedron(xcoord, ycoord, zcoord);
-      }
-      if (document.querySelector("select").value == "Octahedron") {
-        createOctahedron(xcoord, ycoord, zcoord);
-      }
-      if (document.querySelector("select").value == "Dodecahedron") {
-        createDodecahedron(xcoord, ycoord, zcoord);
-      }
-      Model.style.display = "none";
-    });
+    };
+    // geometry.translate(intersects[0].object.position.x,intersects[0].object.position.y,intersects[0].object.position.z);
+    document.getElementById("editShape").onclick = function () {
+      document.getElementById("AddModal").style.display = "block";
+      document
+        .querySelector(".buttonisprimary")
+        .addEventListener("click", () => {
+          for (let i = 0; i < intersects.length; i++) {
+            scene.remove(intersects[i].object);
+            scene.remove(line);
+          }
+          var xcoord = document.getElementById("x").value;
+          var ycoord = document.getElementById("y").value;
+          var zcoord = document.getElementById("z").value;
+          // alert(document.querySelector("select").value);
+          no_of_shapes++;
+          if (document.querySelector("select").value == "Cube") {
+            createCube(xcoord, ycoord, zcoord);
+            // createCube(xcoord, ycoord, zcoord);
+          }
+          if (document.querySelector("select").value == "Tetrahedron") {
+            createTetrahedron(xcoord, ycoord, zcoord);
+          }
+          if (document.querySelector("select").value == "Octahedron") {
+            createOctahedron(xcoord, ycoord, zcoord);
+          }
+          if (document.querySelector("select").value == "Dodecahedron") {
+            createDodecahedron(xcoord, ycoord, zcoord);
+          }
+          document.getElementById("AddModal").style.display = "none";
+        });
+    };
   }
 }
 
@@ -422,10 +454,10 @@ document.addEventListener("pointermove", (event) => {
         planeIntersect.z + shift.z
       );
       shapes[i].geometry.verticesNeedUpdate = true;
-      point[i * 8].position.set(
-        planeIntersect.x + shift.x - dragx[0],
-        planeIntersect.y + shift.y - dragy[0],
-        planeIntersect.z + shift.z - dragz[0]
+      shapevertex[i].position.set(
+        planeIntersect.x + shift.x - dragx[i],
+        planeIntersect.y + shift.y - dragy[i],
+        planeIntersect.z + shift.z - dragz[i]
       );
     }
   } else if (isDragging && con == 0) {
@@ -436,9 +468,15 @@ document.addEventListener("pointermove", (event) => {
       planeIntersect.y + shift.y,
       planeIntersect.z + shift.z
     );
-    document.getElementById("quantityx").value = dott[0].position.x + xcor;
-    document.getElementById("quantityy").value = dott[0].position.y + ycor;
-    document.getElementById("quantityz").value = dott[0].position.z + zcor;
+    document.getElementById("quantityx").value = (
+      dott[0].position.x + xcor
+    ).toFixed(2);
+    document.getElementById("quantityy").value = (
+      dott[0].position.y + ycor
+    ).toFixed(2);
+    document.getElementById("quantityz").value = (
+      dott[0].position.z + zcor
+    ).toFixed(2);
   }
 });
 
@@ -493,9 +531,13 @@ let createCube = function (x, y, z) {
       size: 6,
       sizeAttenuation: false,
     });
+    const geometry = new THREE.SphereGeometry(15, 32, 16);
     var dot = new THREE.Points(dotGeometry, dotMaterial);
     point.push(dot);
     shapes[shapes.length - 1].add(point[point.length - 1]);
+    if (i === 0) {
+      shapevertex.push(dot);
+    }
   }
   // console.log(cube[cube.length-1].geometry.vertices[0].x,cube[cube.length-1].geometry.vertices[0].y,cube[cube.length-1].geometry.vertices[0].z);
   dragx.push(shapes[shapes.length - 1].geometry.vertices[0].x);
@@ -533,6 +575,9 @@ let createDodecahedron = function (x, y, z) {
     var dot = new THREE.Points(dotGeometry, dotMaterial);
     point.push(dot);
     shapes[shapes.length - 1].add(point[point.length - 1]);
+    if (i === 0) {
+      shapevertex.push(dot);
+    }
   }
   // console.log(cube[cube.length-1].geometry.vertices[0].x,cube[cube.length-1].geometry.vertices[0].y,cube[cube.length-1].geometry.vertices[0].z);
   dragx.push(shapes[shapes.length - 1].geometry.vertices[0].x);
@@ -564,6 +609,9 @@ let createOctahedron = function (x, y, z) {
     var dot = new THREE.Points(dotGeometry, dotMaterial);
     point.push(dot);
     shapes[shapes.length - 1].add(point[point.length - 1]);
+    if (i === 0) {
+      shapevertex.push(dot);
+    }
   }
   // console.log(cube[cube.length-1].geometry.vertices[0].x,cube[cube.length-1].geometry.vertices[0].y,cube[cube.length-1].geometry.vertices[0].z);
   dragx.push(shapes[shapes.length - 1].geometry.vertices[0].x);
@@ -595,6 +643,9 @@ let createTetrahedron = function (x, y, z) {
     var dot = new THREE.Points(dotGeometry, dotMaterial);
     point.push(dot);
     shapes[shapes.length - 1].add(point[point.length - 1]);
+    if (i === 0) {
+      shapevertex.push(dot);
+    }
   }
   // console.log(cube[cube.length-1].geometry.vertices[0].x,cube[cube.length-1].geometry.vertices[0].y,cube[cube.length-1].geometry.vertices[0].z);
   dragx.push(shapes[shapes.length - 1].geometry.vertices[0].x);
