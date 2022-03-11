@@ -183,13 +183,59 @@
 
                 </div>
 
-                <button id="NewCam" class="button is-small is-responsive is-outlined is-info" onclick="NewCam()">New
+                <button id="NewCam" class="button is-small is-responsive is-outlined is-info" onclick="new_cam()">New
                     Cam</button>
 
                 <div id="CamModal" class="modal">
                     <div class="modal-content">
                         <span class="close">&times;</span>
-                        <p>Add a New Camera</p>
+                        <p>    
+                            <div class="control">
+                                <p>Clipping</p>
+                                <div style="display: flex;">
+                                    <input class="input is-small" type="text" id="near-coord" placeholder="Near">
+                                    <input class="input is-small" type="text" id="far-coord" placeholder="Far">
+                                </div>
+                                <div style="display: flex;">
+                                    <input class="input is-small" type="text" id="left-coord" placeholder="Left">
+                                    <input class="input is-small" type="text" id="right-coord" placeholder="Right">
+                                </div>
+                                <div style="display: flex;">
+                                    <input class="input is-small" type="text" id="top-coord" placeholder="Top">
+                                    <input class="input is-small" type="text" id="bottom-coord" placeholder="Bottom">
+                                </div>
+                                <p>Camera Position</p>
+                                <div style="display: flex;">
+                                    <input class="input is-small" type="text" id="cam-x" placeholder="Cam-X">
+                                    <input class="input is-small" type="text" id="cam-y" placeholder="Cam-Y">
+                                    <input class="input is-small" type="text" id="cam-z" placeholder="Cam-Z">
+                                </div>
+                                <p>Target Position</p>
+                                <div style="display: flex;">
+                                    <input class="input is-small" type="text" id="target-x" placeholder="Target-X">
+                                    <input class="input is-small" type="text" id="target-y" placeholder="Target-Y">
+                                    <input class="input is-small" type="text" id="target-z" placeholder="Target-Z">
+                                </div>
+                                <p>Up Vector</p>
+                                <div style="display: flex;">
+                                    <input class="input is-small" type="text" id="up-x" placeholder="Up-X">
+                                    <input class="input is-small" type="text" id="up-y" placeholder="Up-Y">
+                                    <input class="input is-small" type="text" id="up-z" placeholder="Up-Z">
+                                </div>
+                                <p>Type</p>
+                                <div id ="camera-type"class="control">
+                                    <div id="ortho-id" class="select" style="float:left;">
+                                      <select>
+                                        <option value="0">Orthographic</option>
+                                        <option value="1">Perspective</option>
+                                      </select>
+                                    </div>
+                                </div>
+                                <div class="control">
+                                    <button class="button is-link" id="new-cam">Submit</button>
+                                </div>
+                            </div>
+                        </p>
                     </div>
 
                 </div>
@@ -218,6 +264,16 @@
         <div id="observations" class="column has-text-centered is-2-desktop is-5-tablet is-5-mobile right">
             <div class="v-datalist-container">
                 <div class="v-datalist-title">World and Instances</div>
+                <form>
+                    <label for="quantity">X:</label>
+                    <input type="number" id="h-x" name="x_coord" min="1" step=".01" value="3"></br>
+                    <label for="quantity">Y:</label>
+                    <input type="number" id="h-y" name="y_coord" min="1" step=".01" value="3"> </br>
+                    <label for="quantity">Z:</label>
+                    <input type="number" id="h-z" name="z_coord" min="1" step=".01" value="3"> </br>
+                    <label for="quantity">Scaling factor:</label>
+                    <input type="number" id="h-s" name="scale" min="1" step=".01" value="1"> </br>                    
+                </form>
                 <div class="v-datalist-row v-bold" id="output1"></div>
                 <div class="v-datalist-row v-bold" id="output2"></div>
                 <div class="v-datalist-row">

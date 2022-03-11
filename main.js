@@ -39,7 +39,28 @@ let scene,
   zcor = 3,
   lock = 0,
   dir = [],
+  scale = 1,
   arrowHelper = [];
+
+// modal box for camera js part
+let CamModal = document.getElementById("CamModal");
+let camBtn = document.getElementById("NewCam");
+
+let span4 = document.getElementsByClassName("close")[4];
+
+camBtn.onclick = function() {
+  CamModal.style.display = "block";
+}
+
+span4.onclick = function() {
+  CamModal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == CamModal) {
+    CamModal.style.display = "none";
+  }
+}
 
 function vertexShader() {
   return `varying vec3 vUv; 
@@ -215,8 +236,29 @@ function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_ve
 
 function NewCam(event) {
   // function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp ) {
-  AddCam(0.1, 1000, -10, -10, -10, 10, new THREE.Vector3(7,-6,2), new THREE.Vector3(1,1,1), new THREE.Vector3(1,0,1), 0);
+  // AddCam(0.1, 1000, -10, -10, -10, 10, new THREE.Vector3(7,-6,2), new THREE.Vector3(1,1,1), new THREE.Vector3(1,0,1), 0);
+  AddCam(0.01, 100, -3.2, 3.2, -2.4, 2.4, new THREE.Vector3(3,5,2), new THREE.Vector3(0,0,0), new THREE.Vector3(0,1,0), 1);
+
+}
+
+document.getElementById("new-cam").onclick = function (){
+  // function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp ) {
+  // AddCam(0.1, 1000, -10, -10, -10, 10, new THREE.Vector3(7,-6,2), new THREE.Vector3(1,1,1), new THREE.Vector3(1,0,1), 0);
   // AddCam(0.01, 100, -3.2, 3.2, -2.4, 2.4, new THREE.Vector3(3,5,2), new THREE.Vector3(0,0,0), new THREE.Vector3(0,1,0), 1);
+
+  let near = document.getElementById("near-coord").value;
+  let far = document.getElementById("far-coord").value;
+  let left = document.getElementById("left-coord").value;
+  let right = document.getElementById("right-coord").value;
+  let bottom = document.getElementById("bottom-coord").value;
+  let top = document.getElementById("top-coord").value;
+
+  let camera_pos = new THREE.Vector3(document.getElementById("cam-x").value, document.getElementById("cam-y").value, document.getElementById("cam-z").value);
+  let target = new THREE.Vector3(document.getElementById("target-x").value, document.getElementById("target-y").value, document.getElementById("target-z").value);
+  let up_vec = new THREE.Vector3(document.getElementById("up-x").value, document.getElementById("up-y").value, document.getElementById("up-z").value);
+  let ortho_persp = document.getElementById("ortho-id").value;
+
+  AddCam(near, far, left, right, bottom, top, camera_pos, target, up_vec, parseInt(ortho_persp) );
 }
 
 // Add a camera 
@@ -512,9 +554,18 @@ document.addEventListener("pointermove", (event) => {
       planeIntersect.y + shift.y,
       planeIntersect.z + shift.z
     );
-    document.getElementById("quantityx").value = (dott[0].position.x + xcor).toFixed(2);
-    document.getElementById("quantityy").value = (dott[0].position.y + ycor).toFixed(2);
-    document.getElementById("quantityz").value = (dott[0].position.z + zcor).toFixed(2);
+    scale = document.getElementById("h-s").value;
+    let c_x = document.getElementById("quantityx").value = ((dott[0].position.x + xcor)*scale).toFixed(2);
+    let c_y = document.getElementById("quantityy").value = ((dott[0].position.y + ycor)*scale).toFixed(2);
+    let c_z = document.getElementById("quantityz").value = ((dott[0].position.z + zcor)*scale).toFixed(2);
+      
+    let h_x = c_x*scale;
+    let h_y = c_y*scale;
+    let h_z = c_z*scale;
+
+    document.getElementById("h-x").value = h_x.toFixed(2);
+    document.getElementById("h-y").value = h_y.toFixed(2);
+    document.getElementById("h-z").value = h_z.toFixed(2);
   }
 });
 
