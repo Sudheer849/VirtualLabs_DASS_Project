@@ -182,17 +182,17 @@ checkboxes[6].addEventListener("click", () => {
 // --------------------------------------------------------------------------------------------------
 
 var buttons = document.getElementsByTagName("button");
-buttons[0].addEventListener("click", XY, false);
-buttons[1].addEventListener("click", XZ, false); //
-buttons[2].addEventListener("click", YZ, false);
-buttons[3].addEventListener("click", Change, false);
-buttons[4].addEventListener("click", Rotate, false);
-buttons[5].addEventListener("click", Delete, false);
-buttons[6].addEventListener("click", Add, false);
+// buttons[0].addEventListener("click", XY, false);
+// buttons[1].addEventListener("click", XZ, false); //
+// buttons[2].addEventListener("click", YZ, false);
+buttons[0].addEventListener("click", Change, false);
+// buttons[4].addEventListener("click", Rotate, false);
+// buttons[5].addEventListener("click", Delete, false);
+// buttons[6].addEventListener("click", Add, false);
 //buttons[7].addEventListener("click", ADD, false);
-buttons[8].addEventListener("click", lockV, false);
-buttons[9].addEventListener("click", NewCam, false);
-buttons[10].addEventListener("click", OldCam, false);
+// buttons[8].addEventListener("click", lockV, false);
+buttons[1].addEventListener("click", NewCam, false);
+buttons[2].addEventListener("click", OldCam, false);
 const size = 50;
 const divisions = 25;
 
@@ -229,6 +229,9 @@ function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_ve
     controls.target.set(target.x, target.y, target.z);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05; 
+    orbit.minPolarAngle = 0;
+    orbit.maxPolarAngle = 180;
+
     controls.update();  
   // }
   return camera;
@@ -258,7 +261,10 @@ document.getElementById("new-cam").onclick = function (){
   let up_vec = new THREE.Vector3(document.getElementById("up-x").value, document.getElementById("up-y").value, document.getElementById("up-z").value);
   let ortho_persp = document.getElementById("ortho-id").value;
 
-  AddCam(near, far, left, right, bottom, top, camera_pos, target, up_vec, parseInt(ortho_persp) );
+  // debug
+  console.log(near, far, left, right, top, bottom, camera_pos, target, up_vec, parseInt(ortho_persp));
+
+  AddCam(parseFloat(near), parseFloat(far), parseFloat(left), parseFloat(right), parseFloat(top), parseFloat(bottom), camera_pos, target, up_vec, 1 );
 }
 
 // Add a camera 

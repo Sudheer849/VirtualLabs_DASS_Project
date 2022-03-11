@@ -12,17 +12,17 @@
 <body class="page">
     </br></br>
 
-    <button style="top: 0" id="XY Grid" class="ui">XY GRID</button>
+    <!-- <button style="top: 0" id="XY Grid" class="ui">XY GRID</button>
     <button style="top: 50" id="YZ Grid" class="ui">YZ GRID</button>
-    <button style="top: 100" id="XZ Grid" class="ui">XZ GRID</button>
-    <button style="top: 150" id="Change" class="ui">2D</button>
-    <button style="top: 200" id="Rotate" class="ui">Rotate the Shape</button>
+    <button style="top: 100" id="XZ Grid" class="ui">XZ GRID</button> -->
+    <button style="top: 0" id="Change" class="ui">2D</button>
+    <!-- <button style="top: 200" id="Rotate" class="ui">Rotate the Shape</button>
     <button style="top: 250" id="Delete" class="ui">Delete the Shape</button>
     <button style="top: 300" id="Delete" class="ui">Add the Shape</button>
     <button style="top: 350" id="ADD" class="ui">ADD</button>
-    <button style="top: 400" id="lock" class="ui">Lock vertices</button>
-    <button style="top: 450" id="newCam" class="ui">New Cam</button>
-    <button style="top: 500" id="oldCam" class="ui">Del Cam</button>
+    <button style="top: 400" id="lock" class="ui">Lock vertices</button> -->
+    <button style="top: 50" id="newCam" class="ui">New Cam</button>
+    <button style="top: 100" id="oldCam" class="ui">Del Cam</button>
 
     <div class="columns is-centered is-variable is-1-mobile is-flex is-flex-wrap-wrap workspace">
         <div id="left" class="column has-text-centered is-2-desktop is-5-tablet is-5-mobile apparatus">
@@ -223,11 +223,11 @@
                                     <input class="input is-small" type="text" id="up-z" placeholder="Up-Z">
                                 </div>
                                 <p>Type</p>
-                                <div id ="camera-type"class="control">
+                                <div id ="camera-type" class="control" value="1">
                                     <div id="ortho-id" class="select" style="float:left;">
-                                      <select>
-                                        <option value="0">Orthographic</option>
-                                        <option value="1">Perspective</option>
+                                      <select name="" value="1">
+                                        <option value="1">Orthographic</option>
+                                        <option value="0">Perspective</option>
                                       </select>
                                     </div>
                                 </div>
