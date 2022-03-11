@@ -410,10 +410,6 @@ document.addEventListener("pointermove", (event) => {
     };
     // orbit.target.set(0, 0, 0);
     orbit.enableDamping = true;
-
-    //document.getElementById("quantityx").value = dott[0].position.x + xcor;
-    //document.getElementById("quantityy").value = dott[0].position.y + ycor;
-    //document.getElementById("quantityz").value = dott[0].position.z + zcor;
   }
 });
 
