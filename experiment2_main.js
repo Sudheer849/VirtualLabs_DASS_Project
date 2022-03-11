@@ -1,17 +1,14 @@
 import * as THREE from "https://threejsfundamentals.org/threejs/resources/threejs/r115/build/three.module.js";
 import { OrbitControls } from "https://threejsfundamentals.org/threejs/resources/threejs/r115/examples/jsm/controls/OrbitControls.js";
 import { MOUSE } from "https://unpkg.com/three@0.128.0/build/three.module.js";
-const button = document.querySelector(".submit_button");
-const modelbutton1 = document.querySelector(".buttonisprimary");
-const modelbutton2 = document.querySelector(".buttonissecondary");
 var checkboxes = [];
-checkboxes[0] = document.getElementById("checkbox1");
-checkboxes[1] = document.getElementById("checkbox2");
-checkboxes[2] = document.getElementById("checkbox3");
-checkboxes[3] = document.getElementById("checkbox4");
-checkboxes[4] = document.getElementById("checkbox5");
-checkboxes[5] = document.getElementById("checkbox6");
-checkboxes[6] = document.getElementById("checkbox7");
+let three_d = document.getElementById("checkbox1");
+let lock_vertices = document.getElementById("checkbox2");
+let show_animation = document.getElementById("checkbox3");
+let transform_axis = document.getElementById("checkbox4");
+let xy_grid = document.getElementById("checkbox5");
+let yz_grid = document.getElementById("checkbox6");
+let xz_grid = document.getElementById("checkbox7");
 var Model = document.getElementById("AddModal");
 var Model1 = document.getElementById("ModelAdd");
 var ModelAdd = document.getElementById("myBtn");
@@ -29,6 +26,7 @@ slider.step =
 let final_xcoordinate = document.getElementById("finalx").value;
 let final_ycoordinate = document.getElementById("finaly").value;
 let final_zcoordinate = document.getElementById("finalz").value;
+let frames = document.getElementById("frames").value;
 //slider.step = 2;
 let scene,
   camera,
@@ -77,8 +75,8 @@ function fragmentShader() {
 // Section of Checkboxes
 // --------------------------------------------------------------------------------------------------
 // 2D
-checkboxes[0].addEventListener("click", () => {
-  if (checkboxes[0].checked) {
+three_d.addEventListener("click", () => {
+  if (three_d.checked) {
     //
   } else {
     //
@@ -87,8 +85,8 @@ checkboxes[0].addEventListener("click", () => {
 
 // lock vertices
 
-checkboxes[1].addEventListener("click", () => {
-  if (checkboxes[1].checked) {
+lock_vertices.addEventListener("click", () => {
+  if (lock_vertices.checked) {
     lock = 1;
     //console.log("hello");
     orbit.mouseButtons = {
@@ -112,7 +110,7 @@ checkboxes[1].addEventListener("click", () => {
   }
 });
 //Show Animation
-checkboxes[2].addEventListener("click", () => {
+show_animation.addEventListener("click", () => {
   if (checkboxes[2].checked) {
     //
   } else {
@@ -120,8 +118,8 @@ checkboxes[2].addEventListener("click", () => {
   }
 });
 // Transformation
-checkboxes[3].addEventListener("click", () => {
-  if (checkboxes[3].checked) {
+transform_axis.addEventListener("click", () => {
+  if (transform_axis.checked) {
     //
   } else {
     //
@@ -129,8 +127,8 @@ checkboxes[3].addEventListener("click", () => {
 });
 
 // XY Grid
-checkboxes[4].addEventListener("click", () => {
-  if (checkboxes[4].checked) {
+xy_grid.addEventListener("click", () => {
+  if (xy_grid.checked) {
     var grid = new THREE.GridHelper(size, divisions);
     var vector3 = new THREE.Vector3(0, 0, 1);
     grid.lookAt(vector3);
@@ -143,8 +141,8 @@ checkboxes[4].addEventListener("click", () => {
   }
 });
 // XZ Grid
-checkboxes[5].addEventListener("click", () => {
-  if (checkboxes[5].checked) {
+yz_grid.addEventListener("click", () => {
+  if (yz_grid.checked) {
     var grid = new THREE.GridHelper(size, divisions);
     grid.geometry.rotateZ(Math.PI / 2);
     grid3.push(grid);
@@ -156,8 +154,8 @@ checkboxes[5].addEventListener("click", () => {
   }
 });
 // YZ Grid
-checkboxes[6].addEventListener("click", () => {
-  if (checkboxes[6].checked) {
+xz_grid.addEventListener("click", () => {
+  if (xz_grid.checked) {
     var grid = new THREE.GridHelper(size, divisions);
     var vector3 = new THREE.Vector3(0, 1, 0);
     grid.lookAt(vector3);
@@ -172,166 +170,14 @@ checkboxes[6].addEventListener("click", () => {
 
 // Section of Buttons
 // --------------------------------------------------------------------------------------------------
-
-var buttons = document.getElementsByTagName("button");
-buttons[0].addEventListener("click", XY, false);
-buttons[1].addEventListener("click", XZ, false); //
-buttons[2].addEventListener("click", YZ, false);
-buttons[3].addEventListener("click", Change, false);
-buttons[4].addEventListener("click", Rotate, false);
-buttons[5].addEventListener("click", Delete, false);
-buttons[6].addEventListener("click", Add, false);
-//buttons[7].addEventListener("click", ADD, false);
-buttons[8].addEventListener("click", lockV, false);
-buttons[9].addEventListener("click", NewCam, false);
 const size = 50;
 const divisions = 25;
 
 // Add a camera
-function AddCam(
-  near,
-  far,
-  left,
-  right,
-  bottom,
-  top,
-  camera_pos,
-  target,
-  up_vec,
-  ortho_persp
-) {
-  // 1 == orthographic, 0 == perspective
-  if (ortho_persp == 1) {
-    camera = new THREE.OrthographicCamera(left, right, bottom, top, near, far);
-  } else {
-    camera = new THREE.PerspectiveCamera(
-      45,
-      window.innerWidth / window.innerHeight,
-      near,
-      far
-    );
-  }
-
-  camera.position.set(camera_pos.x, camera_pos.y, camera_pos.z);
-  camera.up.set(up_vec.x, up_vec.y, up_vec.z);
-  camera.lookAt(target);
-
-  scene.add(camera);
-  let newRenderer = new THREE.WebGLRenderer();
-  newRenderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(newRenderer.domElement);
-
-  // orbit controls
-  let controls = new OrbitControls(camera, newRenderer.domElement);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.05;
-  controls.mouseButtons = {
-    LEFT: MOUSE.PAN,
-    MIDDLE: MOUSE.DOLLY,
-    RIGHT: MOUSE.ROTATE,
-  };
-  controls.target.set(target.x, target.y, target.z);
-  newRenderer.render(scene, camera);
-
-  return camera;
-}
-
-function NewCam(event) {
-  // function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp ) {
-  AddCam(
-    0.1,
-    1000,
-    -10,
-    10,
-    -10,
-    10,
-    new THREE.Vector3(2, 4, 3),
-    new THREE.Vector3(1, 1, 1),
-    new THREE.Vector3(-1, 0, 1),
-    1
-  );
-}
-
-function XY(event) {
-  var grid = new THREE.GridHelper(size, divisions);
-  var vector3 = new THREE.Vector3(0, 0, 1);
-  grid.lookAt(vector3);
-  if (vargrid1 == 0) {
-    grid1.push(grid);
-    scene.add(grid1[0]);
-    vargrid1 = 1;
-  } else {
-    scene.remove(grid1[0]);
-    grid1.pop();
-    vargrid1 = 0;
-  }
-}
-
-function XZ(event) {
-  var grid = new THREE.GridHelper(size, divisions);
-  var vector3 = new THREE.Vector3(0, 1, 0);
-  grid.lookAt(vector3);
-  if (vargrid2 == 0) {
-    grid2.push(grid);
-    scene.add(grid2[0]);
-    vargrid2 = 1;
-  } else {
-    scene.remove(grid2[0]);
-    grid2.pop();
-    vargrid2 = 0;
-  }
-}
-function YZ(event) {
-  var grid = new THREE.GridHelper(size, divisions);
-  grid.geometry.rotateZ(Math.PI / 2);
-  if (vargrid3 == 0) {
-    grid3.push(grid);
-    scene.add(grid3[0]);
-    vargrid3 = 1;
-  } else {
-    scene.remove(grid3[0]);
-    vargrid3 = 0;
-  }
-}
-function Change(event) {
-  console.log("Hello");
-  camera.position.y = 3;
-  camera.position.x = 0;
-  camera.position.z = 0;
-  orbit.minPolarAngle = 0;
-  orbit.maxPolarAngle = 0;
-}
-function Delete(event) {
-  scene.remove(shapes[shapes.length - 1]);
-  shapes.pop();
-  var PointGeometry = Dot();
-  con = 0;
-}
-
-// locks the vertices of the shape
-function lockV(event) {
-  /*if (cube[cube.length - 1].geometry.verticesNeedUpdate == true)
-    cube[cube.length - 1].geometry.verticesNeedUpdate = false;
-  else cube[cube.length - 1].geometry.verticesNeedUpdate = true;*/
-}
-function Add(event) {
-  createCube(0, 0, 0);
-  scene.remove(dott[0]);
-  con = 1;
-}
-
-function Rotate(event) {
-  if (variable == 0) {
-    variable = 1;
-  } else {
-    variable = 0;
-  }
-  console.log(variable);
-}
 
 ModelAdd.onclick = function () {
   Model1.style.display = "block";
-  modelbutton2.addEventListener("click", () => {
+  document.querySelector(".buttonissecondary").addEventListener("click", () => {
     var xcoord = document.getElementById("x1").value;
     var ycoord = document.getElementById("y1").value;
     var zcoord = document.getElementById("z1").value;
@@ -355,9 +201,7 @@ ModelAdd.onclick = function () {
   });
 };
 
-// Translation - animation for expt2
-// -----------------------------------------------------------------------------------
-
+/////////////////////////////////////////////////// 2D slider simulation
 function movePoint(e) {
   var target = e.target ? e.target : e.srcElement;
   console.log(target.value);
@@ -420,7 +264,7 @@ document.getElementById("finaly").onchange = function () {
     parseFloat(dott[0].position.z) + 3;
   final_ycoordinate = new_value;
   document.getElementById("slider").max =
-    document.getElementById("finaly").value - 3;
+    document.getElementById("finalx").value - 3;
   document.getElementById("slider").min = 0;
   slider.step =
     (document.getElementById("slider").max -
@@ -445,7 +289,7 @@ document.getElementById("finalz").onchange = function () {
     parseFloat(dott[0].position.z) + 3;
   final_zcoordinate = new_value;
   document.getElementById("slider").max =
-    document.getElementById("finalz").value - 3;
+    document.getElementById("finalx").value - 3;
   document.getElementById("slider").min = 0;
   slider.step =
     (document.getElementById("slider").max -
@@ -453,7 +297,18 @@ document.getElementById("finalz").onchange = function () {
     document.getElementById("frames").value;
   //document.getElementById("final_z").value = new_value
 };
-// --------------------------------------------------------------------------------------------------
+document.getElementById("frames").onchange = function () {
+  let new_value = document.getElementById("frames").value; // new value
+  let new_xcoord = 3 + (dott[0].position.x * frames) / new_value;
+  let new_ycoord = 3 + (dott[0].position.y * frames) / new_value;
+  let new_zcoord = 3 + (dott[0].position.z * frames) / new_value;
+  console.log(new_xcoord, new_ycoord, new_zcoord);
+  dott[0].position.set(new_xcoord - 3, new_ycoord - 3, new_zcoord - 3);
+  slider.step =
+    (document.getElementById("slider").max -
+      document.getElementById("slider").min) /
+    document.getElementById("frames").value;
+};
 // Section of mouse control functions
 // --------------------------------------------------------------------------------------------------
 
@@ -490,7 +345,7 @@ function ondblclick(event) {
       con = 0;
       Model.style.display = "none";
     });
-    modelbutton1.addEventListener("click", () => {
+    document.querySelector(".buttonisprimary").addEventListener("click", () => {
       for (let i = 0; i < intersects.length; i++) {
         scene.remove(intersects[i].object);
       }
@@ -618,7 +473,7 @@ let createCube = function (x, y, z) {
   dragy.push(shapes[shapes.length - 1].geometry.vertices[0].y);
   dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
 };
-button.addEventListener("click", () => {
+document.querySelector(".submit_button").addEventListener("click", () => {
   let x = document.getElementById("quantityx").value;
   let y = document.getElementById("quantityy").value;
   let z = document.getElementById("quantityz").value;
@@ -718,14 +573,14 @@ let createTetrahedron = function (x, y, z) {
   dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
 };
 
-button.addEventListener("click", () => {
+document.querySelector(".submit_button").addEventListener("click", () => {
   let x = document.getElementById("quantityx").value;
   let y = document.getElementById("quantityy").value;
   let z = document.getElementById("quantityz").value;
   console.log(x, y, z);
   dott[0].position.set(x - xcor, y - ycor, z - zcor);
 });
-button.addEventListener("click", () => {
+document.querySelector(".submit_button").addEventListener("click", () => {
   let x = document.getElementById("quantityx").value;
   let y = document.getElementById("quantityy").value;
   let z = document.getElementById("quantityz").value;
@@ -853,3 +708,4 @@ let mainLoop = function () {
 };
 init();
 mainLoop();
+
