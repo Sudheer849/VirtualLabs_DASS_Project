@@ -355,6 +355,9 @@ ModelAdd.onclick = function () {
   });
 };
 
+// Translation - animation for expt2
+// -----------------------------------------------------------------------------------
+
 function movePoint(e) {
   var target = e.target ? e.target : e.srcElement;
   console.log(target.value);
@@ -450,6 +453,7 @@ document.getElementById("finalz").onchange = function () {
     document.getElementById("frames").value;
   //document.getElementById("final_z").value = new_value
 };
+// --------------------------------------------------------------------------------------------------
 // Section of mouse control functions
 // --------------------------------------------------------------------------------------------------
 
@@ -551,10 +555,6 @@ document.addEventListener("pointermove", (event) => {
     };
     // orbit.target.set(0, 0, 0);
     orbit.enableDamping = true;
-
-    //document.getElementById("quantityx").value = dott[0].position.x + xcor;
-    //document.getElementById("quantityy").value = dott[0].position.y + ycor;
-    //document.getElementById("quantityz").value = dott[0].position.z + zcor;
   }
 });
 

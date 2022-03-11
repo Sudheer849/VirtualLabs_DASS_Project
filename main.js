@@ -171,72 +171,85 @@ buttons[6].addEventListener("click", Add, false);
 //buttons[7].addEventListener("click", ADD, false);
 buttons[8].addEventListener("click", lockV, false);
 buttons[9].addEventListener("click", NewCam, false);
+buttons[10].addEventListener("click", OldCam, false);
 const size = 50;
 const divisions = 25;
 
-// Add a camera
-function AddCam(
-  near,
-  far,
-  left,
-  right,
-  bottom,
-  top,
-  camera_pos,
-  target,
-  up_vec,
-  ortho_persp
-) {
+var camera2, scene2, controls;
+function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp ) {
   // 1 == orthographic, 0 == perspective
+  scene.remove(camera);
   if (ortho_persp == 1) {
-    camera = new THREE.OrthographicCamera(left, right, bottom, top, near, far);
+    camera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
   } else {
-    camera = new THREE.PerspectiveCamera(
-      45,
-      window.innerWidth / window.innerHeight,
-      near,
-      far
-    );
+    // cam2 = new THREE.PerspectiveCamera( Math.atan( ( (top - bottom)/( near + far ) ), (left - right) / (top - bottom) , near, far) );
+    camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, near, far );
+    camera.up.set(up_vec.x, up_vec.y, up_vec.z);
   }
-
+  
   camera.position.set(camera_pos.x, camera_pos.y, camera_pos.z);
-  camera.up.set(up_vec.x, up_vec.y, up_vec.z);
   camera.lookAt(target);
 
   scene.add(camera);
-  let newRenderer = new THREE.WebGLRenderer();
-  newRenderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(newRenderer.domElement);
+  // renderer.render(scene, camera);
+
+  // let newRenderer = new THREE.WebGLRenderer();
+  // newRenderer.setSize(window.innerWidth, window.innerHeight);
+  // document.body.appendChild(newRenderer.domElement);
 
   // orbit controls
-  let controls = new OrbitControls(camera, newRenderer.domElement);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.05;
-  controls.mouseButtons = {
-    LEFT: MOUSE.PAN,
-    MIDDLE: MOUSE.DOLLY,
-    RIGHT: MOUSE.ROTATE,
-  };
-  controls.target.set(target.x, target.y, target.z);
-  newRenderer.render(scene, camera);
-
+  // if (ortho_persp == 0) {
+    controls = new OrbitControls(camera, renderer.domElement);
+    controls.mouseButtons = {
+      // LEFT: THREE.MOUSE.PAN,
+      MIDDLE: THREE.MOUSE.DOLLY,
+      RIGHT: THREE.MOUSE.ROTATE,
+    };
+    controls.target.set(target.x, target.y, target.z);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05; 
+    controls.update();  
+  // }
   return camera;
 }
 
 function NewCam(event) {
   // function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp ) {
-  AddCam(
-    0.1,
-    1000,
-    -10,
-    10,
-    -10,
-    10,
-    new THREE.Vector3(2, 4, 3),
-    new THREE.Vector3(1, 1, 1),
-    new THREE.Vector3(-1, 0, 1),
-    1
+  AddCam(0.1, 1000, -10, -10, -10, 10, new THREE.Vector3(7,-6,2), new THREE.Vector3(1,1,1), new THREE.Vector3(1,0,1), 0);
+  // AddCam(0.01, 100, -3.2, 3.2, -2.4, 2.4, new THREE.Vector3(3,5,2), new THREE.Vector3(0,0,0), new THREE.Vector3(0,1,0), 1);
+}
+
+// Add a camera 
+function OldCam () {
+  scene.remove(camera);
+  
+  camera = new THREE.PerspectiveCamera(
+    30,
+    window.innerWidth / window.innerHeight,
+    1,
+    1000
   );
+
+  camera.position.x = 2;
+  camera.position.y = 2;
+  camera.position.z = 5;
+
+  origin = new THREE.Vector3(0, 0, 0);
+  camera.lookAt(origin);
+
+  scene.add(camera);
+  orbit = new OrbitControls(camera, renderer.domElement);
+  orbit.mouseButtons = {
+    MIDDLE: MOUSE.DOLLY,
+    RIGHT: MOUSE.ROTATE,
+  };
+  orbit.target.set(0, 0, 0);
+  orbit.enableDamping = true;
+  orbit.dampingFactor = 0.05;
+
+  renderer.render(scene, camera);
+
+  return camera;
 }
 
 function XY(event) {
@@ -281,13 +294,42 @@ function YZ(event) {
   }
 }
 function Change(event) {
-  console.log("Hello");
-  camera.position.y = 3;
-  camera.position.x = 0;
-  camera.position.z = 0;
-  orbit.minPolarAngle = 0;
-  orbit.maxPolarAngle = 0;
+  // scene.remove(arrowHelper2);
+  // scene.remove(arrowHelper5);
+  is_2D = 1;
+
+  camera_pos = new THREE.Vector3(3, 0, 0);
+  camera_up = new THREE.Vector3(0, 0, 1);
+  camera.position.set(camera_pos.x, camera_pos.y, camera_pos.z);
+  camera.up.set(0, 1, 0);
+  camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+  orbit.screenSpacePanning = true;
+
+  if( first_time == 1 ) {
+    //create someplane to project to
+    two_plane = new THREE.Plane().setFromCoplanarPoints( new THREE.Vector3(0,1,0),new THREE.Vector3(1,0,0), new THREE.Vector3(0,0,0) );
+    //create some geometry to flatten..
+    // two_geometry = new THREE.BufferGeometry();
+    // fillGeometry(two_geometry);
+    first_time = 0;
+  }
+
+  var positionAttr = two_geometry.getAttribute("position");
+  for(var i = 0; i < positionAttr.array.length; i+=3)
+  {
+      var point = new THREE.Vector3(positionAttr.array[i],positionAttr.array[i+1],positionAttr.array[i+2]);
+      var projectedPoint = two_plane.projectPoint();
+      positionAttr.array[i] = projectedPoint.x;
+      positionAttr.array[i+1] = projectedPoint.y;
+      positionAttr.array[i+2] = projectedPoint.z;
+  }
+  positionAttr.needsUpdate = true;
+  
+  // orbit.minPolarAngle = 0;
+  // orbit.maxPolarAngle = 0;
 }
+
 function Delete(event) {
   scene.remove(shapes[shapes.length - 1]);
   shapes.pop();
@@ -297,10 +339,12 @@ function Delete(event) {
 
 // locks the vertices of the shape
 function lockV(event) {
-  /*if (cube[cube.length - 1].geometry.verticesNeedUpdate == true)
-    cube[cube.length - 1].geometry.verticesNeedUpdate = false;
-  else cube[cube.length - 1].geometry.verticesNeedUpdate = true;*/
-}
+  if( cube[cube.length-1].geometry.verticesNeedUpdate == true )
+      cube[cube.length - 1].geometry.verticesNeedUpdate = false;
+  else
+      cube[cube.length - 1].geometry.verticesNeedUpdate = true;
+} 
+
 function Add(event) {
   createCube(0, 0, 0);
   scene.remove(dott[0]);
@@ -436,9 +480,9 @@ document.addEventListener("pointermove", (event) => {
       planeIntersect.y + shift.y,
       planeIntersect.z + shift.z
     );
-    document.getElementById("quantityx").value = dott[0].position.x + xcor;
-    document.getElementById("quantityy").value = dott[0].position.y + ycor;
-    document.getElementById("quantityz").value = dott[0].position.z + zcor;
+    document.getElementById("quantityx").value = (dott[0].position.x + xcor).toFixed(2);
+    document.getElementById("quantityy").value = (dott[0].position.y + ycor).toFixed(2);
+    document.getElementById("quantityz").value = (dott[0].position.z + zcor).toFixed(2);
   }
 });
 
