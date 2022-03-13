@@ -13,15 +13,15 @@ checkboxes[4] = document.getElementById("checkbox5");
 checkboxes[5] = document.getElementById("checkbox6");
 checkboxes[6] = document.getElementById("checkbox7");
 var Model = document.getElementById("AddModal");
-var Model1 = document.getElementById("ModelAdd");
+var Model1 = document.getElementById("ModelEdit");
 var ModelAdd = document.getElementById("myBtn");
 var span = document.getElementsByClassName("close")[0];
 var deletebutton = document.getElementById("deletebutton");
-var scene;
-var camera;
-var renderer;
-var orbit;
-var shapes = [],
+let scene,
+  camera,
+  renderer,
+  orbit,
+  shapes = [],
   rot = 0.01,
   variable = 0,
   con = 0,
@@ -41,6 +41,21 @@ var shapes = [],
   dir = [],
   scale = 1,
   arrowHelper = [];
+
+
+// Get the modal
+var Addmodal = document.getElementById("AddModal");
+var span = document.getElementsByClassName("close")[0];
+
+span.onclick = function() {
+  Addmodal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == Addmodal) {
+    Addmodal.style.display = "none";
+  }
+}
 
 // modal box for camera js part
 let CamModal = document.getElementById("CamModal");
@@ -166,8 +181,8 @@ checkboxes[5].addEventListener("click", () => {
 // YZ Grid
 checkboxes[6].addEventListener("click", () => {
   if (checkboxes[6].checked) {
-    let grid = new THREE.GridHelper(size, divisions);
-    let vector3 = new THREE.Vector3(0, 1, 0);
+    var grid = new THREE.GridHelper(size, divisions);
+    var vector3 = new THREE.Vector3(0, 1, 0);
     grid.lookAt(vector3);
     grid2.push(grid);
     scene.add(grid2[0]);
@@ -182,9 +197,6 @@ checkboxes[6].addEventListener("click", () => {
 // --------------------------------------------------------------------------------------------------
 
 var buttons = document.getElementsByTagName("button");
-buttons[0].addEventListener("click", Change, false);
-buttons[1].addEventListener("click", NewCam, false);
-buttons[2].addEventListener("click", OldCam, false);
 const size = 50;
 const divisions = 25;
 
@@ -221,9 +233,6 @@ function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_ve
     controls.target.set(target.x, target.y, target.z);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05; 
-    orbit.minPolarAngle = 0;
-    orbit.maxPolarAngle = 180;
-
     controls.update();  
   // }
   return camera;
@@ -251,13 +260,9 @@ document.getElementById("new-cam").onclick = function (){
   let camera_pos = new THREE.Vector3(document.getElementById("cam-x").value, document.getElementById("cam-y").value, document.getElementById("cam-z").value);
   let target = new THREE.Vector3(document.getElementById("target-x").value, document.getElementById("target-y").value, document.getElementById("target-z").value);
   let up_vec = new THREE.Vector3(document.getElementById("up-x").value, document.getElementById("up-y").value, document.getElementById("up-z").value);
-  // let ortho_persp = document.getElementById("ortho-id").value;
-  let camtype = document.getElementById("cam-type").value;
+  let ortho_persp = document.getElementById("ortho-id").value;
 
-  // debug
-  console.log(near, far, left, right, top, bottom, camera_pos, target, up_vec, parseInt(camtype));
-
-  AddCam(parseFloat(near), parseFloat(far), parseFloat(left), parseFloat(right), parseFloat(top), parseFloat(bottom), camera_pos, target, up_vec, camtype );
+  AddCam(near, far, left, right, bottom, top, camera_pos, target, up_vec, parseInt(ortho_persp) );
 }
 
 // Add a camera 
@@ -294,8 +299,8 @@ function OldCam () {
 }
 
 function XY(event) {
-  let grid = new THREE.GridHelper(size, divisions);
-  let vector3 = new THREE.Vector3(0, 0, 1);
+  var grid = new THREE.GridHelper(size, divisions);
+  var vector3 = new THREE.Vector3(0, 0, 1);
   grid.lookAt(vector3);
   if (vargrid1 == 0) {
     grid1.push(grid);
@@ -309,8 +314,8 @@ function XY(event) {
 }
 
 function XZ(event) {
-  let grid = new THREE.GridHelper(size, divisions);
-  let vector3 = new THREE.Vector3(0, 1, 0);
+  var grid = new THREE.GridHelper(size, divisions);
+  var vector3 = new THREE.Vector3(0, 1, 0);
   grid.lookAt(vector3);
   if (vargrid2 == 0) {
     grid2.push(grid);
@@ -323,7 +328,7 @@ function XZ(event) {
   }
 }
 function YZ(event) {
-  let grid = new THREE.GridHelper(size, divisions);
+  var grid = new THREE.GridHelper(size, divisions);
   grid.geometry.rotateZ(Math.PI / 2);
   if (vargrid3 == 0) {
     grid3.push(grid);
@@ -402,7 +407,7 @@ function Rotate(event) {
 }
 
 document.getElementById("myBtn").onclick = function () {
-  Model1.style.display = "block";
+  Model.style.display = "block";
   modelbutton2.addEventListener("click", () => {
     var xcoord = document.getElementById("x1").value;
     var ycoord = document.getElementById("y1").value;
@@ -424,7 +429,7 @@ document.getElementById("myBtn").onclick = function () {
     }
     scene.remove(dott[0]);
     con = 1;
-    Model1.style.display = "none";
+    Mode.style.display = "none";
   });
 };
 
@@ -567,14 +572,7 @@ document.addEventListener("pointermove", (event) => {
     document.getElementById("h-z").value = h_z.toFixed(2);
   }
 });
-document.getElementById("h-s").onchange = function () {
-  scale = parseFloat(document.getElementById("h-s").value) ;
-  // alert(scale);
-  document.getElementById("h-x").value = ( parseFloat(document.getElementById("quantityx").value) * scale).toFixed(2);    
-  document.getElementById("h-y").value = ( parseFloat(document.getElementById("quantityy").value) * scale).toFixed(2);
-  document.getElementById("h-z").value = ( parseFloat(document.getElementById("quantityz").value) * scale).toFixed(2);
 
-};
 // mouse click
 
 document.addEventListener("pointerdown", () => {
@@ -808,7 +806,7 @@ camera = new THREE.PerspectiveCamera(
 function createMaterials() {
   const cubeShader = new THREE.ShaderMaterial({
     uniforms: {
-      colorA: { type: "vec3", value: new THREE.Color(0x00FF00) },
+      colorA: { type: "vec3", value: new THREE.Color(0xff0000) },
       colorB: { type: "vec3", value: new THREE.Color(0x0000ff) },
     },
     vertexShader: vertexShader(),
@@ -855,7 +853,7 @@ let init = function () {
   }
   var PointGeometry = Dot();
   renderer = new THREE.WebGLRenderer();
-  var container = document.getElementById("hello");
+  var container = document.getElementById("canvas-main");
   var w = container.offsetWidth;
   var h = container.offsetHeight;
   renderer.setSize(w, h);
