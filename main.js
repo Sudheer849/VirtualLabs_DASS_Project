@@ -182,15 +182,7 @@ checkboxes[6].addEventListener("click", () => {
 // --------------------------------------------------------------------------------------------------
 
 var buttons = document.getElementsByTagName("button");
-// buttons[0].addEventListener("click", XY, false);
-// buttons[1].addEventListener("click", XZ, false); //
-// buttons[2].addEventListener("click", YZ, false);
 buttons[0].addEventListener("click", Change, false);
-// buttons[4].addEventListener("click", Rotate, false);
-// buttons[5].addEventListener("click", Delete, false);
-// buttons[6].addEventListener("click", Add, false);
-//buttons[7].addEventListener("click", ADD, false);
-// buttons[8].addEventListener("click", lockV, false);
 buttons[1].addEventListener("click", NewCam, false);
 buttons[2].addEventListener("click", OldCam, false);
 const size = 50;
@@ -259,12 +251,13 @@ document.getElementById("new-cam").onclick = function (){
   let camera_pos = new THREE.Vector3(document.getElementById("cam-x").value, document.getElementById("cam-y").value, document.getElementById("cam-z").value);
   let target = new THREE.Vector3(document.getElementById("target-x").value, document.getElementById("target-y").value, document.getElementById("target-z").value);
   let up_vec = new THREE.Vector3(document.getElementById("up-x").value, document.getElementById("up-y").value, document.getElementById("up-z").value);
-  let ortho_persp = document.getElementById("ortho-id").value;
+  // let ortho_persp = document.getElementById("ortho-id").value;
+  let camtype = document.getElementById("cam-type").value;
 
   // debug
-  console.log(near, far, left, right, top, bottom, camera_pos, target, up_vec, parseInt(ortho_persp));
+  console.log(near, far, left, right, top, bottom, camera_pos, target, up_vec, parseInt(camtype));
 
-  AddCam(parseFloat(near), parseFloat(far), parseFloat(left), parseFloat(right), parseFloat(top), parseFloat(bottom), camera_pos, target, up_vec, 1 );
+  AddCam(parseFloat(near), parseFloat(far), parseFloat(left), parseFloat(right), parseFloat(top), parseFloat(bottom), camera_pos, target, up_vec, camtype );
 }
 
 // Add a camera 
