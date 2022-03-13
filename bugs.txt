@@ -8,7 +8,7 @@ before R1:
 7. Modular Code 
 8. Multiple Files
 9. Make the inputs for coordinates as tuples
-10. Scalling factor
+10. Scaling factor
 11. Proper Margins(important)
 12. Buttons should come in line 
 13. ModelBox css should be changed

@@ -17,11 +17,11 @@ var Model1 = document.getElementById("ModelAdd");
 var ModelAdd = document.getElementById("myBtn");
 var span = document.getElementsByClassName("close")[0];
 var deletebutton = document.getElementById("deletebutton");
-let scene,
-  camera,
-  renderer,
-  orbit,
-  shapes = [],
+var scene;
+var camera;
+var renderer;
+var orbit;
+var shapes = [],
   rot = 0.01,
   variable = 0,
   con = 0,
@@ -166,8 +166,8 @@ checkboxes[5].addEventListener("click", () => {
 // YZ Grid
 checkboxes[6].addEventListener("click", () => {
   if (checkboxes[6].checked) {
-    var grid = new THREE.GridHelper(size, divisions);
-    var vector3 = new THREE.Vector3(0, 1, 0);
+    let grid = new THREE.GridHelper(size, divisions);
+    let vector3 = new THREE.Vector3(0, 1, 0);
     grid.lookAt(vector3);
     grid2.push(grid);
     scene.add(grid2[0]);
@@ -301,8 +301,8 @@ function OldCam () {
 }
 
 function XY(event) {
-  var grid = new THREE.GridHelper(size, divisions);
-  var vector3 = new THREE.Vector3(0, 0, 1);
+  let grid = new THREE.GridHelper(size, divisions);
+  let vector3 = new THREE.Vector3(0, 0, 1);
   grid.lookAt(vector3);
   if (vargrid1 == 0) {
     grid1.push(grid);
@@ -316,8 +316,8 @@ function XY(event) {
 }
 
 function XZ(event) {
-  var grid = new THREE.GridHelper(size, divisions);
-  var vector3 = new THREE.Vector3(0, 1, 0);
+  let grid = new THREE.GridHelper(size, divisions);
+  let vector3 = new THREE.Vector3(0, 1, 0);
   grid.lookAt(vector3);
   if (vargrid2 == 0) {
     grid2.push(grid);
@@ -330,7 +330,7 @@ function XZ(event) {
   }
 }
 function YZ(event) {
-  var grid = new THREE.GridHelper(size, divisions);
+  let grid = new THREE.GridHelper(size, divisions);
   grid.geometry.rotateZ(Math.PI / 2);
   if (vargrid3 == 0) {
     grid3.push(grid);
@@ -574,7 +574,14 @@ document.addEventListener("pointermove", (event) => {
     document.getElementById("h-z").value = h_z.toFixed(2);
   }
 });
+document.getElementById("h-s").onchange = function () {
+  scale = parseFloat(document.getElementById("h-s").value) ;
+  // alert(scale);
+  document.getElementById("h-x").value = ( parseFloat(document.getElementById("quantityx").value) * scale).toFixed(2);    
+  document.getElementById("h-y").value = ( parseFloat(document.getElementById("quantityy").value) * scale).toFixed(2);
+  document.getElementById("h-z").value = ( parseFloat(document.getElementById("quantityz").value) * scale).toFixed(2);
 
+};
 // mouse click
 
 document.addEventListener("pointerdown", () => {
@@ -808,7 +815,7 @@ camera = new THREE.PerspectiveCamera(
 function createMaterials() {
   const cubeShader = new THREE.ShaderMaterial({
     uniforms: {
-      colorA: { type: "vec3", value: new THREE.Color(0xff0000) },
+      colorA: { type: "vec3", value: new THREE.Color(0x00FF00) },
       colorB: { type: "vec3", value: new THREE.Color(0x0000ff) },
     },
     vertexShader: vertexShader(),
