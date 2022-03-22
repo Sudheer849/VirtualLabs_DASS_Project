@@ -2,6 +2,7 @@ import * as THREE from "https://threejsfundamentals.org/threejs/resources/threej
 import { OrbitControls } from "https://threejsfundamentals.org/threejs/resources/threejs/r115/examples/jsm/controls/OrbitControls.js";
 import { MOUSE } from "https://unpkg.com/three@0.128.0/build/three.module.js";
 const move_button = document.getElementById("move-button");
+const set_rotation_axis = document.getElementById("set-rotation-axis");
 const modalbutton1 = document.querySelector(".buttonisprimary");
 const modalbutton2 = document.querySelector(".buttonissecondary");
 let threeD = document.getElementById("3d-toggle-cb");
@@ -13,18 +14,20 @@ let xz_grid = document.getElementById("xz-grid-cb");
 
 let modal_add = document.getElementById("add-modal");
 let modal_edit = document.getElementById("edit-modal");
-
+let initial_pos = [3, 3, 3];
 let span_edit_modal = document.getElementsByClassName("close")[0];
 var slider = document.getElementById("slider");
 slider.addEventListener("input", movePoint);
-document.getElementById("slider").max =
-  document.getElementById("theta").value - 3;
+document.getElementById("slider").max = document.getElementById("theta").value;
 document.getElementById("slider").min = 0;
-slider.step =
-  (document.getElementById("slider").max -
-    document.getElementById("slider").min) /
-  document.getElementById("frames").value;
-let theta_change = document.getElementById("theta").value;
+slider.step =(document.getElementById("slider").max - document.getElementById("slider").min) / document.getElementById("frames").value;
+
+let rot_axis = new THREE.Vector3( document.getElementById("x-comp").value, document.getElementById("y-comp").value, document.getElementById("z-comp").value );
+// convert axis to unit vector
+rot_axis.normalize();
+console.log("normalised axis ", rot_axis);
+
+let total_angle = document.getElementById("theta").value;
 let frames = document.getElementById("frames").value;
 let deletebutton = document.getElementById("deletebutton");
 let present_theta = 0;
@@ -44,12 +47,8 @@ let scene,
   dragx = [],
   dragy = [],
   dragz = [],
-  xcor = 3,
-  ycor = 3,
-  zcor = 3,
   lock = 0,
   dir = [],
-  scale = 1,
   arrowHelper = [];
 
 // Modal controls for Add Shape Button
@@ -129,7 +128,8 @@ lock_vertices.addEventListener("click", () => {
       RIGHT: MOUSE.ROTATE,
     };
     orbit.target.set(0, 0, 0);
-    orbit.enableDamping = true;
+    orbit.dampingFactor = 0.05;
+    orbit.enableDamping = true;    
   } else {
     lock = 0;
     orbit.mouseButtons = {
@@ -138,8 +138,8 @@ lock_vertices.addEventListener("click", () => {
       RIGHT: MOUSE.ROTATE,
     };
     orbit.target.set(0, 0, 0);
+    orbit.dampingFactor = 0.05;
     orbit.enableDamping = true;
-    //
   }
 });
 
@@ -273,10 +273,6 @@ function NewCam(event) {
 }
 
 document.getElementById("new-cam").onclick = function () {
-  // function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp ) {
-  // AddCam(0.1, 1000, -10, -10, -10, 10, new THREE.Vector3(7,-6,2), new THREE.Vector3(1,1,1), new THREE.Vector3(1,0,1), 0);
-  // AddCam(0.01, 100, -3.2, 3.2, -2.4, 2.4, new THREE.Vector3(3,5,2), new THREE.Vector3(0,0,0), new THREE.Vector3(0,1,0), 1);
-
   let near = document.getElementById("near-coord").value;
   let far = document.getElementById("far-coord").value;
   let left = document.getElementById("left-coord").value;
@@ -387,9 +383,6 @@ function Change(event) {
     positionAttr.array[i + 2] = projectedPoint.z;
   }
   positionAttr.needsUpdate = true;
-
-  // orbit.minPolarAngle = 0;
-  // orbit.maxPolarAngle = 0;
 }
 
 document.getElementById("add-shape-btn").onclick = function () {
@@ -514,8 +507,8 @@ function ondblclick(event) {
 span_edit_modal.onclick = function () {
   modal_edit.style.display = "none";
 };
-// mouse drag
 
+// mouse drag
 document.addEventListener("pointermove", (event) => {
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -535,43 +528,9 @@ document.addEventListener("pointermove", (event) => {
         planeIntersect.z + shift.z - dragz[i]
       );
     }
+
   } else if (isDragging) {
     raycaster.ray.intersectPlane(plane, planeIntersect);
-    //  dot.geometry.verticesNeedUpdate = true;
-    /*  dot_list[0].position.set(
-      planeIntersect.x + shift.x,
-      planeIntersect.y + shift.y,
-      planeIntersect.z + shift.z
-    );*/
-    /*scale = document.getElementById("h-s").value;
-    let c_x = (document.getElementById("quantityx").value = (
-      (dot_list[0].position.x + xcor) *
-      scale
-    ).toFixed(2));
-    let c_y = (document.getElementById("quantityy").value = (
-      (dot_list[0].position.y + ycor) *
-      scale
-    ).toFixed(2));
-    let c_z = (document.getElementById("quantityz").value = (
-      (dot_list[0].position.z + zcor) *
-      scale
-    ).toFixed(2));
-
-    let h_x = c_x * scale;
-    let h_y = c_y * scale;
-    let h_z = c_z * scale;
-
-    document.getElementById("h-x").value = h_x.toFixed(2);
-    document.getElementById("h-y").value = h_y.toFixed(2);
-    document.getElementById("h-z").value = h_z.toFixed(2);*/
-
-    /* orbit.mouseButtons = {
-        LEFT: MOUSE.PAN,
-        MIDDLE: MOUSE.DOLLY,
-        RIGHT: MOUSE.ROTATE,
-      };
-      // orbit.target.set(0, 0, 0);
-      orbit.enableDamping = true;*/
   }
 });
 
@@ -587,7 +546,7 @@ document.addEventListener("pointerdown", () => {
       plane.setFromNormalAndCoplanarPoint(pNormal, scene.position);
       raycaster.setFromCamera(mouse, camera);
       raycaster.ray.intersectPlane(plane, planeIntersect);
-      shift.subVectors(dot_list[0].position, planeIntersect);
+      shift.subVectors(dot_list[0].geometry.getAttribute('position').array, planeIntersect);
       isDragging = true;
       dragObject = shapes[shapes.length - 1];
       break;
@@ -603,70 +562,77 @@ document.addEventListener("pointerup", () => {
 // Slider Implementation
 // ---------------------------------------------------------------------------------------
 function movePoint(e) {
-  console.log("Hello");
-  var target = e.target ? e.target : e.srcElement;
-  let theta = target.value * document.getElementById("theta").value;
-  theta = theta / target.max;
-  present_theta = theta;
-  let radius = 3 * Math.sqrt(2);
-  let x = radius * Math.cos((theta * Math.PI) / 180 + Math.PI / 4);
-  let y = radius * Math.sin((theta * Math.PI) / 180 + Math.PI / 4);
-  let z = 3;
-  dot_list[0].position.set(x - 3, y - 3, z - 3);
-  console.log(Math.cos((theta * Math.PI) / 180));
-  document.getElementById("quantityx").value =
-    parseFloat(dot_list[0].position.x) + 3;
-  document.getElementById("quantityy").value =
-    parseFloat(dot_list[0].position.y) + 3;
-  document.getElementById("quantityz").value =
-    parseFloat(dot_list[0].position.z) + 3;
-}
-document.getElementById("theta").onchange = function () {
-  let slider_value = document.getElementById("slider").value;
-  console.log(slider_value);
-  let new_value = document.getElementById("theta").value; // new value
-  let new_theta = present_theta * (new_value / theta_change);
-  let radius = 3 * Math.sqrt(2);
-  let x = radius * Math.cos((new_theta * Math.PI) / 180 + Math.PI / 4);
-  let y = radius * Math.sin((new_theta * Math.PI) / 180 + Math.PI / 4);
-  let z = 3;
-  dot_list[0].position.set(x - 3, y - 3, z - 3);
-  document.getElementById("quantityx").value =
-    parseFloat(dot_list[0].position.x) + 3;
-  document.getElementById("quantityy").value =
-    parseFloat(dot_list[0].position.y) + 3;
-  document.getElementById("quantityz").value =
-    parseFloat(dot_list[0].position.z) + 3;
+    var target = e.target ? e.target : e.srcElement;
+    let rot_angle = ( target.value * parseFloat(document.getElementById("theta").value) ) / target.max - present_theta;
 
-  theta_change = new_value;
-  document.getElementById("slider").value = slider_value;
-  console.log(document.getElementById("slider").value);
-};
+    let quat = new THREE.Quaternion();
+    // console.log(quat);
+    let rot_matrix = new THREE.Matrix4();
+    quat.setFromAxisAngle( rot_axis, rot_angle * Math.PI / 180 );
+    // console.log(quat);
+    rot_matrix.makeRotationFromQuaternion(quat);
+    // console.log(rot_matrix);
+    // rot_matrix.makeRotationAxis(rot_axis, rot_angle/frames);
+
+    dot_list[0].geometry.applyMatrix4( rot_matrix );
+    dot_list[0].geometry.verticesNeedUpdate = true;
+
+    document.getElementById("quantityx").value = dot_list[0].geometry.getAttribute('position').array[0];
+    document.getElementById("quantityy").value = dot_list[0].geometry.getAttribute('position').array[1];
+    document.getElementById("quantityz").value = dot_list[0].geometry.getAttribute('position').array[2];
+
+    present_theta += rot_angle;
+}
 
 document.getElementById("frames").onchange = function () {
-  let new_value = document.getElementById("frames").value;
-  let new_theta = present_theta * (frames / new_value);
-  let radius = 3 * Math.sqrt(2);
-  let x = radius * Math.cos((new_theta * Math.PI) / 180 + Math.PI / 4);
-  let y = radius * Math.sin((new_theta * Math.PI) / 180 + Math.PI / 4);
-  let z = 3;
-  dot_list[0].position.set(x - 3, y - 3, z - 3);
-  document.getElementById("quantityx").value =
-    parseFloat(dot_list[0].position.x) + 3;
-  document.getElementById("quantityy").value =
-    parseFloat(dot_list[0].position.y) + 3;
-  document.getElementById("quantityz").value =
-    parseFloat(dot_list[0].position.z) + 3;
-  slider.step =
-    (document.getElementById("slider").max -
-      document.getElementById("slider").min) /
-    document.getElementById("frames").value;
+  let new_value = document.getElementById("frames").value; // new value
+  let cur_pos = new Array();
+  for ( let i = 0; i < 3; i++ )  {
+    cur_pos[i] = dot_list[0].geometry.getAttribute('position').array[i];
+  }
+
+  document.getElementById("quantityx").value = initial_pos[0] + parseFloat(( (cur_pos[0] - initial_pos[0]) * frames) / new_value);
+  document.getElementById("quantityy").value = initial_pos[1] + parseFloat(( (cur_pos[1] - initial_pos[1]) * frames) / new_value);
+  document.getElementById("quantityz").value = initial_pos[2] + parseFloat(( (cur_pos[2] - initial_pos[2]) * frames) / new_value);
+  
+  let translate_M = new THREE.Matrix4();
+  translate_M.makeTranslation( document.getElementById("quantityx").value - cur_pos[0], document.getElementById("quantityy").value - cur_pos[1], document.getElementById("quantityz").value - cur_pos[2] );
+  dot_list[0].geometry.applyMatrix4( translate_M );
+  dot_list[0].geometry.verticesNeedUpdate = true;
+
+  slider.step = (document.getElementById("slider").max - document.getElementById("slider").min) / document.getElementById("frames").value;
   let no_of_frames = frames * (slider.value / slider.max);
-  slider.value =
-    document.getElementById("slider").max * (no_of_frames / new_value);
+  slider.value = document.getElementById("slider").max * (no_of_frames / new_value);
   //  document.getElementById("slider").value =  * (new_value/frames)
   frames = new_value;
 };
+
+document.getElementById("theta").onchange = function () {
+  let slider_value = document.getElementById("slider").value;
+  // console.log(slider_value);
+  let new_value = document.getElementById("theta").value; // new value
+  let new_theta = present_theta * (new_value / total_angle);  
+  
+  let quat = new THREE.Quaternion();
+  let rot_matrix = new THREE.Matrix4();
+  quat.setFromAxisAngle( rot_axis, (new_theta - present_theta) * Math.PI / 180 );
+  rot_matrix.makeRotationFromQuaternion(quat);
+
+  dot_list[0].geometry.applyMatrix4( rot_matrix );
+  dot_list[0].geometry.verticesNeedUpdate = true;
+
+  document.getElementById("quantityx").value = dot_list[0].geometry.getAttribute('position').array[0];
+  document.getElementById("quantityy").value = dot_list[0].geometry.getAttribute('position').array[1];
+  document.getElementById("quantityz").value = dot_list[0].geometry.getAttribute('position').array[2];
+
+  total_angle = new_value;
+  document.getElementById("slider").value = slider_value;
+  present_theta = new_theta;
+};
+
+set_rotation_axis.addEventListener("click", () => {
+  rot_axis = new THREE.Vector3( parseFloat( document.getElementById("x-comp").value), parseFloat( document.getElementById("y-comp").value), parseFloat( document.getElementById("z-comp").value) );
+});
 
 // --------------------------------------------------------------------------------------------------
 
@@ -706,11 +672,21 @@ let createCube = function (x, y, z) {
   dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
 };
 move_button.addEventListener("click", () => {
-  let x = document.getElementById("quantityx").value;
-  let y = document.getElementById("quantityy").value;
-  let z = document.getElementById("quantityz").value;
-  console.log(x, y, z);
-  dot_list[0].position.set(x - xcor, y - ycor, z - zcor);
+  initial_pos[0] = parseFloat( document.getElementById("quantityx").value);
+  initial_pos[1] = parseFloat( document.getElementById("quantityy").value);
+  initial_pos[2] = parseFloat( document.getElementById("quantityz").value);
+
+  let cur_pos = new Array();
+  for ( let i = 0; i < 3; i++ ) 
+    cur_pos[i] = dot_list[0].geometry.getAttribute('position').array[i];
+  
+  let translate_M = new THREE.Matrix4();
+  translate_M.makeTranslation( initial_pos[0] - cur_pos[0], initial_pos[1] - cur_pos[1], initial_pos[2] - cur_pos[2] );
+  dot_list[0].geometry.applyMatrix4( translate_M );  
+  dot_list[0].geometry.verticesNeedUpdate = true;
+
+  document.getElementById("slider").max = document.getElementById("finalx").value - initial_pos[0];
+  slider.step = (document.getElementById("slider").max - document.getElementById("slider").min) / document.getElementById("frames").value;
 });
 // Dodecahedron Function
 // --------------------------------------------------------------------------------------------------
@@ -814,35 +790,22 @@ let createTetrahedron = function (x, y, z) {
   dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
 };
 
-move_button.addEventListener("click", () => {
-  let x = document.getElementById("quantityx").value;
-  let y = document.getElementById("quantityy").value;
-  let z = document.getElementById("quantityz").value;
-  console.log(x, y, z);
-  dot_list[0].position.set(x - xcor, y - ycor, z - zcor);
-});
-move_button.addEventListener("click", () => {
-  let x = document.getElementById("quantityx").value;
-  let y = document.getElementById("quantityy").value;
-  let z = document.getElementById("quantityz").value;
-  console.log(x, y, z);
-  dot_list[0].position.set(x - xcor, y - ycor, z - zcor);
-});
-
 // Dot Function
 // --------------------------------------------------------------------------------------------------
 
 let Dot = function () {
-  let dotGeometry = new THREE.Geometry();
-  dotGeometry.vertices.push(new THREE.Vector3(xcor, ycor, zcor));
+  
+  let tmp_vec = new THREE.Vector3( initial_pos[0], initial_pos[1], initial_pos[2] );
+  let dotGeometry = new THREE.BufferGeometry().setFromPoints( [ tmp_vec ] );
   let dotMaterial = new THREE.PointsMaterial({
     size: 6,
     sizeAttenuation: false,
   });
-  let point = new THREE.Points(dotGeometry, dotMaterial);
+
+  let point = new THREE.Points( dotGeometry, dotMaterial );
   dot_list.push(point);
   scene.add(dot_list[0]);
-  console.log(dotGeometry.vertices[0]);
+
   return dotGeometry;
 };
 
@@ -925,7 +888,6 @@ let init = function () {
   let container = document.getElementById("canvas-main");
   let w = container.offsetWidth;
   let h = container.offsetHeight;
-  console.log(w, h);
   renderer.setSize(w, h);
   container.appendChild(renderer.domElement);
   orbit = new OrbitControls(camera, renderer.domElement);
@@ -951,23 +913,3 @@ let mainLoop = function () {
 };
 init();
 mainLoop();
-
-/*
-function movePoint(e) {
-  var target = e.target ? e.target : e.srcElement;
-  let theta =
-    target.value * (document.getElementById("theta").value - 3);
-  theta = theta / target.max;
-  let radius = 3*Math.sqrt(2);
-  let x = radius * Math.cos(theta);
-  let y = radius * Math.sin(theta);
-  let z = 3;
-  dot_list[0].position.set(x, y, z);
-  document.getElementById("quantityx").value =
-    parseFloat(dot_list[0].position.x) + 3;
-  document.getElementById("quantityy").value =
-    parseFloat(dot_list[0].position.y) + 3;
-  document.getElementById("quantityz").value =
-    parseFloat(dot_list[0].position.z) + 3;
-}
-*/

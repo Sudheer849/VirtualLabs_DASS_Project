@@ -13,22 +13,16 @@ let xz_grid = document.getElementById("xz-grid-cb");
 
 let modal_add = document.getElementById("add-modal");
 let modal_edit = document.getElementById("edit-modal");
-let initial_xcoordinate = 3;
-let initial_ycoordinate = 3;
-let initial_zcoordinate = 3;
+let initial_pos = [3, 3, 3];
 let span_edit_modal = document.getElementsByClassName("close")[0];
 var slider = document.getElementById("slider");
 slider.addEventListener("input", movePoint);
-document.getElementById("slider").max =
-  document.getElementById("finalx").value - initial_xcoordinate;
+document.getElementById("slider").max = document.getElementById("finalx").value - initial_pos[0];
 document.getElementById("slider").min = 0;
-slider.step =
-  (document.getElementById("slider").max -
-    document.getElementById("slider").min) /
-  document.getElementById("frames").value;
-let final_xcoordinate = document.getElementById("finalx").value;
-let final_ycoordinate = document.getElementById("finaly").value;
-let final_zcoordinate = document.getElementById("finalz").value;
+slider.step =(document.getElementById("slider").max - document.getElementById("slider").min) / document.getElementById("frames").value;
+
+let final_pos = [ document.getElementById("finalx").value, document.getElementById("finaly").value, document.getElementById("finalz").value ];
+
 let frames = document.getElementById("frames").value;
 let deletebutton = document.getElementById("deletebutton");
 let scene,
@@ -132,7 +126,8 @@ lock_vertices.addEventListener("click", () => {
       RIGHT: MOUSE.ROTATE,
     };
     orbit.target.set(0, 0, 0);
-    orbit.enableDamping = true;
+    orbit.dampingFactor = 0.05;
+    orbit.enableDamping = true;    
   } else {
     lock = 0;
     orbit.mouseButtons = {
@@ -141,8 +136,8 @@ lock_vertices.addEventListener("click", () => {
       RIGHT: MOUSE.ROTATE,
     };
     orbit.target.set(0, 0, 0);
+    orbit.dampingFactor = 0.05;
     orbit.enableDamping = true;
-    //
   }
 });
 
@@ -390,9 +385,6 @@ function Change(event) {
     positionAttr.array[i + 2] = projectedPoint.z;
   }
   positionAttr.needsUpdate = true;
-
-  // orbit.minPolarAngle = 0;
-  // orbit.maxPolarAngle = 0;
 }
 
 document.getElementById("add-shape-btn").onclick = function () {
@@ -537,44 +529,9 @@ document.addEventListener("pointermove", (event) => {
         planeIntersect.y + shift.y - dragy[i],
         planeIntersect.z + shift.z - dragz[i]
       );
-    }
+    } 
   } else if (isDragging) {
     raycaster.ray.intersectPlane(plane, planeIntersect);
-    //  dot.geometry.verticesNeedUpdate = true;
-    /*  dot_list[0].position.set(
-      planeIntersect.x + shift.x,
-      planeIntersect.y + shift.y,
-      planeIntersect.z + shift.z
-    );*/
-    /*scale = document.getElementById("h-s").value;
-    let c_x = (document.getElementById("quantityx").value = (
-      (dot_list[0].position.x + xcor) *
-      scale
-    ).toFixed(2));
-    let c_y = (document.getElementById("quantityy").value = (
-      (dot_list[0].position.y + ycor) *
-      scale
-    ).toFixed(2));
-    let c_z = (document.getElementById("quantityz").value = (
-      (dot_list[0].position.z + zcor) *
-      scale
-    ).toFixed(2));
-
-    let h_x = c_x * scale;
-    let h_y = c_y * scale;
-    let h_z = c_z * scale;
-
-    document.getElementById("h-x").value = h_x.toFixed(2);
-    document.getElementById("h-y").value = h_y.toFixed(2);
-    document.getElementById("h-z").value = h_z.toFixed(2);*/
-
-    /* orbit.mouseButtons = {
-        LEFT: MOUSE.PAN,
-        MIDDLE: MOUSE.DOLLY,
-        RIGHT: MOUSE.ROTATE,
-      };
-      // orbit.target.set(0, 0, 0);
-      orbit.enableDamping = true;*/
   }
 });
 
@@ -590,7 +547,7 @@ document.addEventListener("pointerdown", () => {
       plane.setFromNormalAndCoplanarPoint(pNormal, scene.position);
       raycaster.setFromCamera(mouse, camera);
       raycaster.ray.intersectPlane(plane, planeIntersect);
-      shift.subVectors(dot_list[0].position, planeIntersect);
+      shift.subVectors(dot_list[0].geometry.getAttribute('position').array, planeIntersect);
       isDragging = true;
       dragObject = shapes[shapes.length - 1];
       break;
@@ -606,135 +563,84 @@ document.addEventListener("pointerup", () => {
 // Slider Implementation
 // ---------------------------------------------------------------------------------------
 function movePoint(e) {
-  //Matrix.needsUpdate = true;
   var target = e.target ? e.target : e.srcElement;
-  let xcoordinate =
-    target.value *
-    (document.getElementById("finalx").value - initial_xcoordinate);
-  xcoordinate = xcoordinate / target.max;
-  let ycoordinate =
-    target.value *
-    (document.getElementById("finaly").value - initial_ycoordinate);
-  ycoordinate = ycoordinate / target.max;
-  let zcoordinate =
-    target.value *
-    (document.getElementById("finalz").value - initial_zcoordinate);
-  zcoordinate = zcoordinate / target.max;
-  console.log(ycoordinate);
-  console.log(xcoordinate, ycoordinate, zcoordinate);
-  //let matrix = new THREE.Matrix4();
-  // matrix  --- dot_list[0].matrix;
 
-  dot_list[0].position.set(xcoordinate, ycoordinate, zcoordinate);
-  document.getElementById("quantityx").value = parseFloat(
-    dot_list[0].position.x + initial_xcoordinate
-  );
-  document.getElementById("quantityy").value = parseFloat(
-    dot_list[0].position.y + initial_ycoordinate
-  );
-  document.getElementById("quantityz").value = parseFloat(
-    dot_list[0].position.z + initial_zcoordinate
-  );
-  console.log(dot_list[0].position.x);
-  console.log(initial_xcoordinate);
-  console.log(
-    parseFloat(dot_list[0].position.x) + parseFloat(initial_xcoordinate)
-  );
+  let p = new THREE.Vector3( dot_list[0].geometry.getAttribute('position').array[0], dot_list[0].geometry.getAttribute('position').array[1], dot_list[0].geometry.getAttribute('position').array[2] );
+  let tx = initial_pos[0] + ( target.value * (document.getElementById("finalx").value - initial_pos[0]) )/target.max - p.x;
+  let ty = initial_pos[1] + ( target.value * (document.getElementById("finaly").value - initial_pos[1]) )/target.max - p.y;
+  let tz = initial_pos[2] + ( target.value * (document.getElementById("finalz").value - initial_pos[2]) )/target.max - p.z;
+
+  let translate_M = new THREE.Matrix4();
+  translate_M.makeTranslation( tx, ty, tz );
+  // console.log(translate_M);
+  dot_list[0].geometry.applyMatrix4( translate_M );
+  dot_list[0].geometry.verticesNeedUpdate = true;
+
+  document.getElementById("quantityx").value = dot_list[0].geometry.getAttribute('position').array[0];
+  document.getElementById("quantityy").value = dot_list[0].geometry.getAttribute('position').array[1];
+  document.getElementById("quantityz").value = dot_list[0].geometry.getAttribute('position').array[2];
 }
 
 document.getElementById("finalx").onchange = function () {
-  let slider_value = document.getElementById("slider").value;
-  console.log(slider_value);
+  // let slider_value = document.getElementById("slider").value;
+  // console.log(slider_value);
   let new_value = document.getElementById("finalx").value; // new value
-  let new_position =
-    initial_xcoordinate +
-    (dot_list[0].position.x * (new_value - initial_xcoordinate)) /
-      (final_xcoordinate - initial_xcoordinate);
-  dot_list[0].position.set(
-    new_position - initial_xcoordinate,
-    dot_list[0].position.y,
-    dot_list[0].position.z
-  );
-  document.getElementById("quantityx").value =
-    parseFloat(dot_list[0].position.x) + initial_xcoordinate;
-  document.getElementById("quantityy").value =
-    parseFloat(dot_list[0].position.y) + initial_ycoordinate;
-  document.getElementById("quantityz").value =
-    parseFloat(dot_list[0].position.z) + initial_zcoordinate;
-
-  final_xcoordinate = new_value;
-  document.getElementById("slider").value = slider_value;
-  console.log(document.getElementById("slider").value);
+  let old_position = dot_list[0].geometry.getAttribute('position').array[0];
+  let new_position = initial_pos[0] + ( (old_position - initial_pos[0]) * (new_value - initial_pos[0])) / (final_pos[0] - initial_pos[0]);
+  let translate_M = new THREE.Matrix4();
+  translate_M.makeTranslation( new_position - old_position, 0, 0 );
+  dot_list[0].geometry.applyMatrix4( translate_M );
+  dot_list[0].geometry.verticesNeedUpdate = true;
+  
+  document.getElementById("quantityx").value = dot_list[0].geometry.getAttribute('position').array[0];
+  final_pos[0] = new_value;
+  // document.getElementById("slider").value = slider_value;
 };
 document.getElementById("finaly").onchange = function () {
   let new_value = document.getElementById("finaly").value; // new value
-  let new_position =
-    initial_ycoordinate +
-    (dot_list[0].position.y * (new_value - initial_ycoordinate)) /
-      (final_ycoordinate - initial_ycoordinate);
-  dot_list[0].position.set(
-    dot_list[0].position.x,
-    new_position - initial_ycoordinate,
-    dot_list[0].position.z
-  );
-  document.getElementById("quantityx").value =
-    parseFloat(dot_list[0].position.x) + initial_xcoordinate;
-  document.getElementById("quantityy").value =
-    parseFloat(dot_list[0].position.y) + initial_ycoordinate;
-  document.getElementById("quantityz").value =
-    parseFloat(dot_list[0].position.z) + initial_zcoordinate;
-  final_ycoordinate = new_value;
+  let old_position = dot_list[0].geometry.getAttribute('position').array[1];
+  let new_position = initial_pos[1] + ( (old_position - initial_pos[1]) * (new_value - initial_pos[1])) / (final_pos[1] - initial_pos[1]);
+  
+  let translate_M = new THREE.Matrix4();
+  translate_M.makeTranslation( 0, new_position - old_position, 0 );
+  dot_list[0].geometry.applyMatrix4( translate_M );
+  dot_list[0].geometry.verticesNeedUpdate = true;
+  
+  document.getElementById("quantityy").value = dot_list[0].geometry.getAttribute('position').array[1];
+  final_pos[1] = new_value;
 };
 document.getElementById("finalz").onchange = function () {
   let new_value = document.getElementById("finalz").value; // new value
-  let new_position =
-    initial_zcoordinate +
-    (dot_list[0].position.z * (new_value - initial_zcoordinate)) /
-      (final_zcoordinate - initial_zcoordinate);
-  dot_list[0].position.set(
-    dot_list[0].position.x,
-    dot_list[0].position.y,
-    new_position - initial_zcoordinate
-  );
-  document.getElementById("quantityx").value =
-    parseFloat(dot_list[0].position.x) + initial_xcoordinate;
-  document.getElementById("quantityy").value =
-    parseFloat(dot_list[0].position.y) + initial_ycoordinate;
-  document.getElementById("quantityz").value =
-    parseFloat(dot_list[0].position.z) + initial_zcoordinate;
-  final_zcoordinate = new_value;
+  let old_position = dot_list[0].geometry.getAttribute('position').array[2];
+  let new_position = initial_pos[2] + ( (old_position - initial_pos[2]) * (new_value - initial_pos[2])) / (final_pos[2] - initial_pos[2]);
+  
+  let translate_M = new THREE.Matrix4();
+  translate_M.makeTranslation( 0, 0, new_position - old_position );
+  dot_list[0].geometry.applyMatrix4( translate_M );
+  dot_list[0].geometry.verticesNeedUpdate = true;
+  
+  document.getElementById("quantityz").value = dot_list[0].geometry.getAttribute('position').array[2];
+  final_pos[2] = new_value;
 };
 document.getElementById("frames").onchange = function () {
   let new_value = document.getElementById("frames").value; // new value
-  let new_xcoord =
-    initial_xcoordinate +
-    parseFloat((dot_list[0].position.x * frames) / new_value);
-  let new_ycoord =
-    initial_ycoordinate +
-    parseFloat((dot_list[0].position.y * frames) / new_value);
-  let new_zcoord =
-    initital_zcoordinate +
-    parseFloat((dot_list[0].position.z * frames) / new_value);
-  console.log(frames, new_value);
-  console.log(new_xcoord, new_ycoord, new_zcoord);
-  dot_list[0].position.set(
-    new_xcoord - initial_xcoordinate,
-    new_ycoord - initial_ycoordinate,
-    new_zcoord - initial_zcoordinate
-  );
-  document.getElementById("quantityx").value = parseFloat(new_xcoord);
-  document.getElementById("quantityy").value = parseFloat(new_ycoord);
-  document.getElementById("quantityz").value = parseFloat(new_zcoord);
-  /*document.getElementById("slider").max =
-      document.getElementById("finalx").value - 3;
-    document.getElementById("slider").min = 0;*/
-  slider.step =
-    (document.getElementById("slider").max -
-      document.getElementById("slider").min) /
-    document.getElementById("frames").value;
+  let cur_pos = new Array();
+  for ( let i = 0; i < 3; i++ )  {
+    cur_pos[i] = dot_list[0].geometry.getAttribute('position').array[i];
+  }
+
+  document.getElementById("quantityx").value = initial_pos[0] + parseFloat(( (cur_pos[0] - initial_pos[0]) * frames) / new_value);
+  document.getElementById("quantityy").value = initial_pos[1] + parseFloat(( (cur_pos[1] - initial_pos[1]) * frames) / new_value);
+  document.getElementById("quantityz").value = initial_pos[2] + parseFloat(( (cur_pos[2] - initial_pos[2]) * frames) / new_value);
+  
+  let translate_M = new THREE.Matrix4();
+  translate_M.makeTranslation( document.getElementById("quantityx").value - cur_pos[0], document.getElementById("quantityy").value - cur_pos[1], document.getElementById("quantityz").value - cur_pos[2] );
+  dot_list[0].geometry.applyMatrix4( translate_M );
+  dot_list[0].geometry.verticesNeedUpdate = true;
+
+  slider.step = (document.getElementById("slider").max - document.getElementById("slider").min) / document.getElementById("frames").value;
   let no_of_frames = frames * (slider.value / slider.max);
-  slider.value =
-    document.getElementById("slider").max * (no_of_frames / new_value);
+  slider.value = document.getElementById("slider").max * (no_of_frames / new_value);
   //  document.getElementById("slider").value =  * (new_value/frames)
   frames = new_value;
 };
@@ -776,28 +682,21 @@ let createCube = function (x, y, z) {
   dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
 };
 move_button.addEventListener("click", () => {
-  let x = document.getElementById("quantityx").value;
-  let y = document.getElementById("quantityy").value;
-  let z = document.getElementById("quantityz").value;
-  console.log(x, y, z);
-  /*dot_list[0].position.set(
-    x - initial_xcoordinate,
-    y - initial_ycoordinate,
-    z - initial_zcoordinate
-  );*/
-  initial_xcoordinate = parseFloat(x);
-  initial_ycoordinate = parseFloat(y);
-  initial_zcoordinate = parseFloat(z);
-  scene.remove(dot_list[0]);
-  dot_list.pop();
-  let PointGeometry = Dot();
-  document.getElementById("slider").max =
-    document.getElementById("finalx").value - initial_xcoordinate;
-  slider.step =
-    (document.getElementById("slider").max -
-      document.getElementById("slider").min) /
-    document.getElementById("frames").value;
-  // console.log(initial_xcoordinate, initial_ycoordinate, initial_zcoordinate);
+  initial_pos[0] = parseFloat( document.getElementById("quantityx").value);
+  initial_pos[1] = parseFloat( document.getElementById("quantityy").value);
+  initial_pos[2] = parseFloat( document.getElementById("quantityz").value);
+
+  let cur_pos = new Array();
+  for ( let i = 0; i < 3; i++ ) 
+    cur_pos[i] = dot_list[0].geometry.getAttribute('position').array[i];
+  
+  let translate_M = new THREE.Matrix4();
+  translate_M.makeTranslation( initial_pos[0] - cur_pos[0], initial_pos[1] - cur_pos[1], initial_pos[2] - cur_pos[2] );
+  dot_list[0].geometry.applyMatrix4( translate_M );  
+  dot_list[0].geometry.verticesNeedUpdate = true;
+
+  document.getElementById("slider").max = document.getElementById("finalx").value - initial_pos[0];
+  slider.step = (document.getElementById("slider").max - document.getElementById("slider").min) / document.getElementById("frames").value;
 });
 // Dodecahedron Function
 // --------------------------------------------------------------------------------------------------
@@ -901,42 +800,24 @@ let createTetrahedron = function (x, y, z) {
   dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
 };
 
-/*move_button.addEventListener("click", () => {
-  let x = document.getElementById("quantityx").value;
-  let y = document.getElementById("quantityy").value;
-  let z = document.getElementById("quantityz").value;
-  console.log(x, y, z);
-  dot_list[0].position.set(x - xcor, y - ycor, z - zcor);
-});
-move_button.addEventListener("click", () => {
-  let x = document.getElementById("quantityx").value;
-  let y = document.getElementById("quantityy").value;
-  let z = document.getElementById("quantityz").value;
-  console.log(x, y, z);
-  dot_list[0].position.set(x - xcor, y - ycor, z - zcor);
-});*/
+
 
 // Dot Function
 // --------------------------------------------------------------------------------------------------
 
 let Dot = function () {
-  let dotGeometry = new THREE.Geometry();
-  dotGeometry.vertices.push(
-    new THREE.Vector3(
-      initial_xcoordinate,
-      initial_ycoordinate,
-      initial_zcoordinate
-    )
-  );
-  console.log(initial_xcoordinate, initial_ycoordinate, initial_zcoordinate);
+  
+  let tmp_vec = new THREE.Vector3( initial_pos[0], initial_pos[1], initial_pos[2] );
+  let dotGeometry = new THREE.BufferGeometry().setFromPoints( [ tmp_vec ] );
   let dotMaterial = new THREE.PointsMaterial({
     size: 6,
     sizeAttenuation: false,
   });
-  let point = new THREE.Points(dotGeometry, dotMaterial);
+
+  let point = new THREE.Points( dotGeometry, dotMaterial );
   dot_list.push(point);
   scene.add(dot_list[0]);
-  console.log(dotGeometry.vertices[0]);
+
   return dotGeometry;
 };
 

@@ -13,3 +13,104 @@ before R1:
 12. Buttons should come in line 
 13. ModelBox css should be changed
 14.
+
+////////
+dot_list[0]:
+1. Line 593 - shift subvectors
+2. 
+
+let theta_change = document.getElementById("theta").value;
+let frames = document.getElementById("frames").value;
+let deletebutton = document.getElementById("deletebutton");
+let present_theta = 0;
+let scene,
+  camera,
+  renderer,
+  orbit,
+  shapes = [],
+  rot = 0.01,
+  variable = 0,
+  vargrid1 = 0,
+  vargrid2 = 0,
+  vargrid3 = 0,
+  grid1 = [],
+  grid2 = [],
+  grid3 = [],
+  dragx = [],
+  dragy = [],
+  dragz = [],
+  xcor = 3,
+  ycor = 3,
+  zcor = 3,
+  lock = 0,
+  dir = [],
+  scale = 1,
+  arrowHelper = [];
+
+// Slider Implementation
+// ---------------------------------------------------------------------------------------
+function movePoint(e) {
+  console.log("Hello");
+  var target = e.target ? e.target : e.srcElement;
+  let theta = target.value * document.getElementById("theta").value;
+  theta = theta / target.max;
+  present_theta = theta;
+  let radius = 3 * Math.sqrt(2);
+  let x = radius * Math.cos((theta * Math.PI) / 180 + Math.PI / 4);
+  let y = radius * Math.sin((theta * Math.PI) / 180 + Math.PI / 4);
+  let z = 3;
+  dot_list[0].position.set(x - 3, y - 3, z - 3);
+  console.log(Math.cos((theta * Math.PI) / 180));
+  document.getElementById("quantityx").value =
+    parseFloat(dot_list[0].position.x) + 3;
+  document.getElementById("quantityy").value =
+    parseFloat(dot_list[0].position.y) + 3;
+  document.getElementById("quantityz").value =
+    parseFloat(dot_list[0].position.z) + 3;
+}
+document.getElementById("theta").onchange = function () {
+  let slider_value = document.getElementById("slider").value;
+  console.log(slider_value);
+  let new_value = document.getElementById("theta").value; // new value
+  let new_theta = present_theta * (new_value / theta_change);
+  let radius = 3 * Math.sqrt(2);
+  let x = radius * Math.cos((new_theta * Math.PI) / 180 + Math.PI / 4);
+  let y = radius * Math.sin((new_theta * Math.PI) / 180 + Math.PI / 4);
+  let z = 3;
+  dot_list[0].position.set(x - 3, y - 3, z - 3);
+  document.getElementById("quantityx").value =
+    parseFloat(dot_list[0].position.x) + 3;
+  document.getElementById("quantityy").value =
+    parseFloat(dot_list[0].position.y) + 3;
+  document.getElementById("quantityz").value =
+    parseFloat(dot_list[0].position.z) + 3;
+
+  theta_change = new_value;
+  document.getElementById("slider").value = slider_value;
+  console.log(document.getElementById("slider").value);
+};
+
+document.getElementById("frames").onchange = function () {
+  let new_value = document.getElementById("frames").value;
+  let new_theta = present_theta * (frames / new_value);
+  let radius = 3 * Math.sqrt(2);
+  let x = radius * Math.cos((new_theta * Math.PI) / 180 + Math.PI / 4);
+  let y = radius * Math.sin((new_theta * Math.PI) / 180 + Math.PI / 4);
+  let z = 3;
+  dot_list[0].position.set(x - 3, y - 3, z - 3);
+  document.getElementById("quantityx").value =
+    parseFloat(dot_list[0].position.x) + 3;
+  document.getElementById("quantityy").value =
+    parseFloat(dot_list[0].position.y) + 3;
+  document.getElementById("quantityz").value =
+    parseFloat(dot_list[0].position.z) + 3;
+  slider.step =
+    (document.getElementById("slider").max -
+      document.getElementById("slider").min) /
+    document.getElementById("frames").value;
+  let no_of_frames = frames * (slider.value / slider.max);
+  slider.value =
+    document.getElementById("slider").max * (no_of_frames / new_value);
+  //  document.getElementById("slider").value =  * (new_value/frames)
+  frames = new_value;
+};
