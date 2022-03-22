@@ -579,6 +579,27 @@ function movePoint(e) {
   document.getElementById("quantityx").value = dot_list[0].geometry.getAttribute('position').array[0];
   document.getElementById("quantityy").value = dot_list[0].geometry.getAttribute('position').array[1];
   document.getElementById("quantityz").value = dot_list[0].geometry.getAttribute('position').array[2];
+
+  document.getElementById("matrix-00").value = translate_M.elements[0];
+  document.getElementById("matrix-01").value = translate_M.elements[1];
+  document.getElementById("matrix-02").value = translate_M.elements[2];
+  document.getElementById("matrix-03").value = translate_M.elements[3];
+
+  document.getElementById("matrix-10").value = translate_M.elements[4];
+  document.getElementById("matrix-11").value = translate_M.elements[5];
+  document.getElementById("matrix-12").value = translate_M.elements[6];
+  document.getElementById("matrix-13").value = translate_M.elements[7];
+
+  document.getElementById("matrix-20").value = translate_M.elements[8];
+  document.getElementById("matrix-21").value = translate_M.elements[9];
+  document.getElementById("matrix-22").value = translate_M.elements[10];
+  document.getElementById("matrix-23").value = translate_M.elements[11];
+
+  document.getElementById("matrix-30").value = translate_M.elements[12];
+  document.getElementById("matrix-31").value = translate_M.elements[13];
+  document.getElementById("matrix-32").value = translate_M.elements[14];
+  document.getElementById("matrix-33").value = translate_M.elements[15];
+
 }
 
 document.getElementById("finalx").onchange = function () {

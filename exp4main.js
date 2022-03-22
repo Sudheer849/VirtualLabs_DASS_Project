@@ -580,26 +580,6 @@ function movePoint(e) {
     document.getElementById("quantityy").value = dot_list[0].geometry.getAttribute('position').array[1];
     document.getElementById("quantityz").value = dot_list[0].geometry.getAttribute('position').array[2];
 
-    document.getElementById("matrix-00").value = rot_matrix.elements[0];
-    document.getElementById("matrix-01").value = rot_matrix.elements[1];
-    document.getElementById("matrix-02").value = rot_matrix.elements[2];
-    document.getElementById("matrix-03").value = rot_matrix.elements[3];
-
-    document.getElementById("matrix-10").value = rot_matrix.elements[4];
-    document.getElementById("matrix-11").value = rot_matrix.elements[5];
-    document.getElementById("matrix-12").value = rot_matrix.elements[6];
-    document.getElementById("matrix-13").value = rot_matrix.elements[7];
-
-    document.getElementById("matrix-20").value = rot_matrix.elements[8];
-    document.getElementById("matrix-21").value = rot_matrix.elements[9];
-    document.getElementById("matrix-22").value = rot_matrix.elements[10];
-    document.getElementById("matrix-23").value = rot_matrix.elements[11];
-
-    document.getElementById("matrix-30").value = rot_matrix.elements[12];
-    document.getElementById("matrix-31").value = rot_matrix.elements[13];
-    document.getElementById("matrix-32").value = rot_matrix.elements[14];
-    document.getElementById("matrix-33").value = rot_matrix.elements[15];
-
     present_theta += rot_angle;
 }
 
@@ -609,15 +589,6 @@ document.getElementById("frames").onchange = function () {
   for ( let i = 0; i < 3; i++ )  {
     cur_pos[i] = dot_list[0].geometry.getAttribute('position').array[i];
   }
-
-  // document.getElementById("quantityx").value = initial_pos[0] + parseFloat(( (cur_pos[0] - initial_pos[0]) * frames) / new_value);
-  // document.getElementById("quantityy").value = initial_pos[1] + parseFloat(( (cur_pos[1] - initial_pos[1]) * frames) / new_value);
-  // document.getElementById("quantityz").value = initial_pos[2] + parseFloat(( (cur_pos[2] - initial_pos[2]) * frames) / new_value);
-  // 
-  // let translate_M = new THREE.Matrix4();
-  // translate_M.makeTranslation( document.getElementById("quantityx").value - cur_pos[0], document.getElementById("quantityy").value - cur_pos[1], document.getElementById("quantityz").value - cur_pos[2] );
-  // dot_list[0].geometry.applyMatrix4( translate_M );
-  // dot_list[0].geometry.verticesNeedUpdate = true;
 
   let quat = new THREE.Quaternion();
   let rot_matrix = new THREE.Matrix4();
@@ -827,17 +798,30 @@ let createTetrahedron = function (x, y, z) {
 // --------------------------------------------------------------------------------------------------
 
 let Dot = function () {
-  
-  let tmp_vec = new THREE.Vector3( initial_pos[0], initial_pos[1], initial_pos[2] );
-  let dotGeometry = new THREE.BufferGeometry().setFromPoints( [ tmp_vec ] );
-  let dotMaterial = new THREE.PointsMaterial({
-    size: 6,
-    sizeAttenuation: false,
-  });
 
-  let point = new THREE.Points( dotGeometry, dotMaterial );
-  dot_list.push(point);
-  scene.add(dot_list[0]);
+const material = new THREE.MeshNormalMaterial();
+let geometry = new THREE.BufferGeometry()
+const points = [ new THREE.Vector3(-1, 1, -1),//c  new THREE.Vector3(-1, -1, 1),//b
+    new THREE.Vector3(1, 1, 1),//a 
+]
+
+geometry.setFromPoints(points)
+geometry.computeVertexNormals()
+
+const mesh = new THREE.Mesh(geometry, material)
+dot_list.push(mesh);
+scene.add(mesh);
+  
+//   let tmp_vec = new THREE.Vector3( initial_pos[0], initial_pos[1], initial_pos[2] );
+//   let dotGeometry = new THREE.BufferGeometry().setFromPoints( [ tmp_vec ] );
+//   let dotMaterial = new THREE.PointsMaterial({
+//     size: 6,
+//     sizeAttenuation: false,
+//   });
+
+//   let point = new THREE.Points( dotGeometry, dotMaterial );
+//   dot_list.push(point);
+//   scene.add(dot_list[0]);
 
   return dotGeometry;
 };
