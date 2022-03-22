@@ -117,7 +117,6 @@ threeD.addEventListener("click", () => {
 });
 
 // lock vertices
-
 lock_vertices.addEventListener("click", () => {
   if (lock_vertices.checked) {
     lock = 1;
@@ -591,16 +590,30 @@ document.getElementById("frames").onchange = function () {
     cur_pos[i] = dot_list[0].geometry.getAttribute('position').array[i];
   }
 
-  document.getElementById("quantityx").value = initial_pos[0] + parseFloat(( (cur_pos[0] - initial_pos[0]) * frames) / new_value);
-  document.getElementById("quantityy").value = initial_pos[1] + parseFloat(( (cur_pos[1] - initial_pos[1]) * frames) / new_value);
-  document.getElementById("quantityz").value = initial_pos[2] + parseFloat(( (cur_pos[2] - initial_pos[2]) * frames) / new_value);
-  
-  let translate_M = new THREE.Matrix4();
-  translate_M.makeTranslation( document.getElementById("quantityx").value - cur_pos[0], document.getElementById("quantityy").value - cur_pos[1], document.getElementById("quantityz").value - cur_pos[2] );
-  dot_list[0].geometry.applyMatrix4( translate_M );
+  // document.getElementById("quantityx").value = initial_pos[0] + parseFloat(( (cur_pos[0] - initial_pos[0]) * frames) / new_value);
+  // document.getElementById("quantityy").value = initial_pos[1] + parseFloat(( (cur_pos[1] - initial_pos[1]) * frames) / new_value);
+  // document.getElementById("quantityz").value = initial_pos[2] + parseFloat(( (cur_pos[2] - initial_pos[2]) * frames) / new_value);
+  // 
+  // let translate_M = new THREE.Matrix4();
+  // translate_M.makeTranslation( document.getElementById("quantityx").value - cur_pos[0], document.getElementById("quantityy").value - cur_pos[1], document.getElementById("quantityz").value - cur_pos[2] );
+  // dot_list[0].geometry.applyMatrix4( translate_M );
+  // dot_list[0].geometry.verticesNeedUpdate = true;
+
+  let quat = new THREE.Quaternion();
+  let rot_matrix = new THREE.Matrix4();
+  quat.setFromAxisAngle( rot_axis,  slider.value * ( (frames/new_value) - 1) * Math.PI / 180 );
+
+  rot_matrix.makeRotationFromQuaternion(quat);
+  dot_list[0].geometry.applyMatrix4( rot_matrix );
   dot_list[0].geometry.verticesNeedUpdate = true;
 
-  slider.step = (document.getElementById("slider").max - document.getElementById("slider").min) / document.getElementById("frames").value;
+  document.getElementById("quantityx").value = dot_list[0].geometry.getAttribute('position').array[0];
+  document.getElementById("quantityy").value = dot_list[0].geometry.getAttribute('position').array[1];
+  document.getElementById("quantityz").value = dot_list[0].geometry.getAttribute('position').array[2];
+
+  present_theta += slider.value * ( (frames/new_value) - 1);
+
+  slider.step = (document.getElementById("slider").max - document.getElementById("slider").min) / new_value;
   let no_of_frames = frames * (slider.value / slider.max);
   slider.value = document.getElementById("slider").max * (no_of_frames / new_value);
   //  document.getElementById("slider").value =  * (new_value/frames)
