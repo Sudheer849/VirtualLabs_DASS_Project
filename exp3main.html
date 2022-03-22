@@ -10,8 +10,8 @@
 </head>
 
 <body class="page">
-    </br>
-
+</br>
+   
     <div class="columns is-centered is-variable is-1-mobile is-flex is-flex-wrap-wrap workspace">
         <div id="left" class="column has-text-centered is-2-desktop is-5-tablet is-5-mobile apparatus">
             <div class="v-datalist-container">
@@ -35,7 +35,7 @@
                     </label>
 
                     <label class="checkbox">
-                        <input type="checkbox" id="xy-grid-cb">
+                        <input type="checkbox" id="xy-grid-cb" >
                         <span style="font-size:x-small;">XY-Grid </span>
                 </p>
 
@@ -58,9 +58,8 @@
                         onclick="editShape()">Edit</button>
                     <button id="delete-shape-btn" style="margin:2px;" class="button is-small is-responsive  is-danger"
                         onclick="deleteShape()">Delete</button>
-                    <button id="new-cam-btn" style="margin:2px;" class="button is-small is-responsive is-info"
-                        onclick="new_cam()">New
-                        Cam</button>
+                    <button id="new-cam-btn" style="margin:2px;" class="button is-small is-responsive is-info" onclick="new_cam()">New
+                            Cam</button>
 
                 <div id="edit-modal" class="modal is-responsive">
                     <div class="modal-content">
@@ -114,7 +113,7 @@
                         <p>
                             <input class="input" style="width:auto; float: left;" id="nam" type="text"
                                 placeholder="Instance Name">
-                        <div id="ShapeAdd" class="control">
+                        <div id="ShapeAdd" class="control" >
                             <div class="select" style="float:left;">
                                 <select name="" id="shape-add-dropdown" value="dropdown">
                                     <option value="Tetrahedron">Tetrahedron</option>
@@ -174,66 +173,51 @@
                     <div class="modal-content">
                         <span class="close">&times;</span>
                         <p>
-                        <div class="control">
-                            <p>Clipping</p>
-                            <div style="display: flexbox;">
-                                <input class="input is-small" style="width:20%" type="text" id="near-coord"
-                                    placeholder="Near">
-                                <input class="input is-small" style="width:20%" type="text" id="far-coord"
-                                    placeholder="Far">
-                            </div>
-                            <div style="display: flexbox;">
-                                <input class="input is-small" style="width:20%" type="text" id="left-coord"
-                                    placeholder="Left">
-                                <input class="input is-small" style="width:20%" type="text" id="right-coord"
-                                    placeholder="Right">
-                            </div>
-                            <div style="display: flexbox;">
-                                <input class="input is-small" style="width:20%" type="text" id="top-coord"
-                                    placeholder="Top">
-                                <input class="input is-small" style="width:20%" type="text" id="bottom-coord"
-                                    placeholder="Bottom">
-                            </div>
-                            <p>Camera Position</p>
-                            <div style="display: flexbox;">
-                                <input class="input is-small" style="width:20%" type="text" id="cam-x"
-                                    placeholder="Cam-X">
-                                <input class="input is-small" style="width:20%" type="text" id="cam-y"
-                                    placeholder="Cam-Y">
-                                <input class="input is-small" style="width:20%" type="text" id="cam-z"
-                                    placeholder="Cam-Z">
-                            </div>
-                            <p>Target Position</p>
-                            <div style="display: flexbox;">
-                                <input class="input is-small" style="width:20%" type="text" id="target-x"
-                                    placeholder="Target-X">
-                                <input class="input is-small" style="width:20%" type="text" id="target-y"
-                                    placeholder="Target-Y">
-                                <input class="input is-small" style="width:20%" type="text" id="target-z"
-                                    placeholder="Target-Z">
-                            </div>
-                            <p>Up Vector</p>
-                            <div style="display: flexbox;">
-                                <input class="input is-small" style="width:20%" type="text" id="up-x"
-                                    placeholder="Up-X">
-                                <input class="input is-small" style="width:20%" type="text" id="up-y"
-                                    placeholder="Up-Y">
-                                <input class="input is-small" style="width:20%" type="text" id="up-z"
-                                    placeholder="Up-Z">
-                            </div>
-                            <p>Type</p>
-                            <!-- <div id ="camera-type" class="control" value="1"> -->
-                            <div id="ortho-id" class="select" style="float:left;">
-                                <select id="cam-type" name="" value="1">
-                                    <option value="1">Orthographic</option>
-                                    <option value="0">Perspective</option>
-                                </select>
-                            </div>
-                            <!-- </div> -->
                             <div class="control">
-                                <button class="button is-link" id="new-cam">Submit</button>
+                                <p >Clipping</p>
+                                <div style="display: flexbox;">
+                                    <input class="input is-small" style="width:20%" type="text" id="near-coord" placeholder="Near">
+                                    <input class="input is-small" style="width:20%" type="text" id="far-coord" placeholder="Far">
+                                </div>
+                                <div style="display: flexbox;">
+                                    <input class="input is-small" style="width:20%" type="text" id="left-coord" placeholder="Left">
+                                    <input class="input is-small" style="width:20%" type="text" id="right-coord" placeholder="Right">
+                                </div>
+                                <div style="display: flexbox;">
+                                    <input class="input is-small" style="width:20%" type="text" id="top-coord" placeholder="Top">
+                                    <input class="input is-small" style="width:20%" type="text" id="bottom-coord" placeholder="Bottom">
+                                </div>
+                                <p>Camera Position</p>
+                                <div style="display: flexbox;">
+                                    <input class="input is-small" style="width:20%" type="text" id="cam-x" placeholder="Cam-X">
+                                    <input class="input is-small" style="width:20%" type="text" id="cam-y" placeholder="Cam-Y">
+                                    <input class="input is-small" style="width:20%" type="text" id="cam-z" placeholder="Cam-Z">
+                                </div>
+                                <p>Target Position</p>
+                                <div style="display: flexbox;">
+                                    <input class="input is-small" style="width:20%" type="text" id="target-x" placeholder="Target-X">
+                                    <input class="input is-small" style="width:20%" type="text" id="target-y" placeholder="Target-Y">
+                                    <input class="input is-small" style="width:20%" type="text" id="target-z" placeholder="Target-Z">
+                                </div>
+                                <p>Up Vector</p>
+                                <div style="display: flexbox;">
+                                    <input class="input is-small" style="width:20%" type="text" id="up-x" placeholder="Up-X">
+                                    <input class="input is-small" style="width:20%" type="text" id="up-y" placeholder="Up-Y">
+                                    <input class="input is-small" style="width:20%" type="text" id="up-z" placeholder="Up-Z">
+                                </div>
+                                <p>Type</p>
+                                <!-- <div id ="camera-type" class="control" value="1"> -->
+                                    <div id="ortho-id" class="select" style="float:left;">
+                                        <select id="cam-type" name="" value="1">
+                                          <option value="1">Orthographic</option>
+                                          <option value="0">Perspective</option>
+                                        </select>
+                                      </div>
+                                  <!-- </div> -->
+                                  <div class="control">
+                                      <button class="button is-link" id="new-cam">Submit</button>
+                                  </div>
                             </div>
-                        </div>
                         </p>
                     </div>
 
@@ -242,44 +226,37 @@
                 </p>
 
                 <div class="v-datalist-title" id="top-border">Point Co-ordinates</div>
-
+               
                 <div style="display: flexbox;">
                     X:
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="quantityx" value="3"
-                        placeholder="X">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="quantityx" value="3" placeholder="X">
                     Y:
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="quantityy" value="3"
-                        placeholder="Y">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="quantityy"  value="3" placeholder="Y">
                     Z:
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="quantityz" value="3"
-                        placeholder="Z">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="quantityz" value ="3" placeholder="Z">
                 </div>
-                <input class="button is-responsive is-small is-link" style="margin: 2px;" id="move-button" type="submit"
-                    value="Move">
+                <input class="button is-responsive is-small is-link" style="margin: 2px;" id="move-button" type="submit" value="Move">
 
                 <div class="v-datalist-title" id="top-border">Description</div>
                 <div class="vlabs-page-content ">
                     <li style="font-size: 0.9rem;">
-                        This experiment explains how points and co-ordinate systems are used together to represent two
-                        and three dimensional shapes.
+                        This experiment explains how points and co-ordinate systems are used together to represent two and three dimensional shapes.
                     </li>
                     <li style="font-size: 0.9rem;">
-                        This experiment is designed to teach how points and co-ordinate systems are represented in
-                        computer graphics.
-                        Start by editing the co-ordinates of the point and comparing how the point gets displayed. The
-                        co-ordinates can be edited by changing the text boxes above
+                        This experiment is designed to teach how points and co-ordinate systems are represented in computer graphics.
+                        Start by editing the co-ordinates of the point and comparing how the point gets displayed. The co-ordinates can be edited by changing the text boxes above
                         Also notice how the absolute co-ordinates are displayed.
                     </li>
                     <li style="font-size: 0.9rem;">
                         Drag with the right mouse button to rotate the view and use the mouse wheel to zoom in and out.
                     </li>
                 </div>
-
+                
             </div>
         </div>
 
         <div class="column is-8-desktop is-10-tablet is-10-mobile exp">
-            <div class="v-canvas-container" id="canvas-main">
+            <div class="v-canvas-container"  id="canvas-main">
 
             </div>
         </div>
@@ -290,31 +267,56 @@
 
                 <div style="display: flexbox;">
                     X:
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="x-comp" value="1"
-                        placeholder="X">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="x-comp" value="1" placeholder="X">
                     Y:
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="y-comp" value="0"
-                        placeholder="Y">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="y-comp"  value="0" placeholder="Y">
                     Z:
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="z-comp" value="0"
-                        placeholder="Z">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="z-comp" value ="0" placeholder="Z">
                 </div>
-                <input class="button is-responsive is-small is-link" style="margin: 2px;" id="set-rotation-axis"
-                    type="submit" value="Change Axis">
+                <input class="button is-responsive is-small is-link" style="margin: 2px;" id="set-rotation-axis" type="submit" value="Change Axis">
 
                 <form>
-                    <label for="quantity">No of Frames:</label>
-                    <input type="number" id="frames" name="noofframes" min="1" step="1" value="100"></br>
-                    <label for="quantity">Theta:</label>
-                    <input type="number" id="theta" name="theta" step="0.01" value="180"></br>
+                    <label style="float:left;" for="quantity">Frames:</label>
+                    <input style="width: 20%;" type="number" id="frames" name="no-of-frames" style="width:20%" min="1" step="1" value="100"></br>
+                    <label style="float:left;" for="quantity">Theta:</label>
+                    <input style="width: 20%;" type="number" id="theta" name="theta"  step="0.01" value="180"></br>
                 </form>
 
+                <br>
+
+                <div class="v-datalist-title" id="top-border">Transformation Matrix</div>
+                <br>
+                <div style="display: flexbox;">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-00" value="3" placeholder="X">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-01" value="3" placeholder="X">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-02" value="3" placeholder="X">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-03" value="3" placeholder="X">
+                </div>
+                <div style="display: flexbox;">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-10" value="3" placeholder="X">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-11" value="3" placeholder="X">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-12" value="3" placeholder="X">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-13" value="3" placeholder="X">
+                </div>
+                <div style="display: flexbox;">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-20" value="3" placeholder="X">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-21" value="3" placeholder="X">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-22" value="3" placeholder="X">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-22" value="3" placeholder="X">
+                </div>
+                <div style="display: flexbox;">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-30" value="3" placeholder="X">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-31" value="3" placeholder="X">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-32" value="3" placeholder="X">
+                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-33" value="3" placeholder="X">
+                </div>
+                
                 <div class="v-datalist-row v-bold" id="output1"></div>
                 <div class="v-datalist-row v-bold" id="output2"></div>
                 <div class="v-datalist-row">
                     <div class="v-table-wrap">
                         <table id="table" class="table is-bordered is-fullwidth">
-
+                            
                         </table>
                     </div>
                 </div>
@@ -331,7 +333,7 @@
                             </script> -->
 
     <script src="https://unpkg.com/mathjs@9.2.0/lib/browser/math.js"></script>
-    <script type="module" src="exp3main.js"></script>
-</body>
+   <script type="module" src="exp3main.js"></script>
+    </body>
 
 </html>
