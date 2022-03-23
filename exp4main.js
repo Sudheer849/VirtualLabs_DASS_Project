@@ -2,7 +2,6 @@ import * as THREE from "https://threejsfundamentals.org/threejs/resources/threej
 import { OrbitControls } from "https://threejsfundamentals.org/threejs/resources/threejs/r115/examples/jsm/controls/OrbitControls.js";
 import { MOUSE } from "https://unpkg.com/three@0.128.0/build/three.module.js";
 const move_button = document.getElementById("move-button");
-const set_rotation_axis = document.getElementById("set-rotation-axis");
 const modalbutton1 = document.querySelector(".buttonisprimary");
 const modalbutton2 = document.querySelector(".buttonissecondary");
 let threeD = document.getElementById("3d-toggle-cb");
@@ -18,16 +17,21 @@ let initial_pos = [3, 3, 3];
 let span_edit_modal = document.getElementsByClassName("close")[0];
 var slider = document.getElementById("slider");
 slider.addEventListener("input", movePoint);
-document.getElementById("slider").max = document.getElementById("theta").value;
+document.getElementById("slider").max = document.getElementById("frames").value;
 document.getElementById("slider").min = 0;
-slider.step =(document.getElementById("slider").max - document.getElementById("slider").min) / document.getElementById("frames").value;
+slider.step = 1;
 
-let rot_axis = new THREE.Vector3( document.getElementById("x-comp").value, document.getElementById("y-comp").value, document.getElementById("z-comp").value );
-// convert axis to unit vector
-rot_axis.normalize();
-console.log("normalised axis ", rot_axis);
+let max_x_scale = document.getElementById("scale-x").value;
+let max_y_scale = document.getElementById("scale-y").value;
+let max_z_scale = document.getElementById("scale-z").value;
 
-let total_angle = document.getElementById("theta").value;
+let init_pos = new Array();
+init_pos[0] = document.getElementById("quantityx").value;
+init_pos[1] = document.getElementById("quantityy").value;
+init_pos[2] = document.getElementById("quantityz").value;
+
+let old_scale = [1, 1, 1];
+
 let frames = document.getElementById("frames").value;
 let deletebutton = document.getElementById("deletebutton");
 let present_theta = 0;
@@ -408,8 +412,6 @@ document.getElementById("add-shape-btn").onclick = function () {
     ) {
       createDodecahedron(xcoord, ycoord, zcoord);
     }
-    // scene.remove(dot_list[0]);
-    //  con = 1;
     modal_add.style.display = "none";
   });
 };
@@ -464,10 +466,6 @@ function ondblclick(event) {
         no_of_shapes--;
         console.log(no_of_shapes);
       }
-      // if (no_of_shapes === 0) {
-      //   con = 0;
-      //    scene.add(dot_list[0]);
-      // }
     };
     // geometry.translate(intersects[0].object.position.x,intersects[0].object.position.y,intersects[0].object.position.z);
     document.getElementById("edit-shape-btn").onclick = function () {
@@ -562,81 +560,49 @@ document.addEventListener("pointerup", () => {
 // ---------------------------------------------------------------------------------------
 function movePoint(e) {
     var target = e.target ? e.target : e.srcElement;
-    let rot_angle = ( target.value * parseFloat(document.getElementById("theta").value) ) / target.max - present_theta;
+    let scale = new Array();
+    scale[0] = (target.value/frames)*max_x_scale;
+    scale[1] = (target.value/frames)*max_y_scale;
+    scale[2] = (target.value/frames)*max_z_scale;
 
-    let quat = new THREE.Quaternion();
-    // console.log(quat);
-    let rot_matrix = new THREE.Matrix4();
-    quat.setFromAxisAngle( rot_axis, rot_angle * Math.PI / 180 );
-    // console.log(quat);
-    rot_matrix.makeRotationFromQuaternion(quat);
-    // console.log(rot_matrix);
-    // rot_matrix.makeRotationAxis(rot_axis, rot_angle/frames);
+    let scale_m = new THREE.Matrix4();
+    scale_m.makeScale(scale[0]/old_scale[0], scale[1]/old_scale[1], scale[2]/old_scale[2] );
 
-    dot_list[0].geometry.applyMatrix4( rot_matrix );
+    dot_list[0].geometry.applyMatrix4(scale_m);
     dot_list[0].geometry.verticesNeedUpdate = true;
-
+    
     document.getElementById("quantityx").value = dot_list[0].geometry.getAttribute('position').array[0];
     document.getElementById("quantityy").value = dot_list[0].geometry.getAttribute('position').array[1];
     document.getElementById("quantityz").value = dot_list[0].geometry.getAttribute('position').array[2];
 
-    present_theta += rot_angle;
+    for( let i = 0; i < 3; i++)
+        old_scale[i] = scale[i];    
 }
 
 document.getElementById("frames").onchange = function () {
   let new_value = document.getElementById("frames").value; // new value
-  let cur_pos = new Array();
-  for ( let i = 0; i < 3; i++ )  {
-    cur_pos[i] = dot_list[0].geometry.getAttribute('position').array[i];
-  }
+  // slider adjusts according to the new number of frames
 
-  let quat = new THREE.Quaternion();
-  let rot_matrix = new THREE.Matrix4();
-  quat.setFromAxisAngle( rot_axis,  slider.value * ( (frames/new_value) - 1) * Math.PI / 180 );
-
-  rot_matrix.makeRotationFromQuaternion(quat);
-  dot_list[0].geometry.applyMatrix4( rot_matrix );
-  dot_list[0].geometry.verticesNeedUpdate = true;
-
-  document.getElementById("quantityx").value = dot_list[0].geometry.getAttribute('position').array[0];
-  document.getElementById("quantityy").value = dot_list[0].geometry.getAttribute('position').array[1];
-  document.getElementById("quantityz").value = dot_list[0].geometry.getAttribute('position').array[2];
-
-  present_theta += slider.value * ( (frames/new_value) - 1);
-
-  slider.step = (document.getElementById("slider").max - document.getElementById("slider").min) / new_value;
-  let no_of_frames = frames * (slider.value / slider.max);
-  slider.value = document.getElementById("slider").max * (no_of_frames / new_value);
-  //  document.getElementById("slider").value =  * (new_value/frames)
-  frames = new_value;
 };
 
-document.getElementById("theta").onchange = function () {
-  let slider_value = document.getElementById("slider").value;
-  // console.log(slider_value);
-  let new_value = document.getElementById("theta").value; // new value
-  let new_theta = present_theta * (new_value / total_angle);  
+document.getElementById("scale-x").onchange = function () {
+  let new_scale = document.getElementById("scale-x").value;
+  // scale x component of each point of buffergeometry by new_scale/x_scale amount. 
   
-  let quat = new THREE.Quaternion();
-  let rot_matrix = new THREE.Matrix4();
-  quat.setFromAxisAngle( rot_axis, (new_theta - present_theta) * Math.PI / 180 );
-  rot_matrix.makeRotationFromQuaternion(quat);
-
-  dot_list[0].geometry.applyMatrix4( rot_matrix );
-  dot_list[0].geometry.verticesNeedUpdate = true;
-
-  document.getElementById("quantityx").value = dot_list[0].geometry.getAttribute('position').array[0];
-  document.getElementById("quantityy").value = dot_list[0].geometry.getAttribute('position').array[1];
-  document.getElementById("quantityz").value = dot_list[0].geometry.getAttribute('position').array[2];
-
-  total_angle = new_value;
-  document.getElementById("slider").value = slider_value;
-  present_theta = new_theta;
+  scale_x = new_scale;
 };
+document.getElementById("scale-y").onchange = function () {
+  let new_scale = document.getElementById("scale-y").value;
+  // scale y component of each point of buffergeometry by new_scale/y_scale amount.
 
-set_rotation_axis.addEventListener("click", () => {
-  rot_axis = new THREE.Vector3( parseFloat( document.getElementById("x-comp").value), parseFloat( document.getElementById("y-comp").value), parseFloat( document.getElementById("z-comp").value) );
-});
+  scale_y = new_scale;
+};
+document.getElementById("scale-z").onchange = function () {
+  let new_scale = document.getElementById("scale-z").value;
+  // scale z component of each point of buffergeometry by new_scale/z_scale amount.
+
+  scale_z = new_scale;
+}
 
 // --------------------------------------------------------------------------------------------------
 
@@ -794,37 +760,33 @@ let createTetrahedron = function (x, y, z) {
   dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
 };
 
-// Dot Function
+// Creates the triangle
 // --------------------------------------------------------------------------------------------------
 
-let Dot = function () {
+let Triangle = function () {
 
-const material = new THREE.MeshNormalMaterial();
-let geometry = new THREE.BufferGeometry()
-const points = [ new THREE.Vector3(-1, 1, -1),//c  new THREE.Vector3(-1, -1, 1),//b
-    new THREE.Vector3(1, 1, 1),//a 
-]
-
-geometry.setFromPoints(points)
-geometry.computeVertexNormals()
-
-const mesh = new THREE.Mesh(geometry, material)
-dot_list.push(mesh);
-scene.add(mesh);
+  const tri_mater = new THREE.MeshNormalMaterial();
+  let tri_geom = new THREE.BufferGeometry()
   
-//   let tmp_vec = new THREE.Vector3( initial_pos[0], initial_pos[1], initial_pos[2] );
-//   let dotGeometry = new THREE.BufferGeometry().setFromPoints( [ tmp_vec ] );
-//   let dotMaterial = new THREE.PointsMaterial({
-//     size: 6,
-//     sizeAttenuation: false,
-//   });
-
-//   let point = new THREE.Points( dotGeometry, dotMaterial );
-//   dot_list.push(point);
-//   scene.add(dot_list[0]);
-
-  return dotGeometry;
-};
+  let vertices = [
+    new THREE.Vector3( document.getElementById("vertex-00").value, document.getElementById("vertex-01").value, document.getElementById("vertex-02").value ),
+    new THREE.Vector3( document.getElementById("vertex-10").value, document.getElementById("vertex-11").value, document.getElementById("vertex-12").value ),
+    new THREE.Vector3( document.getElementById("vertex-20").value, document.getElementById("vertex-21").value, document.getElementById("vertex-22").value )
+  ];
+  
+  console.log( "Vertices: ", vertices );
+  
+  tri_geom.setFromPoints(vertices);
+  tri_geom.computeVertexNormals();
+  
+  const mesh = new THREE.Mesh(tri_geom, tri_mater);
+  dot_list.push(mesh);
+  console.log(mesh);
+  scene.add(mesh);
+  
+  return tri_geom;
+  
+  };
 
 // Function for Lights
 
@@ -900,7 +862,7 @@ let init = function () {
   for (let i = 0; i < 6; i++) {
     scene.add(arrowHelper[i]);
   }
-  let PointGeometry = Dot();
+  let tri_geo = Triangle();
   renderer = new THREE.WebGLRenderer();
   let container = document.getElementById("canvas-main");
   let w = container.offsetWidth;
