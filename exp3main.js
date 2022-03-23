@@ -565,13 +565,9 @@ function movePoint(e) {
     let rot_angle = ( target.value * parseFloat(document.getElementById("theta").value) ) / target.max - present_theta;
 
     let quat = new THREE.Quaternion();
-    // console.log(quat);
     let rot_matrix = new THREE.Matrix4();
     quat.setFromAxisAngle( rot_axis, rot_angle * Math.PI / 180 );
-    // console.log(quat);
     rot_matrix.makeRotationFromQuaternion(quat);
-    // console.log(rot_matrix);
-    // rot_matrix.makeRotationAxis(rot_axis, rot_angle/frames);
 
     dot_list[0].geometry.applyMatrix4( rot_matrix );
     dot_list[0].geometry.verticesNeedUpdate = true;
@@ -579,6 +575,11 @@ function movePoint(e) {
     document.getElementById("quantityx").value = dot_list[0].geometry.getAttribute('position').array[0];
     document.getElementById("quantityy").value = dot_list[0].geometry.getAttribute('position').array[1];
     document.getElementById("quantityz").value = dot_list[0].geometry.getAttribute('position').array[2];
+
+    // for( let i = 0; i < 3; i++ )
+    // {
+      // console.log(dot_list[0].geometry.getAttribute('position').array[i]);
+    // }
 
     document.getElementById("matrix-00").value = rot_matrix.elements[0];
     document.getElementById("matrix-01").value = rot_matrix.elements[1];
@@ -601,27 +602,20 @@ function movePoint(e) {
     document.getElementById("matrix-33").value = rot_matrix.elements[15];
 
     present_theta += rot_angle;
+    console.log("present_theta ", present_theta);
 }
 
 document.getElementById("frames").onchange = function () {
   let new_value = document.getElementById("frames").value; // new value
-  let cur_pos = new Array();
-  for ( let i = 0; i < 3; i++ )  {
-    cur_pos[i] = dot_list[0].geometry.getAttribute('position').array[i];
-  }
-
-  // document.getElementById("quantityx").value = initial_pos[0] + parseFloat(( (cur_pos[0] - initial_pos[0]) * frames) / new_value);
-  // document.getElementById("quantityy").value = initial_pos[1] + parseFloat(( (cur_pos[1] - initial_pos[1]) * frames) / new_value);
-  // document.getElementById("quantityz").value = initial_pos[2] + parseFloat(( (cur_pos[2] - initial_pos[2]) * frames) / new_value);
-  // 
-  // let translate_M = new THREE.Matrix4();
-  // translate_M.makeTranslation( document.getElementById("quantityx").value - cur_pos[0], document.getElementById("quantityy").value - cur_pos[1], document.getElementById("quantityz").value - cur_pos[2] );
-  // dot_list[0].geometry.applyMatrix4( translate_M );
-  // dot_list[0].geometry.verticesNeedUpdate = true;
 
   let quat = new THREE.Quaternion();
   let rot_matrix = new THREE.Matrix4();
-  quat.setFromAxisAngle( rot_axis,  slider.value * ( (frames/new_value) - 1) * Math.PI / 180 );
+  let rot_angle = slider.value * ( (frames/new_value) - 1); // , (slider.max - slider.value)* Math.PI / 180 );
+  if ( rot_angle + present_theta > total_angle )
+    rot_angle = total_angle - present_theta;
+
+  quat.setFromAxisAngle( rot_axis,  rot_angle*Math.PI/180 );
+  // console.log( slider.value, frames, new_value );
 
   rot_matrix.makeRotationFromQuaternion(quat);
   dot_list[0].geometry.applyMatrix4( rot_matrix );
@@ -641,10 +635,13 @@ document.getElementById("frames").onchange = function () {
 };
 
 document.getElementById("theta").onchange = function () {
-  let slider_value = document.getElementById("slider").value;
-  // console.log(slider_value);
-  let new_value = document.getElementById("theta").value; // new value
-  let new_theta = present_theta * (new_value / total_angle);  
+  let old_sli_val = document.getElementById("slider").value;
+  let new_tot_angle = document.getElementById("theta").value; // new value
+  let new_theta = present_theta * (new_tot_angle / total_angle); 
+  if ( new_theta > total_angle )
+    new_theta = total_angle;
+  
+  // console.log( new_theta, present_theta );
   
   let quat = new THREE.Quaternion();
   let rot_matrix = new THREE.Matrix4();
@@ -658,8 +655,11 @@ document.getElementById("theta").onchange = function () {
   document.getElementById("quantityy").value = dot_list[0].geometry.getAttribute('position').array[1];
   document.getElementById("quantityz").value = dot_list[0].geometry.getAttribute('position').array[2];
 
-  total_angle = new_value;
-  document.getElementById("slider").value = slider_value;
+  document.getElementById("slider").value = old_sli_val * (new_tot_angle / total_angle);
+  total_angle = new_tot_angle;
+  document.getElementById("slider").max = new_tot_angle;
+  slider.step = (document.getElementById("slider").max - document.getElementById("slider").min) / frames;
+  // console.log( document.getElementById("slider").value, old_sli_val, new_tot_angle, total_angle );
   present_theta = new_theta;
 };
 
