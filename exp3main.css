@@ -1,5 +1,5 @@
 .page {
-	overflow-x: hidden;
+	overflow: hidden;
 }
 
 .v-datalist-container {

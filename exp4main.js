@@ -21,14 +21,21 @@ document.getElementById("slider").max = document.getElementById("frames").value;
 document.getElementById("slider").min = 0;
 slider.step = 1;
 
+let trans_matrix = new THREE.Matrix4();
+trans_matrix.set( 
+  1, 0, 0, 0,
+  0, 1, 0, 0,
+  0, 0, 1, 0,
+  0, 0, 0, 1
+); 
+
 let max_x_scale = document.getElementById("scale-x").value;
 let max_y_scale = document.getElementById("scale-y").value;
 let max_z_scale = document.getElementById("scale-z").value;
 
-let init_pos = new Array();
-init_pos[0] = document.getElementById("quantityx").value;
-init_pos[1] = document.getElementById("quantityy").value;
-init_pos[2] = document.getElementById("quantityz").value;
+let vertex_a = new THREE.Vector3( document.getElementById("vertex-00").value, document.getElementById("vertex-01").value, document.getElementById("vertex-02").value ),
+    vertex_b = new THREE.Vector3( document.getElementById("vertex-10").value, document.getElementById("vertex-11").value, document.getElementById("vertex-12").value ),
+    vertex_c = new THREE.Vector3( document.getElementById("vertex-20").value, document.getElementById("vertex-21").value, document.getElementById("vertex-22").value );
 
 let old_scale = [1, 1, 1];
 
@@ -72,7 +79,6 @@ window.onclick = function (event) {
 // Modal controls for Add Camera Button
 let camModal = document.getElementById("cam-modal");
 let camBtn = document.getElementById("new-cam-btn");
-
 let span_new_cam = document.getElementsByClassName("close")[4];
 
 camBtn.onclick = function () {
@@ -236,14 +242,6 @@ function AddCam(
   camera.lookAt(target);
 
   scene.add(camera);
-  // renderer.render(scene, camera);
-
-  // let newRenderer = new THREE.WebGLRenderer();
-  // newRenderer.setSize(window.innerWidth, window.innerHeight);
-  // document.body.appendChild(newRenderer.domElement);
-
-  // orbit controls
-  // if (ortho_persp === 0) {
   controls = new OrbitControls(camera, renderer.domElement);
   controls.mouseButtons = {
     // LEFT: THREE.MOUSE.PAN,
@@ -561,9 +559,9 @@ document.addEventListener("pointerup", () => {
 function movePoint(e) {
     var target = e.target ? e.target : e.srcElement;
     let scale = new Array();
-    scale[0] = (target.value/frames)*max_x_scale;
-    scale[1] = (target.value/frames)*max_y_scale;
-    scale[2] = (target.value/frames)*max_z_scale;
+    scale[0] = 1 + (target.value/frames)*( max_x_scale - 1);
+    scale[1] = 1 + (target.value/frames)*( max_y_scale - 1);
+    scale[2] = 1 + (target.value/frames)*( max_z_scale - 1);
 
     let scale_m = new THREE.Matrix4();
     scale_m.makeScale(scale[0]/old_scale[0], scale[1]/old_scale[1], scale[2]/old_scale[2] );
@@ -571,37 +569,115 @@ function movePoint(e) {
     dot_list[0].geometry.applyMatrix4(scale_m);
     dot_list[0].geometry.verticesNeedUpdate = true;
     
-    document.getElementById("quantityx").value = dot_list[0].geometry.getAttribute('position').array[0];
-    document.getElementById("quantityy").value = dot_list[0].geometry.getAttribute('position').array[1];
-    document.getElementById("quantityz").value = dot_list[0].geometry.getAttribute('position').array[2];
-
     for( let i = 0; i < 3; i++)
         old_scale[i] = scale[i];    
+
+    trans_matrix.multiply(scale_m);
+
+    document.getElementById("matrix-00").value = trans_matrix.elements[0];
+    document.getElementById("matrix-01").value = trans_matrix.elements[1];
+    document.getElementById("matrix-02").value = trans_matrix.elements[2];
+    document.getElementById("matrix-03").value = trans_matrix.elements[3];
+
+    document.getElementById("matrix-10").value = trans_matrix.elements[4];
+    document.getElementById("matrix-11").value = trans_matrix.elements[5];
+    document.getElementById("matrix-12").value = trans_matrix.elements[6];
+    document.getElementById("matrix-13").value = trans_matrix.elements[7];
+
+    document.getElementById("matrix-20").value = trans_matrix.elements[8];
+    document.getElementById("matrix-21").value = trans_matrix.elements[9];
+    document.getElementById("matrix-22").value = trans_matrix.elements[10];
+    document.getElementById("matrix-23").value = trans_matrix.elements[11];
+
+    document.getElementById("matrix-30").value = trans_matrix.elements[12];
+    document.getElementById("matrix-31").value = trans_matrix.elements[13];
+    document.getElementById("matrix-32").value = trans_matrix.elements[14];
+    document.getElementById("matrix-33").value = trans_matrix.elements[15];
 }
 
 document.getElementById("frames").onchange = function () {
   let new_value = document.getElementById("frames").value; // new value
   // slider adjusts according to the new number of frames
 
+  let new_factor = [frames/new_value, frames/new_value, frames/new_value];
+  for( let i = 0; i < 3; i++ )
+  {
+    if( old_scale[i] === 1 )
+    {
+      new_factor[i] = 1;
+    }
+  }
+
+  let scale_m = new THREE.Matrix4();
+  scale_m.makeScale( new_factor[0], new_factor[1], new_factor[2] );
+  dot_list[0].geometry.applyMatrix4(scale_m);
+  dot_list[0].geometry.verticesNeedUpdate = true;
+
+  for( let i = 0; i < 3; i++)
+      old_scale[i] *= frames/new_value;
+
+  trans_matrix.multiply(scale_m);
+  document.getElementById("matrix-00").value = trans_matrix.elements[0];
+  document.getElementById("matrix-11").value = trans_matrix.elements[5];
+  document.getElementById("matrix-22").value = trans_matrix.elements[10];
+  
+  document.getElementById("slider").max = new_value;
+  // setTimeout( () => {console.log('waiting');}, 2000 );
 };
 
 document.getElementById("scale-x").onchange = function () {
   let new_scale = document.getElementById("scale-x").value;
   // scale x component of each point of buffergeometry by new_scale/x_scale amount. 
+  if( old_scale[0] !== 1 )
+  {
+    let scale_m = new THREE.Matrix4();
+    scale_m.makeScale( new_scale/max_x_scale, 1, 1 );
+    dot_list[0].geometry.applyMatrix4(scale_m);
+    dot_list[0].geometry.verticesNeedUpdate = true;
   
-  scale_x = new_scale;
+    old_scale[0] *= new_scale/max_x_scale;
+
+    trans_matrix.multiply(scale_m);
+    document.getElementById("matrix-00").value = trans_matrix.elements[0];
+  }
+
+  max_x_scale = new_scale;
 };
 document.getElementById("scale-y").onchange = function () {
   let new_scale = document.getElementById("scale-y").value;
-  // scale y component of each point of buffergeometry by new_scale/y_scale amount.
+  // scale x component of each point of buffergeometry by new_scale/x_scale amount. 
+  if( old_scale[1] !== 1)
+  {
+    let scale_m = new THREE.Matrix4();
+    scale_m.makeScale( 1, new_scale/max_y_scale, 1 );
+    dot_list[0].geometry.applyMatrix4(scale_m);
+    dot_list[0].geometry.verticesNeedUpdate = true;
+  
+    old_scale[1] *= new_scale/max_y_scale;
 
-  scale_y = new_scale;
+    trans_matrix.multiply(scale_m);
+    document.getElementById("matrix-11").value = trans_matrix.elements[5];
+  }
+
+  max_y_scale = new_scale;
 };
 document.getElementById("scale-z").onchange = function () {
   let new_scale = document.getElementById("scale-z").value;
-  // scale z component of each point of buffergeometry by new_scale/z_scale amount.
+  // scale x component of each point of buffergeometry by new_scale/x_scale amount. 
+  if( old_scale[2] !== 1)
+  {
+    let scale_m = new THREE.Matrix4();
+    scale_m.makeScale( 1, 1, new_scale/max_z_scale );
+    dot_list[0].geometry.applyMatrix4(scale_m);
+    dot_list[0].geometry.verticesNeedUpdate = true;
 
-  scale_z = new_scale;
+    old_scale[2] *= new_scale/max_z_scale;
+
+    trans_matrix.multiply(scale_m);
+    document.getElementById("matrix-22").value = trans_matrix.elements[10];
+  }
+
+  max_z_scale = new_scale;
 }
 
 // --------------------------------------------------------------------------------------------------
@@ -642,21 +718,13 @@ let createCube = function (x, y, z) {
   dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
 };
 move_button.addEventListener("click", () => {
-  initial_pos[0] = parseFloat( document.getElementById("quantityx").value);
-  initial_pos[1] = parseFloat( document.getElementById("quantityy").value);
-  initial_pos[2] = parseFloat( document.getElementById("quantityz").value);
+  vertex_a = new THREE.Vector3( document.getElementById("vertex-00").value, document.getElementById("vertex-01").value, document.getElementById("vertex-02").value ),
+  vertex_b = new THREE.Vector3( document.getElementById("vertex-10").value, document.getElementById("vertex-11").value, document.getElementById("vertex-12").value ),
+  vertex_c = new THREE.Vector3( document.getElementById("vertex-20").value, document.getElementById("vertex-21").value, document.getElementById("vertex-22").value );
 
-  let cur_pos = new Array();
-  for ( let i = 0; i < 3; i++ ) 
-    cur_pos[i] = dot_list[0].geometry.getAttribute('position').array[i];
-  
-  let translate_M = new THREE.Matrix4();
-  translate_M.makeTranslation( initial_pos[0] - cur_pos[0], initial_pos[1] - cur_pos[1], initial_pos[2] - cur_pos[2] );
-  dot_list[0].geometry.applyMatrix4( translate_M );  
-  dot_list[0].geometry.verticesNeedUpdate = true;
-
-  document.getElementById("slider").max = document.getElementById("finalx").value - initial_pos[0];
-  slider.step = (document.getElementById("slider").max - document.getElementById("slider").min) / document.getElementById("frames").value;
+  scene.remove(dot_list[0]);
+  dot_list.pop();
+  Triangle(vertex_a, vertex_b, vertex_c);
 });
 // Dodecahedron Function
 // --------------------------------------------------------------------------------------------------
@@ -763,25 +831,17 @@ let createTetrahedron = function (x, y, z) {
 // Creates the triangle
 // --------------------------------------------------------------------------------------------------
 
-let Triangle = function () {
+let Triangle = function ( A, B, C ) {
 
   const tri_mater = new THREE.MeshNormalMaterial();
-  let tri_geom = new THREE.BufferGeometry()
+  let tri_geom = new THREE.BufferGeometry();
   
-  let vertices = [
-    new THREE.Vector3( document.getElementById("vertex-00").value, document.getElementById("vertex-01").value, document.getElementById("vertex-02").value ),
-    new THREE.Vector3( document.getElementById("vertex-10").value, document.getElementById("vertex-11").value, document.getElementById("vertex-12").value ),
-    new THREE.Vector3( document.getElementById("vertex-20").value, document.getElementById("vertex-21").value, document.getElementById("vertex-22").value )
-  ];
-  
-  console.log( "Vertices: ", vertices );
-  
+  let vertices = [ A, B, C ];
   tri_geom.setFromPoints(vertices);
   tri_geom.computeVertexNormals();
   
   const mesh = new THREE.Mesh(tri_geom, tri_mater);
   dot_list.push(mesh);
-  console.log(mesh);
   scene.add(mesh);
   
   return tri_geom;
@@ -862,7 +922,7 @@ let init = function () {
   for (let i = 0; i < 6; i++) {
     scene.add(arrowHelper[i]);
   }
-  let tri_geo = Triangle();
+  let tri_geo = Triangle(vertex_a, vertex_b, vertex_c);
   renderer = new THREE.WebGLRenderer();
   let container = document.getElementById("canvas-main");
   let w = container.offsetWidth;

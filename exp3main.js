@@ -51,6 +51,13 @@ let scene,
   dir = [],
   arrowHelper = [];
 
+let trans_matrix = new THREE.Matrix4( 
+  1, 0, 0, 0,
+  0, 1, 0, 0,
+  0, 0, 1, 0,
+  0, 0, 0, 1
+); 
+
 // Modal controls for Add Shape Button
 let addModal = document.getElementById("add-modal");
 let span_add_modal = document.getElementsByClassName("close")[1];
@@ -572,6 +579,8 @@ function movePoint(e) {
     dot_list[0].geometry.applyMatrix4( rot_matrix );
     dot_list[0].geometry.verticesNeedUpdate = true;
 
+    trans_matrix.multiply( rot_matrix );
+
     document.getElementById("quantityx").value = dot_list[0].geometry.getAttribute('position').array[0];
     document.getElementById("quantityy").value = dot_list[0].geometry.getAttribute('position').array[1];
     document.getElementById("quantityz").value = dot_list[0].geometry.getAttribute('position').array[2];
@@ -581,25 +590,25 @@ function movePoint(e) {
       // console.log(dot_list[0].geometry.getAttribute('position').array[i]);
     // }
 
-    document.getElementById("matrix-00").value = rot_matrix.elements[0];
-    document.getElementById("matrix-01").value = rot_matrix.elements[1];
-    document.getElementById("matrix-02").value = rot_matrix.elements[2];
-    document.getElementById("matrix-03").value = rot_matrix.elements[3];
+    document.getElementById("matrix-00").value = trans_matrix.elements[0];
+    document.getElementById("matrix-01").value = trans_matrix.elements[1];
+    document.getElementById("matrix-02").value = trans_matrix.elements[2];
+    document.getElementById("matrix-03").value = trans_matrix.elements[3];
 
-    document.getElementById("matrix-10").value = rot_matrix.elements[4];
-    document.getElementById("matrix-11").value = rot_matrix.elements[5];
-    document.getElementById("matrix-12").value = rot_matrix.elements[6];
-    document.getElementById("matrix-13").value = rot_matrix.elements[7];
+    document.getElementById("matrix-10").value = trans_matrix.elements[4];
+    document.getElementById("matrix-11").value = trans_matrix.elements[5];
+    document.getElementById("matrix-12").value = trans_matrix.elements[6];
+    document.getElementById("matrix-13").value = trans_matrix.elements[7];
 
-    document.getElementById("matrix-20").value = rot_matrix.elements[8];
-    document.getElementById("matrix-21").value = rot_matrix.elements[9];
-    document.getElementById("matrix-22").value = rot_matrix.elements[10];
-    document.getElementById("matrix-23").value = rot_matrix.elements[11];
+    document.getElementById("matrix-20").value = trans_matrix.elements[8];
+    document.getElementById("matrix-21").value = trans_matrix.elements[9];
+    document.getElementById("matrix-22").value = trans_matrix.elements[10];
+    document.getElementById("matrix-23").value = trans_matrix.elements[11];
 
-    document.getElementById("matrix-30").value = rot_matrix.elements[12];
-    document.getElementById("matrix-31").value = rot_matrix.elements[13];
-    document.getElementById("matrix-32").value = rot_matrix.elements[14];
-    document.getElementById("matrix-33").value = rot_matrix.elements[15];
+    document.getElementById("matrix-30").value = trans_matrix.elements[12];
+    document.getElementById("matrix-31").value = trans_matrix.elements[13];
+    document.getElementById("matrix-32").value = trans_matrix.elements[14];
+    document.getElementById("matrix-33").value = trans_matrix.elements[15];
 
     present_theta += rot_angle;
     console.log("present_theta ", present_theta);
