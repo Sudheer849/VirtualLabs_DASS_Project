@@ -794,7 +794,7 @@ function createLights() {
 }
 
 scene = new THREE.Scene();
-scene.background = new THREE.Color(0x36393e);
+scene.background = new THREE.Color(0x121212);
 camera = new THREE.PerspectiveCamera(
   30,
   window.innerWidth / window.innerHeight,
