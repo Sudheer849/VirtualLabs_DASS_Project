@@ -1,7 +1,7 @@
 import * as THREE from "https://threejsfundamentals.org/threejs/resources/threejs/r115/build/three.module.js";
 
-// Dot Function
-export let Dot = function (scene, dot_list, xcor, ycor, zcor ) {
+
+export let Dot = function(scene, dot_list, xcor, ycor, zcor) {
     let dotGeometry = new THREE.Geometry();
     dotGeometry.vertices.push(new THREE.Vector3(xcor, ycor, zcor));
     let dotMaterial = new THREE.PointsMaterial({
