@@ -1,6 +1,7 @@
 import * as THREE from "https://threejsfundamentals.org/threejs/resources/threejs/r115/build/three.module.js";
 
-export function ProjectTo2D(camera, orbit, is_2D, two_plane, first_time, two_geometry ) {
+
+export function ProjectTo2D(camera, orbit, is_2D, two_plane, first_time, two_geometry) {
     is_2D = 1;
 
     let camera_pos = new THREE.Vector3(3, 0, 0);
