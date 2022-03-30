@@ -1,107 +1,169 @@
 .page {
-	overflow-x: hidden;
+    overflow-x: hidden;
 }
 
 .v-datalist-container {
-	height: 100%;
+    height: 100%;
 }
+
+.v-instruction-container {
+    width: 80%;
+    margin: 0 auto;
+}
+
 .v-canvas-container {
-	width: 100%;
-	height: 100%;
-	min-height: 900px;
+    width: 100%;
+    height: 100%;
+    min-height: 900px;
 }
 
 .v-slider-full {
-	width: 80%;
+    width: 80%;
 }
 
 .input-form {
-	display: none;
-	color: black;
+    display: none;
+    color: black;
 }
 
 .add {
-	font-size: 0.90rem; 
+    font-size: 0.90rem;
 }
 
 .left {
-	order: 1;
+    order: 1;
 }
 
 .exp {
-	order: 2;
+    order: 2;
 }
 
-.right{
-	order: 3;
+.right {
+    order: 3;
 }
 
 @media screen and (max-width: 1023px) {
-	.left {
-		order: 1;
-	}
-
-	.right {
-		order: 2;
-	}
-
-	.exp {
-		order: 3;
-	}
+    .left {
+        order: 1;
+    }
+    .right {
+        order: 2;
+    }
+    .exp {
+        order: 3;
+    }
 }
 
 #top-border {
-    border-top: 1px solid black;
+    border-top: 0.1px dashed black;
 }
 
 .modal {
-	display: none; /* Hidden by default */
-	position: fixed; /* Stay in place */
-	z-index: 1; /* Sit on top */
-	left: 0;
-	top: 0;
-	width: 100%; /* Full width */
-	height: 100%; /* Full height */
-	overflow: hidden; /* Enable scroll if needed */
-	background-color: rgb(0,0,0); /* Fallback color */
-	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
-  
-  /* Modal Content/Box */
-  .modal-content {
-	background-color: #fefefe;
-	margin: 15% auto; /* 15% from the top and centered */
-	padding: 20px;
-	border: 1px solid #888;
-	width: 80%; /* Could be more or less, depending on screen size */
-  }
-  
-  /* The Close Button */
-  .close {
-	color: #aaa;
-	float: right;
-	font-size: 28px;
-	font-weight: bold;
-  }
-  
-  .close:hover,
-  .close:focus {
-	color: black;
-	text-decoration: none;
-	cursor: pointer;
-  }
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: hidden;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+}
 
-  #cs-modal {
-	  position:static;
-	  margin:0px;
-  }
 
-  #add-modal {
-	/* width: auto; */
-	width: 50%;
-  }
+/* Modal Content/Box */
 
-  #edit-modal {
-	/* width: auto; */
-	width: 50%;
-  }
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    /* Could be more or less, depending on screen size */
+}
+
+
+/* The Close Button */
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#cs-modal {
+    position: static;
+    margin: 0px;
+}
+
+#add-modal {
+    /* width: auto; */
+    width: 50%;
+}
+
+#edit-modal {
+    /* width: auto; */
+    width: 50%;
+}
+
+.slidecontainer {
+    width: 80%;
+}
+
+.slider {
+    -webkit-appearance: none;
+    width: 60%;
+    margin-left: 20%;
+    margin-right: 20%;
+    height: 25px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #04AA6D;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #04AA6D;
+    cursor: pointer;
+}
+
+.v-datalist-title {
+    /* background-color: #2C9AD1; */
+    /* background-blend-mode: overlay; */
+    /* border-radius: 1rem; */
+    border-bottom: 0;
+}
