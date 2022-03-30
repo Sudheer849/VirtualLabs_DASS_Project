@@ -2,7 +2,8 @@ import * as THREE from "https://threejsfundamentals.org/threejs/resources/threej
 import { createMaterials } from "./materials.js";
 
 // Cube Function
-export let createCube = function (x, y, z, shapes, scene, point, shapevertex, dragx, dragy, dragz) {
+// --------------------------------------------------------------------------------------------------
+export let createCube = function(x, y, z, shapes, scene, point, shapevertex, dragx, dragy, dragz) {
     const geometry = new THREE.BoxGeometry(1, 1, 1);
     const material = createMaterials().cubeShader;
     const cub = new THREE.Mesh(geometry, material);
@@ -36,7 +37,7 @@ export let createCube = function (x, y, z, shapes, scene, point, shapevertex, dr
 };
 
 // Dodecahedron Function
-export let createDodecahedron = function (x, y, z, shapes, scene, point, shapevertex, dragx, dragy, dragz) {
+export let createDodecahedron = function(x, y, z, shapes, scene, point, shapevertex, dragx, dragy, dragz) {
     const geometry = new THREE.DodecahedronGeometry(1);
     const material = createMaterials().cubeShader;
     const cub = new THREE.Mesh(geometry, material);
@@ -69,7 +70,7 @@ export let createDodecahedron = function (x, y, z, shapes, scene, point, shapeve
 };
 
 // Octahedron Function
-export let createOctahedron = function (x, y, z, shapes, scene, point, shapevertex, dragx, dragy, dragz ) {
+export let createOctahedron = function(x, y, z, shapes, scene, point, shapevertex, dragx, dragy, dragz) {
     const geometry = new THREE.OctahedronGeometry(1);
     const material = createMaterials().cubeShader;
     const cub = new THREE.Mesh(geometry, material);
@@ -102,7 +103,7 @@ export let createOctahedron = function (x, y, z, shapes, scene, point, shapevert
 };
 // Tetrahedron Function
 // --------------------------------------------------------------------------------------------------
-export let createTetrahedron = function (x, y, z, shapes, scene, point, shapevertex, dragx, dragy, dragz ) {
+export let createTetrahedron = function(x, y, z, shapes, scene, point, shapevertex, dragx, dragy, dragz) {
     const geometry = new THREE.TetrahedronGeometry(1);
     const material = createMaterials().cubeShader;
     const cub = new THREE.Mesh(geometry, material);
