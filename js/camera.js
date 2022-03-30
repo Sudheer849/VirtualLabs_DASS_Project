@@ -2,7 +2,7 @@ import * as THREE from "https://threejsfundamentals.org/threejs/resources/threej
 import { OrbitControls } from "https://threejsfundamentals.org/threejs/resources/threejs/r115/examples/jsm/controls/OrbitControls.js";
 import { MOUSE } from "https://unpkg.com/three@0.128.0/build/three.module.js";
 
-export function AddCam(near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp, scene, camera, controls, renderer) {
+export function AddCam(near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp) {
     // 1 == orthographic, 0 == perspective
     scene.remove(camera);
     if (ortho_persp == 1) {
@@ -34,14 +34,16 @@ export function AddCam(near, far, left, right, bottom, top, camera_pos, target, 
     controls.target.set(target.x, target.y, target.z);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
+    orbit.minPolarAngle = 0;
+    orbit.maxPolarAngle = 180;
+
     controls.update();
     // }
-
     return camera;
 }
 
 // Add a camera 
-export function OldCam(scene, camera, orbit, renderer) {
+export function OldCam() {
     scene.remove(camera);
 
     camera = new THREE.PerspectiveCamera(
