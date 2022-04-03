@@ -31,9 +31,6 @@ let scene,
     shapes = [],
     rot = 0.01,
     variable = 0,
-    vargrid1 = 0,
-    vargrid2 = 0,
-    vargrid3 = 0,
     grid1 = [],
     grid2 = [],
     grid3 = [],
@@ -87,22 +84,18 @@ window.onclick = function(event) {
     }
 }
 
-
-
-
 // Section of Checkboxes
 // --------------------------------------------------------------------------------------------------
 // 2D
 threeD.addEventListener("click", () => {
     if (threeD.checked) {
-        //
+        ProjectTo2D(camera, orbit, is_2D, two_plane, first_time, two_geometry);
     } else {
         //
     }
 });
 
 // lock vertices
-
 lock_vertices.addEventListener("click", () => {
     if (lock_vertices.checked) {
         lock = 1;
@@ -332,6 +325,14 @@ function ondblclick(event) {
     }
 }
 
+document.getElementById("h-s").onchange = function() {
+    scale = document.getElementById("h-s").value;
+
+    document.getElementById("h-x").value = document.getElementById("quantityx").value * scale;
+    document.getElementById("h-y").value = document.getElementById("quantityy").value * scale;
+    document.getElementById("h-z").value = document.getElementById("quantityz").value * scale;
+};
+
 span_edit_modal.onclick = function() {
     modal_edit.style.display = "none";
 };
@@ -363,24 +364,22 @@ document.addEventListener("pointermove", (event) => {
             planeIntersect.y + shift.y,
             planeIntersect.z + shift.z
         );
-        scale = document.getElementById("h-s").value;
-        let c_x = document.getElementById("quantityx").value = ((dot_list[0].position.x + xcor) * scale).toFixed(2);
-        let c_y = document.getElementById("quantityy").value = ((dot_list[0].position.y + ycor) * scale).toFixed(2);
-        let c_z = document.getElementById("quantityz").value = ((dot_list[0].position.z + zcor) * scale).toFixed(2);
+        document.getElementById("quantityx").value = ((dot_list[0].position.x + xcor) * scale).toFixed(2);
+        document.getElementById("quantityy").value = ((dot_list[0].position.y + ycor) * scale).toFixed(2);
+        document.getElementById("quantityz").value = ((dot_list[0].position.z + zcor) * scale).toFixed(2);
 
-        let h_x = c_x * scale;
-        let h_y = c_y * scale;
-        let h_z = c_z * scale;
+        let c_x = document.getElementById("quantityx").value * scale;
+        let c_y = document.getElementById("quantityy").value * scale;
+        let c_z = document.getElementById("quantityz").value * scale;
 
-        document.getElementById("h-x").value = h_x.toFixed(2);
-        document.getElementById("h-y").value = h_y.toFixed(2);
-        document.getElementById("h-z").value = h_z.toFixed(2);
+        document.getElementById("h-x").value = c_x.toFixed(2);
+        document.getElementById("h-y").value = c_y.toFixed(2);
+        document.getElementById("h-z").value = c_z.toFixed(2);
     }
 
 });
 
 // mouse click
-
 document.addEventListener("pointerdown", () => {
     switch (event.which) {
         case 1:
@@ -398,8 +397,8 @@ document.addEventListener("pointerdown", () => {
             break;
     }
 });
-// mouse release
 
+// mouse release
 document.addEventListener("pointerup", () => {
     isDragging = false;
     dragObject = null;
@@ -412,6 +411,10 @@ move_button.addEventListener("click", () => {
     let z = document.getElementById("quantityz").value;
     console.log(x, y, z);
     dot_list[0].position.set(x - xcor, y - ycor, z - zcor);
+
+    document.getElementById("h-x").value = x * scale;
+    document.getElementById("h-y").value = y * scale;
+    document.getElementById("h-z").value = z * scale;
 });
 move_button.addEventListener("click", () => {
     let x = document.getElementById("quantityx").value;
@@ -485,12 +488,12 @@ let init = function() {
 };
 let mainLoop = function() {
     //console.log(scene.children);
-    if (variable === 1) {
-        for (let cub of cube) {
-            cub.rotation.y += rot;
-            if (cub.position.x <= -3 || cub.position.x >= 3) rot *= -1;
-        }
-    }
+    // if (variable === 1) {
+        // for (let cub of cube) {
+            // cub.rotation.y += rot;
+            // if (cub.position.x <= -3 || cub.position.x >= 3) rot *= -1;
+        // }
+    // }
 
     // orbit.update();
     renderer.render(scene, camera);
