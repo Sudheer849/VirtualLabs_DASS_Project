@@ -8,6 +8,7 @@ import { AddCam, OldCam } from "./js/camera.js";
 import { createCube, createDodecahedron, createOctahedron, createTetrahedron } from "./js/shapes.js";
 import { ProjectTo2D } from "./js/2dprojection.js";
 import { Dot } from "./js/point.js";
+// import { scene, camera, orbit, renderer, shapes, grid1, grid2, grid3, dragx, dragy, dragz, two_geometry, two_plane, first_time, is_2D, arrowHelper } from "./js/global_vars.js";
 
 const move_button = document.getElementById("move-button");
 const modalbutton1 = document.querySelector(".buttonisprimary");
@@ -487,15 +488,6 @@ let init = function() {
     orbit.enableDamping = true;
 };
 let mainLoop = function() {
-    //console.log(scene.children);
-    // if (variable === 1) {
-        // for (let cub of cube) {
-            // cub.rotation.y += rot;
-            // if (cub.position.x <= -3 || cub.position.x >= 3) rot *= -1;
-        // }
-    // }
-
-    // orbit.update();
     renderer.render(scene, camera);
     requestAnimationFrame(mainLoop);
 };
