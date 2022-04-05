@@ -38,9 +38,7 @@ let scene,
     dragx = [],
     dragy = [],
     dragz = [],
-    xcor = 3,
-    ycor = 3,
-    zcor = 3,
+    initial_pos = [3,3,3],
     lock = 0,
     dir = [],
     scale = 1,
@@ -179,21 +177,17 @@ let buttons = document.getElementsByTagName("button");
 const size = 50;
 const divisions = 25;
 
-var camera2, scene2, controls;
-
-
 function NewCam(event) {
     // function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp ) {
     // AddCam(0.1, 1000, -10, -10, -10, 10, new THREE.Vector3(7,-6,2), new THREE.Vector3(1,1,1), new THREE.Vector3(1,0,1), 0);
     AddCam(0.01, 100, -3.2, 3.2, -2.4, 2.4, new THREE.Vector3(3, 5, 2), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 1, 0), 1);
-
 }
 
 document.getElementById("new-cam").onclick = function() {
     // function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp ) {
     // AddCam(0.1, 1000, -10, -10, -10, 10, new THREE.Vector3(7,-6,2), new THREE.Vector3(1,1,1), new THREE.Vector3(1,0,1), 0);
     // AddCam(0.01, 100, -3.2, 3.2, -2.4, 2.4, new THREE.Vector3(3,5,2), new THREE.Vector3(0,0,0), new THREE.Vector3(0,1,0), 1);
-    alert("hi");
+
     let near = document.getElementById("near-coord").value;
     let far = document.getElementById("far-coord").value;
     let left = document.getElementById("left-coord").value;
@@ -208,7 +202,7 @@ document.getElementById("new-cam").onclick = function() {
     let camtype = document.getElementById("cam-type").value;
 
     // debug
-    console.log(near, far, left, right, top, bottom, camera_pos, target, up_vec, parseInt(camtype));
+    // console.log(near, far, left, right, top, bottom, camera_pos, target, up_vec, parseInt(camtype));
 
     AddCam(parseFloat(near), parseFloat(far), parseFloat(left), parseFloat(right), parseFloat(top), parseFloat(bottom), camera_pos, target, up_vec, parseInt(camtype));
 }
@@ -308,17 +302,16 @@ function ondblclick(event) {
                     // alert(document.querySelector("select").value);
                     no_of_shapes++;
                     if (document.querySelector("select").value === "Cube") {
-                        createCube(xcoord, ycoord, zcoord);
-                        // createCube(xcoord, ycoord, zcoord);
+                        createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
                     }
                     if (document.querySelector("select").value === "Tetrahedron") {
-                        createTetrahedron(xcoord, ycoord, zcoord);
+                        createTetrahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
                     }
                     if (document.querySelector("select").value === "Octahedron") {
-                        createOctahedron(xcoord, ycoord, zcoord);
+                        createOctahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
                     }
                     if (document.querySelector("select").value === "Dodecahedron") {
-                        createDodecahedron(xcoord, ycoord, zcoord);
+                        createDodecahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
                     }
                     document.getElementById("edit-modal").style.display = "none";
                 });
@@ -365,9 +358,9 @@ document.addEventListener("pointermove", (event) => {
             planeIntersect.y + shift.y,
             planeIntersect.z + shift.z
         );
-        document.getElementById("quantityx").value = ((dot_list[0].position.x + xcor) * scale).toFixed(2);
-        document.getElementById("quantityy").value = ((dot_list[0].position.y + ycor) * scale).toFixed(2);
-        document.getElementById("quantityz").value = ((dot_list[0].position.z + zcor) * scale).toFixed(2);
+        document.getElementById("quantityx").value = ((dot_list[0].position.x + initial_pos[0]) * scale).toFixed(2);
+        document.getElementById("quantityy").value = ((dot_list[0].position.y + initial_pos[1]) * scale).toFixed(2);
+        document.getElementById("quantityz").value = ((dot_list[0].position.z + initial_pos[2]) * scale).toFixed(2);
 
         let c_x = document.getElementById("quantityx").value * scale;
         let c_y = document.getElementById("quantityy").value * scale;
@@ -411,42 +404,21 @@ move_button.addEventListener("click", () => {
     let y = document.getElementById("quantityy").value;
     let z = document.getElementById("quantityz").value;
     console.log(x, y, z);
-    dot_list[0].position.set(x - xcor, y - ycor, z - zcor);
+    dot_list[0].position.set(x - initial_pos[0], y - initial_pos[1], z - initial_pos[2]);
 
     document.getElementById("h-x").value = x * scale;
     document.getElementById("h-y").value = y * scale;
     document.getElementById("h-z").value = z * scale;
 });
-move_button.addEventListener("click", () => {
-    let x = document.getElementById("quantityx").value;
-    let y = document.getElementById("quantityy").value;
-    let z = document.getElementById("quantityz").value;
-    console.log(x, y, z);
-    dot_list[0].position.set(x - xcor, y - ycor, z - zcor);
-});
+//------------------------------------------------------------------
 
-
+// Creating scene
 scene = new THREE.Scene();
-// scene.background = new THREE.Color(0x36393e);
 scene.background = new THREE.Color(0x121212);
-camera = new THREE.PerspectiveCamera(
-    30,
-    window.innerWidth / window.innerHeight,
-    1,
-    1000
-);
-// Materials Function
+camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 1000);
 
-// Geometries Function
-function createGeometries() {
-    const cube = new THREE.BoxGeometry(1, 1, 1);
-    return {
-        cube,
-    };
-}
 // Main Function
 // --------------------------------------------------------------------------------------------------
-
 let init = function() {
     camera.position.z = 5;
     camera.position.x = 2;
@@ -471,7 +443,7 @@ let init = function() {
     for (let i = 0; i < 6; i++) {
         scene.add(arrowHelper[i]);
     }
-    let PointGeometry = Dot(scene, dot_list, xcor, ycor, zcor);
+    let PointGeometry = Dot(scene, dot_list, initial_pos);
     renderer = new THREE.WebGLRenderer();
     let container = document.getElementById("canvas-main");
     let w = container.offsetWidth;

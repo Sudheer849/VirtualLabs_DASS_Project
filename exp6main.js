@@ -7,7 +7,7 @@ import { MOUSE } from "https://unpkg.com/three@0.128.0/build/three.module.js";
 import { AddCam, OldCam } from "./js/camera.js";
 import { createCube, createDodecahedron, createOctahedron, createTetrahedron } from "./js/shapes.js";
 import { ProjectTo2D } from "./js/2dprojection.js";
-import { Dot } from "./js/point.js";
+import { createArm } from "./js/mech_arm.js";
 // import { scene, camera, orbit, renderer, shapes, grid1, grid2, grid3, dragx, dragy, dragz, two_geometry, two_plane, first_time, is_2D, arrowHelper } from "./js/global_vars.js";
 
 const move_button = document.getElementById("move-button");
@@ -24,6 +24,16 @@ let cam_target = new THREE.Vector3(0, 0, 0);
 
 let modal_add = document.getElementById("add-modal");
 let modal_edit = document.getElementById("edit-modal");
+let initial_pos = [3,3,3];
+var slider = document.getElementById("slider");
+slider.addEventListener("input", movePoint);
+document.getElementById("slider").max = document.getElementById("finalx").value - initial_pos[0];
+document.getElementById("slider").min = 0;
+slider.step =(document.getElementById("slider").max - document.getElementById("slider").min) / document.getElementById("frames").value;
+
+let final_pos = [ document.getElementById("finalx").value, document.getElementById("finaly").value, document.getElementById("finalz").value ];
+
+let frames = document.getElementById("frames").value;
 
 let span_edit_modal = document.getElementsByClassName("close")[0];
 let deletebutton = document.getElementById("deletebutton");
@@ -180,16 +190,11 @@ let buttons = document.getElementsByTagName("button");
 const size = 50;
 const divisions = 25;
 
-var camera2, scene2, controls;
-
-
 function NewCam(event) {
     // function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp ) {
     // AddCam(0.1, 1000, -10, -10, -10, 10, new THREE.Vector3(7,-6,2), new THREE.Vector3(1,1,1), new THREE.Vector3(1,0,1), 0);
     AddCam(0.01, 100, -3.2, 3.2, -2.4, 2.4, new THREE.Vector3(3, 5, 2), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 1, 0), 1);
-
 }
-
 document.getElementById("new-cam").onclick = function() {
     // function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp ) {
     // AddCam(0.1, 1000, -10, -10, -10, 10, new THREE.Vector3(7,-6,2), new THREE.Vector3(1,1,1), new THREE.Vector3(1,0,1), 0);
@@ -213,8 +218,6 @@ document.getElementById("new-cam").onclick = function() {
 
     AddCam(parseFloat(near), parseFloat(far), parseFloat(left), parseFloat(right), parseFloat(top), parseFloat(bottom), camera_pos, target, up_vec, parseInt(camtype));
 }
-
-
 
 document.getElementById("add-shape-btn").onclick = function() {
     modal_add.style.display = "block";
@@ -243,7 +246,6 @@ document.getElementById("add-shape-btn").onclick = function() {
 
 // Section of mouse control functions
 // --------------------------------------------------------------------------------------------------
-
 let raycaster = new THREE.Raycaster();
 let raycaster1 = new THREE.Raycaster();
 let mouse = new THREE.Vector2();
@@ -257,7 +259,7 @@ let isDragging = false;
 let dragObject;
 let point = [];
 let shapevertex = [];
-let dot_list = [];
+let hand_comp = [];
 let no_of_shapes = 0;
 
 document.addEventListener("dblclick", ondblclick, false);
@@ -327,103 +329,33 @@ function ondblclick(event) {
     }
 }
 
-document.getElementById("h-s").onchange = function() {
-    scale = document.getElementById("h-s").value;
-
-    document.getElementById("h-x").value = document.getElementById("quantityx").value * scale;
-    document.getElementById("h-y").value = document.getElementById("quantityy").value * scale;
-    document.getElementById("h-z").value = document.getElementById("quantityz").value * scale;
-};
-
 span_edit_modal.onclick = function() {
     modal_edit.style.display = "none";
 };
-// mouse drag
 
-document.addEventListener("pointermove", (event) => {
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    raycaster.setFromCamera(mouse, camera);
-    if (isDragging && lock === 0) {
-        //console.log("Why");
-        for (let i = 0; i < shapes.length; i++) {
-            raycaster.ray.intersectPlane(plane, planeIntersect);
-            shapes[i].geometry.vertices[0].set(
-                planeIntersect.x + shift.x,
-                planeIntersect.y + shift.y,
-                planeIntersect.z + shift.z
-            );
-            shapes[i].geometry.verticesNeedUpdate = true;
-            shapevertex[i].position.set(
-                planeIntersect.x + shift.x - dragx[i],
-                planeIntersect.y + shift.y - dragy[i],
-                planeIntersect.z + shift.z - dragz[i]
-            );
-        }
-        raycaster.ray.intersectPlane(plane, planeIntersect);
-        dot_list[0].position.set(
-            planeIntersect.x + shift.x,
-            planeIntersect.y + shift.y,
-            planeIntersect.z + shift.z
-        );
-        document.getElementById("quantityx").value = ((dot_list[0].position.x + xcor) * scale).toFixed(2);
-        document.getElementById("quantityy").value = ((dot_list[0].position.y + ycor) * scale).toFixed(2);
-        document.getElementById("quantityz").value = ((dot_list[0].position.z + zcor) * scale).toFixed(2);
-
-        let c_x = document.getElementById("quantityx").value * scale;
-        let c_y = document.getElementById("quantityy").value * scale;
-        let c_z = document.getElementById("quantityz").value * scale;
-
-        document.getElementById("h-x").value = c_x.toFixed(2);
-        document.getElementById("h-y").value = c_y.toFixed(2);
-        document.getElementById("h-z").value = c_z.toFixed(2);
-    }
-
-});
-
-// mouse click
-document.addEventListener("pointerdown", () => {
-    switch (event.which) {
-        case 1:
-            //  Left mouse button pressed
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-            pNormal.copy(camera.position).normalize();
-            plane.setFromNormalAndCoplanarPoint(pNormal, scene.position);
-            raycaster.setFromCamera(mouse, camera);
-            raycaster.ray.intersectPlane(plane, planeIntersect);
-            // shift.subVectors(point[0].position, planeIntersect);
-            shift.subVectors(dot_list[0].position, planeIntersect);
-            isDragging = true;
-            dragObject = shapes[shapes.length - 1];
-            break;
-    }
-});
-
-// mouse release
-document.addEventListener("pointerup", () => {
-    isDragging = false;
-    dragObject = null;
-});
-
+// Slider Implementation
+// ---------------------------------------------------------------------------------------
+function movePoint(e) {
+    var target = e.target ? e.target : e.srcElement;
+  
+    
+  }
+  
+  document.getElementById("finalx").onchange = function () {
+    
+  };
+  document.getElementById("finaly").onchange = function () {
+    
+  };
+  document.getElementById("finalz").onchange = function () {
+   
+  };
+  document.getElementById("frames").onchange = function () {
+  };
+  // --------------------------------------------------------------------------------------------------
 
 move_button.addEventListener("click", () => {
-    let x = document.getElementById("quantityx").value;
-    let y = document.getElementById("quantityy").value;
-    let z = document.getElementById("quantityz").value;
-    console.log(x, y, z);
-    dot_list[0].position.set(x - xcor, y - ycor, z - zcor);
-
-    document.getElementById("h-x").value = x * scale;
-    document.getElementById("h-y").value = y * scale;
-    document.getElementById("h-z").value = z * scale;
-});
-move_button.addEventListener("click", () => {
-    let x = document.getElementById("quantityx").value;
-    let y = document.getElementById("quantityy").value;
-    let z = document.getElementById("quantityz").value;
-    console.log(x, y, z);
-    dot_list[0].position.set(x - xcor, y - ycor, z - zcor);
+    
 });
 
 
@@ -478,7 +410,7 @@ let init = function() {
     for (let i = 0; i < 6; i++) {
         scene.add(arrowHelper[i]);
     }
-    let PointGeometry = Dot(scene, dot_list, xcor, ycor, zcor);
+    let PointGeometry = createArm(scene, hand_comp);
     renderer = new THREE.WebGLRenderer();
     let container = document.getElementById("canvas-main");
     let w = container.offsetWidth;

@@ -240,14 +240,59 @@
 
                     <div class="v-datalist-title" id="top-border">World and Instances</div>
 
+                    <form>
+                        <label for="quantity">No of Frames:</label>
+                        <input type="number" id="frames" name="noofframes" min="1" step="1" value="1000"></br>
+                        <label for="quantity">Final X-coordinate:</label>
+                        <input type="number" id="finalx" name="finalx" step=".01" value="9"></br>
+                        <label for="quantity">Final Y-coordinate:</label>
+                        <input type="number" id="finaly" name="finaly" step=".01" value="6"> </br>
+                        <label for="quantity">Final Z-coordinate:</label>
+                        <input type="number" id="finalz" name="finalz" step=".01" value="7"> </br>
+                    </form>
+    
+                    <div class="v-datalist-title" id="top-border">Transformation Matrix</div>
+                    <br>
                     <div style="display: flexbox;">
-                        X:
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="h-x" value="3" placeholder="X"> Y:
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="h-y" value="3" placeholder="Y"> Z:
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="h-z" value="3" placeholder="Z"> Scaling Factor
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="h-s" value="1" step="0.01" placeholder="Scale">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-00" value="1"
+                            placeholder="X">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-01" value="0"
+                            placeholder="X">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-02" value="0"
+                            placeholder="X">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-03" value="0"
+                            placeholder="X">
                     </div>
-
+                    <div style="display: flexbox;">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-10" value="0"
+                            placeholder="X">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-11" value="1"
+                            placeholder="X">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-12" value="0"
+                            placeholder="X">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-13" value="0"
+                            placeholder="X">
+                    </div>
+                    <div style="display: flexbox;">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-20" value="0"
+                            placeholder="X">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-21" value="0"
+                            placeholder="X">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-22" value="1"
+                            placeholder="X">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-22" value="0"
+                            placeholder="X">
+                    </div>
+                    <div style="display: flexbox;">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-30" value="0"
+                            placeholder="X">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-31" value="0"
+                            placeholder="X">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-32" value="0"
+                            placeholder="X">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-33" value="1"
+                            placeholder="X">
+                    </div>
 
                     <div class="v-datalist-row v-bold" id="output1"></div>
                     <div class="v-datalist-row v-bold" id="output2"></div>
@@ -274,6 +319,8 @@
             </div>
         </div> -->
     </div>
+
+    <input class="slider exptwoslider is-fullwidth" id="slider" step="1" min="0" max="100" value="0" type="range">
 
 
     <!-- <script>

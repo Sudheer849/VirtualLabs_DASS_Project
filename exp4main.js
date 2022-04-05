@@ -574,6 +574,16 @@ function movePoint(e) {
 
     trans_matrix.multiply(scale_m);
 
+    if( target.value <= 0 )
+    {
+      trans_matrix = new THREE.Matrix4( 
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+      ); 
+    }
+    
     document.getElementById("matrix-00").value = trans_matrix.elements[0];
     document.getElementById("matrix-01").value = trans_matrix.elements[1];
     document.getElementById("matrix-02").value = trans_matrix.elements[2];

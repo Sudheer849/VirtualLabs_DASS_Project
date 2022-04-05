@@ -38,9 +38,6 @@ let scene,
   shapes = [],
   rot = 0.01,
   variable = 0,
-  vargrid1 = 0,
-  vargrid2 = 0,
-  vargrid3 = 0,
   grid1 = [],
   grid2 = [],
   grid3 = [],
@@ -585,10 +582,15 @@ function movePoint(e) {
     document.getElementById("quantityy").value = dot_list[0].geometry.getAttribute('position').array[1];
     document.getElementById("quantityz").value = dot_list[0].geometry.getAttribute('position').array[2];
 
-    // for( let i = 0; i < 3; i++ )
-    // {
-      // console.log(dot_list[0].geometry.getAttribute('position').array[i]);
-    // }
+    if( target.value <= 0 )
+    {
+      trans_matrix = new THREE.Matrix4( 
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+      ); 
+    }
 
     document.getElementById("matrix-00").value = trans_matrix.elements[0];
     document.getElementById("matrix-01").value = trans_matrix.elements[1];
@@ -925,7 +927,7 @@ let init = function () {
   for (let i = 0; i < 6; i++) {
     scene.add(arrowHelper[i]);
   }
-  let PointGeometry = Dot();
+  let PointGeometry = Dot(scene, dot_list, initial_pos);
   renderer = new THREE.WebGLRenderer();
   let container = document.getElementById("canvas-main");
   let w = container.offsetWidth;
@@ -941,15 +943,6 @@ let init = function () {
   orbit.enableDamping = true;
 };
 let mainLoop = function () {
-  //console.log(scene.children);
-  if (variable === 1) {
-    for (let cub of cube) {
-      cub.rotation.y += rot;
-      if (cub.position.x <= -3 || cub.position.x >= 3) rot *= -1;
-    }
-  }
-
-  // orbit.update();
   renderer.render(scene, camera);
   requestAnimationFrame(mainLoop);
 };
