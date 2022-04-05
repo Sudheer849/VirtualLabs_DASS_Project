@@ -1,6 +1,12 @@
 import * as THREE from "https://threejsfundamentals.org/threejs/resources/threejs/r115/build/three.module.js";
 import { OrbitControls } from "https://threejsfundamentals.org/threejs/resources/threejs/r115/examples/jsm/controls/OrbitControls.js";
 import { MOUSE } from "https://unpkg.com/three@0.128.0/build/three.module.js";
+
+import { AddCam, OldCam } from "./js/camera.js";
+import { createCube, createDodecahedron, createOctahedron, createTetrahedron } from "./js/shapes.js";
+import { ProjectTo2D } from "./js/2dprojection.js";
+import { Dot } from "./js/point.js";
+
 const move_button = document.getElementById("move-button");
 const set_rotation_axis = document.getElementById("set-rotation-axis");
 const modalbutton1 = document.querySelector(".buttonisprimary");
@@ -25,7 +31,7 @@ slider.step =(document.getElementById("slider").max - document.getElementById("s
 let rot_axis = new THREE.Vector3( document.getElementById("x-comp").value, document.getElementById("y-comp").value, document.getElementById("z-comp").value );
 // convert axis to unit vector
 rot_axis.normalize();
-console.log("normalised axis ", rot_axis);
+// console.log("normalised axis ", rot_axis);
 
 let total_angle = document.getElementById("theta").value;
 let frames = document.getElementById("frames").value;
@@ -36,8 +42,6 @@ let scene,
   renderer,
   orbit,
   shapes = [],
-  rot = 0.01,
-  variable = 0,
   grid1 = [],
   grid2 = [],
   grid3 = [],
@@ -46,9 +50,14 @@ let scene,
   dragz = [],
   lock = 0,
   dir = [],
+  two_plane,
+  two_geometry,
+  first_time = 1,
+  is_2D = 0,
   arrowHelper = [];
 
-let trans_matrix = new THREE.Matrix4( 
+let trans_matrix = new THREE.Matrix4();
+trans_matrix.set(
   1, 0, 0, 0,
   0, 1, 0, 0,
   0, 0, 1, 0,
@@ -88,26 +97,6 @@ window.onclick = function (event) {
     camModal.style.display = "none";
   }
 };
-
-function vertexShader() {
-  return `varying vec3 vUv; 
-    
-                void main() {
-                  vUv = position; 
-    
-                  vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0);
-                  gl_Position = projectionMatrix * modelViewPosition; 
-                }`;
-}
-function fragmentShader() {
-  return `uniform vec3 colorA; 
-                  uniform vec3 colorB; 
-                  varying vec3 vUv;
-    
-                  void main() {
-                gl_FragColor = vec4(mix(colorA, colorB, vUv.z), 1.0);
-                  }`;
-}
 
 // Section of Checkboxes
 // --------------------------------------------------------------------------------------------------
@@ -199,83 +188,21 @@ yz_grid.addEventListener("click", () => {
 
 // Section of Buttons
 // --------------------------------------------------------------------------------------------------
-
 let buttons = document.getElementsByTagName("button");
 const size = 50;
 const divisions = 25;
 
-let camera2, scene2, controls;
-function AddCam(
-  near,
-  far,
-  left,
-  right,
-  bottom,
-  top,
-  camera_pos,
-  target,
-  up_vec,
-  ortho_persp
-) {
-  // 1 === orthographic, 0 === perspective
-  scene.remove(camera);
-  if (ortho_persp === 1) {
-    camera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
-  } else {
-    // cam2 = new THREE.PerspectiveCamera( Math.atan( ( (top - bottom)/( near + far ) ), (left - right) / (top - bottom) , near, far) );
-    camera = new THREE.PerspectiveCamera(
-      45,
-      window.innerWidth / window.innerHeight,
-      near,
-      far
-    );
-    camera.up.set(up_vec.x, up_vec.y, up_vec.z);
-  }
-
-  camera.position.set(camera_pos.x, camera_pos.y, camera_pos.z);
-  camera.lookAt(target);
-
-  scene.add(camera);
-  // renderer.render(scene, camera);
-
-  // let newRenderer = new THREE.WebGLRenderer();
-  // newRenderer.setSize(window.innerWidth, window.innerHeight);
-  // document.body.appendChild(newRenderer.domElement);
-
-  // orbit controls
-  // if (ortho_persp === 0) {
-  controls = new OrbitControls(camera, renderer.domElement);
-  controls.mouseButtons = {
-    // LEFT: THREE.MOUSE.PAN,
-    MIDDLE: THREE.MOUSE.DOLLY,
-    RIGHT: THREE.MOUSE.ROTATE,
-  };
-  controls.target.set(target.x, target.y, target.z);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.05;
-  controls.update();
-  // }
-  return camera;
-}
-
 function NewCam(event) {
   // function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp ) {
   // AddCam(0.1, 1000, -10, -10, -10, 10, new THREE.Vector3(7,-6,2), new THREE.Vector3(1,1,1), new THREE.Vector3(1,0,1), 0);
-  AddCam(
-    0.01,
-    100,
-    -3.2,
-    3.2,
-    -2.4,
-    2.4,
-    new THREE.Vector3(3, 5, 2),
-    new THREE.Vector3(0, 0, 0),
-    new THREE.Vector3(0, 1, 0),
-    1
-  );
+  AddCam(0.01, 100, -3.2, 3.2, -2.4, 2.4, new THREE.Vector3(3, 5, 2), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 1, 0), 1);
 }
 
 document.getElementById("new-cam").onclick = function () {
+  // function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp ) {
+  // AddCam(0.1, 1000, -10, -10, -10, 10, new THREE.Vector3(7,-6,2), new THREE.Vector3(1,1,1), new THREE.Vector3(1,0,1), 0);
+  // AddCam(0.01, 100, -3.2, 3.2, -2.4, 2.4, new THREE.Vector3(3,5,2), new THREE.Vector3(0,0,0), new THREE.Vector3(0,1,0), 1);
+
   let near = document.getElementById("near-coord").value;
   let far = document.getElementById("far-coord").value;
   let left = document.getElementById("left-coord").value;
@@ -283,109 +210,15 @@ document.getElementById("new-cam").onclick = function () {
   let bottom = document.getElementById("bottom-coord").value;
   let top = document.getElementById("top-coord").value;
 
-  let camera_pos = new THREE.Vector3(
-    document.getElementById("cam-x").value,
-    document.getElementById("cam-y").value,
-    document.getElementById("cam-z").value
-  );
-  let target = new THREE.Vector3(
-    document.getElementById("target-x").value,
-    document.getElementById("target-y").value,
-    document.getElementById("target-z").value
-  );
-  let up_vec = new THREE.Vector3(
-    document.getElementById("up-x").value,
-    document.getElementById("up-y").value,
-    document.getElementById("up-z").value
-  );
-  let ortho_persp = document.getElementById("ortho-id").value;
+  let camera_pos = new THREE.Vector3(document.getElementById("cam-x").value, document.getElementById("cam-y").value, document.getElementById("cam-z").value);
+  let target = new THREE.Vector3(document.getElementById("target-x").value, document.getElementById("target-y").value, document.getElementById("target-z").value);
+  let up_vec = new THREE.Vector3(document.getElementById("up-x").value, document.getElementById("up-y").value, document.getElementById("up-z").value);
+  let camtype = document.getElementById("cam-type").value;
 
-  AddCam(
-    near,
-    far,
-    left,
-    right,
-    bottom,
-    top,
-    camera_pos,
-    target,
-    up_vec,
-    parseInt(ortho_persp)
-  );
-};
+  // debug
+  // console.log(near, far, left, right, top, bottom, camera_pos, target, up_vec, parseInt(camtype));
 
-// Add a camera
-function OldCam() {
-  scene.remove(camera);
-
-  camera = new THREE.PerspectiveCamera(
-    30,
-    window.innerWidth / window.innerHeight,
-    1,
-    1000
-  );
-
-  camera.position.x = 2;
-  camera.position.y = 2;
-  camera.position.z = 5;
-
-  origin = new THREE.Vector3(0, 0, 0);
-  camera.lookAt(origin);
-
-  scene.add(camera);
-  orbit = new OrbitControls(camera, renderer.domElement);
-  orbit.mouseButtons = {
-    MIDDLE: MOUSE.DOLLY,
-    RIGHT: MOUSE.ROTATE,
-  };
-  orbit.target.set(0, 0, 0);
-  orbit.enableDamping = true;
-  orbit.dampingFactor = 0.05;
-
-  renderer.render(scene, camera);
-
-  return camera;
-}
-
-function Change(event) {
-  // scene.remove(arrowHelper2);
-  // scene.remove(arrowHelper5);
-  is_2D = 1;
-
-  camera_pos = new THREE.Vector3(3, 0, 0);
-  camera_up = new THREE.Vector3(0, 0, 1);
-  camera.position.set(camera_pos.x, camera_pos.y, camera_pos.z);
-  camera.up.set(0, 1, 0);
-  camera.lookAt(new THREE.Vector3(0, 0, 0));
-
-  orbit.screenSpacePanning = true;
-
-  if (first_time === 1) {
-    //create someplane to project to
-    two_plane = new THREE.Plane().setFromCoplanarPoints(
-      new THREE.Vector3(0, 1, 0),
-      new THREE.Vector3(1, 0, 0),
-      new THREE.Vector3(0, 0, 0)
-    );
-    //create some geometry to flatten..
-    // two_geometry = new THREE.BufferGeometry();
-    // fillGeometry(two_geometry);
-    first_time = 0;
-  }
-
-  var positionAttr = two_geometry.getAttribute("position");
-  for (var i = 0; i < positionAttr.array.length; i += 3) {
-    var point = new THREE.Vector3(
-      positionAttr.array[i],
-      positionAttr.array[i + 1],
-      positionAttr.array[i + 2]
-    );
-    var projectedPoint = two_plane.projectPoint();
-    positionAttr.array[i] = projectedPoint.x;
-    positionAttr.array[i + 1] = projectedPoint.y;
-    positionAttr.array[i + 2] = projectedPoint.z;
-  }
-  positionAttr.needsUpdate = true;
+  AddCam(parseFloat(near), parseFloat(far), parseFloat(left), parseFloat(right), parseFloat(top), parseFloat(bottom), camera_pos, target, up_vec, parseInt(camtype));
 }
 
 document.getElementById("add-shape-btn").onclick = function () {
@@ -420,7 +253,6 @@ document.getElementById("add-shape-btn").onclick = function () {
 
 // Section of mouse control functions
 // --------------------------------------------------------------------------------------------------
-
 let raycaster = new THREE.Raycaster();
 let raycaster1 = new THREE.Raycaster();
 let mouse = new THREE.Vector2();
@@ -444,21 +276,10 @@ function ondblclick(event) {
   raycaster1.setFromCamera(mouse, camera);
   let intersects = raycaster1.intersectObjects(shapes);
   if (intersects.length > 0) {
-    console.log(
-      intersects[0].object.position.x,
-      intersects[0].object.position.y,
-      intersects[0].object.position.z
-    );
     const geometry = new THREE.SphereGeometry(1, 32, 16);
     const edges = new THREE.EdgesGeometry(geometry);
-    const line = new THREE.LineSegments(
-      edges,
-      new THREE.LineBasicMaterial({ color: 0xffffff })
-    );
-    line.position.set(
-      intersects[0].object.position.x,
-      intersects[0].object.position.y,
-      intersects[0].object.position.z
+    const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0xffffff }));
+    line.position.set( intersects[0].object.position.x, intersects[0].object.position.y, intersects[0].object.position.z
     );
     scene.add(line);
     document.getElementById("delete-shape-btn").onclick = function () {
@@ -468,12 +289,8 @@ function ondblclick(event) {
         no_of_shapes--;
         console.log(no_of_shapes);
       }
-      // if (no_of_shapes === 0) {
-      //   con = 0;
-      //    scene.add(dot_list[0]);
-      // }
     };
-    // geometry.translate(intersects[0].object.position.x,intersects[0].object.position.y,intersects[0].object.position.z);
+
     document.getElementById("edit-shape-btn").onclick = function () {
       document.getElementById("edit-modal").style.display = "block";
       document
@@ -489,17 +306,16 @@ function ondblclick(event) {
           // alert(document.querySelector("select").value);
           no_of_shapes++;
           if (document.querySelector("select").value === "Cube") {
-            createCube(xcoord, ycoord, zcoord);
-            // createCube(xcoord, ycoord, zcoord);
+            createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
           }
           if (document.querySelector("select").value === "Tetrahedron") {
-            createTetrahedron(xcoord, ycoord, zcoord);
+            createTetrahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
           }
           if (document.querySelector("select").value === "Octahedron") {
-            createOctahedron(xcoord, ycoord, zcoord);
+            createOctahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
           }
           if (document.querySelector("select").value === "Dodecahedron") {
-            createDodecahedron(xcoord, ycoord, zcoord);
+            createDodecahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
           }
           document.getElementById("edit-modal").style.display = "none";
         });
@@ -538,7 +354,6 @@ document.addEventListener("pointermove", (event) => {
 });
 
 // mouse click
-
 document.addEventListener("pointerdown", () => {
   switch (event.which) {
     case 1:
@@ -584,7 +399,7 @@ function movePoint(e) {
 
     if( target.value <= 0 )
     {
-      trans_matrix = new THREE.Matrix4( 
+      trans_matrix.set( 
         1, 0, 0, 0,
         0, 1, 0, 0,
         0, 0, 1, 0,
@@ -677,232 +492,16 @@ document.getElementById("theta").onchange = function () {
 set_rotation_axis.addEventListener("click", () => {
   rot_axis = new THREE.Vector3( parseFloat( document.getElementById("x-comp").value), parseFloat( document.getElementById("y-comp").value), parseFloat( document.getElementById("z-comp").value) );
 });
-
 // --------------------------------------------------------------------------------------------------
 
-// Cube Function
-// --------------------------------------------------------------------------------------------------
 
-let createCube = function (x, y, z) {
-  const geometry = new THREE.BoxGeometry(1, 1, 1);
-  const material = createMaterials().cubeShader;
-  const cube = new THREE.Mesh(geometry, material);
-  cube.geometry.verticesNeedUpdate = true;
-  shapes.push(cube);
-  shapes[shapes.length - 1].position.set(x, y, z);
-  scene.add(shapes[shapes.length - 1]);
-  // console.log(cube[cube.length - 1]);
-  var vertex = new THREE.Vector3();
-  // console.log(cube[cube.length - 1].geometry.vertices[0]);
-  for (let i = 0; i < shapes[shapes.length - 1].geometry.vertices.length; i++) {
-    var dotGeometry = new THREE.Geometry();
-    dotGeometry.vertices.push(shapes[shapes.length - 1].geometry.vertices[i]);
-    var dotMaterial = new THREE.PointsMaterial({
-      color: "white",
-      size: 6,
-      sizeAttenuation: false,
-    });
-    const geometry = new THREE.SphereGeometry(15, 32, 16);
-    var dot = new THREE.Points(dotGeometry, dotMaterial);
-    point.push(dot);
-    shapes[shapes.length - 1].add(point[point.length - 1]);
-    if (i === 0) {
-      shapevertex.push(dot);
-    }
-  }
-  // console.log(cube[cube.length-1].geometry.vertices[0].x,cube[cube.length-1].geometry.vertices[0].y,cube[cube.length-1].geometry.vertices[0].z);
-  dragx.push(shapes[shapes.length - 1].geometry.vertices[0].x);
-  dragy.push(shapes[shapes.length - 1].geometry.vertices[0].y);
-  dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
-};
-move_button.addEventListener("click", () => {
-  initial_pos[0] = parseFloat( document.getElementById("quantityx").value);
-  initial_pos[1] = parseFloat( document.getElementById("quantityy").value);
-  initial_pos[2] = parseFloat( document.getElementById("quantityz").value);
-
-  let cur_pos = new Array();
-  for ( let i = 0; i < 3; i++ ) 
-    cur_pos[i] = dot_list[0].geometry.getAttribute('position').array[i];
-  
-  let translate_M = new THREE.Matrix4();
-  translate_M.makeTranslation( initial_pos[0] - cur_pos[0], initial_pos[1] - cur_pos[1], initial_pos[2] - cur_pos[2] );
-  dot_list[0].geometry.applyMatrix4( translate_M );  
-  dot_list[0].geometry.verticesNeedUpdate = true;
-
-  document.getElementById("slider").max = document.getElementById("finalx").value - initial_pos[0];
-  slider.step = (document.getElementById("slider").max - document.getElementById("slider").min) / document.getElementById("frames").value;
-});
-// Dodecahedron Function
-// --------------------------------------------------------------------------------------------------
-let createDodecahedron = function (x, y, z) {
-  const geometry = new THREE.DodecahedronGeometry(1);
-  const material = createMaterials().cubeShader;
-  const dodecahedron = new THREE.Mesh(geometry, material);
-  dodecahedron.geometry.verticesNeedUpdate = true;
-  shapes.push(dodecahedron);
-  shapes[shapes.length - 1].position.set(x, y, z);
-  scene.add(shapes[shapes.length - 1]);
-  // console.log(cube[cube.length - 1]);
-  var vertex = new THREE.Vector3();
-  // console.log(cube[cube.length - 1].geometry.vertices[0]);
-  for (let i = 0; i < shapes[shapes.length - 1].geometry.vertices.length; i++) {
-    var dotGeometry = new THREE.Geometry();
-    dotGeometry.vertices.push(shapes[shapes.length - 1].geometry.vertices[i]);
-    var dotMaterial = new THREE.PointsMaterial({
-      color: "white",
-      size: 6,
-      sizeAttenuation: false,
-    });
-    var dot = new THREE.Points(dotGeometry, dotMaterial);
-    point.push(dot);
-    shapes[shapes.length - 1].add(point[point.length - 1]);
-    if (i === 0) {
-      shapevertex.push(dot);
-    }
-  }
-  // console.log(cube[cube.length-1].geometry.vertices[0].x,cube[cube.length-1].geometry.vertices[0].y,cube[cube.length-1].geometry.vertices[0].z);
-  dragx.push(shapes[shapes.length - 1].geometry.vertices[0].x);
-  dragy.push(shapes[shapes.length - 1].geometry.vertices[0].y);
-  dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
-};
-
-// Octahedron Function
-// --------------------------------------------------------------------------------------------------
-let createOctahedron = function (x, y, z) {
-  const geometry = new THREE.OctahedronGeometry(1);
-  const material = createMaterials().cubeShader;
-  const octahedron = new THREE.Mesh(geometry, material);
-  octahedron.geometry.verticesNeedUpdate = true;
-  shapes.push(octahedron);
-  shapes[shapes.length - 1].position.set(x, y, z);
-  scene.add(shapes[shapes.length - 1]);
-  // console.log(cube[cube.length - 1]);
-  var vertex = new THREE.Vector3();
-  // console.log(cube[cube.length - 1].geometry.vertices[0]);
-  for (let i = 0; i < shapes[shapes.length - 1].geometry.vertices.length; i++) {
-    var dotGeometry = new THREE.Geometry();
-    dotGeometry.vertices.push(shapes[shapes.length - 1].geometry.vertices[i]);
-    var dotMaterial = new THREE.PointsMaterial({
-      color: "white",
-      size: 6,
-      sizeAttenuation: false,
-    });
-    var dot = new THREE.Points(dotGeometry, dotMaterial);
-    point.push(dot);
-    shapes[shapes.length - 1].add(point[point.length - 1]);
-    if (i === 0) {
-      shapevertex.push(dot);
-    }
-  }
-  // console.log(cube[cube.length-1].geometry.vertices[0].x,cube[cube.length-1].geometry.vertices[0].y,cube[cube.length-1].geometry.vertices[0].z);
-  dragx.push(shapes[shapes.length - 1].geometry.vertices[0].x);
-  dragy.push(shapes[shapes.length - 1].geometry.vertices[0].y);
-  dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
-};
-// Tetrahedron Function
-// --------------------------------------------------------------------------------------------------
-let createTetrahedron = function (x, y, z) {
-  const geometry = new THREE.TetrahedronGeometry(1);
-  const material = createMaterials().cubeShader;
-  const tetrahedron = new THREE.Mesh(geometry, material);
-  tetrahedron.geometry.verticesNeedUpdate = true;
-  shapes.push(tetrahedron);
-  shapes[shapes.length - 1].position.set(x, y, z);
-  scene.add(shapes[shapes.length - 1]);
-
-  // console.log(cube[cube.length - 1]);
-  var vertex = new THREE.Vector3();
-  // console.log(cube[cube.length - 1].geometry.vertices[0]);
-  for (let i = 0; i < shapes[shapes.length - 1].geometry.vertices.length; i++) {
-    var dotGeometry = new THREE.Geometry();
-    dotGeometry.vertices.push(shapes[shapes.length - 1].geometry.vertices[i]);
-    var dotMaterial = new THREE.PointsMaterial({
-      color: "white",
-      size: 6,
-      sizeAttenuation: false,
-    });
-    var dot = new THREE.Points(dotGeometry, dotMaterial);
-    point.push(dot);
-    shapes[shapes.length - 1].add(point[point.length - 1]);
-    if (i === 0) {
-      shapevertex.push(dot);
-    }
-  }
-  // console.log(cube[cube.length-1].geometry.vertices[0].x,cube[cube.length-1].geometry.vertices[0].y,cube[cube.length-1].geometry.vertices[0].z);
-  dragx.push(shapes[shapes.length - 1].geometry.vertices[0].x);
-  dragy.push(shapes[shapes.length - 1].geometry.vertices[0].y);
-  dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
-};
-
-// Dot Function
-// --------------------------------------------------------------------------------------------------
-
-let Dot = function () {
-  
-  let tmp_vec = new THREE.Vector3( initial_pos[0], initial_pos[1], initial_pos[2] );
-  let dotGeometry = new THREE.BufferGeometry().setFromPoints( [ tmp_vec ] );
-  let dotMaterial = new THREE.PointsMaterial({
-    size: 6,
-    sizeAttenuation: false,
-  });
-
-  let point = new THREE.Points( dotGeometry, dotMaterial );
-  dot_list.push(point);
-  scene.add(dot_list[0]);
-
-  return dotGeometry;
-};
-
-// Function for Lights
-
-function createLights() {
-  // Create a directional light
-  const ambientLight = new THREE.HemisphereLight(0xddeeff, 0x202020, 9);
-  const mainLight = new THREE.DirectionalLight(0xffffff, 3.0);
-  scene.add(ambientLight);
-
-  // move the light back and up a bit
-  mainLight.position.set(10, 10, 10);
-
-  // remember to add the light to the scene
-  scene.add(ambientLight, mainLight);
-}
-
+// Creating scene
 scene = new THREE.Scene();
-// scene.background = new THREE.Color(0x36393e);
 scene.background = new THREE.Color(0x121212);
-camera = new THREE.PerspectiveCamera(
-  30,
-  window.innerWidth / window.innerHeight,
-  1,
-  1000
-);
-// Materials Function
+camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 1000);
 
-function createMaterials() {
-  const cubeShader = new THREE.ShaderMaterial({
-    uniforms: {
-      colorA: { type: "vec3", value: new THREE.Color(0xff0000) },
-      colorB: { type: "vec3", value: new THREE.Color(0x0000ff) },
-    },
-    vertexShader: vertexShader(),
-    fragmentShader: fragmentShader(),
-  });
-
-  return {
-    cubeShader,
-  };
-}
-// Geometries Function
-function createGeometries() {
-  const cube = new THREE.BoxGeometry(1, 1, 1);
-  return {
-    cube,
-  };
-}
 // Main Function
 // --------------------------------------------------------------------------------------------------
-
 let init = function () {
   camera.position.z = 5;
   camera.position.x = 2;

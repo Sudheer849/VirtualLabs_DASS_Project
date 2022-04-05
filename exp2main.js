@@ -44,7 +44,6 @@ let scene,
   renderer,
   orbit,
   shapes = [],
-  variable = 0,
   grid1 = [],
   grid2 = [],
   grid3 = [],
@@ -53,7 +52,6 @@ let scene,
   dragz = [],
   lock = 0,
   dir = [],
-  scale = 1,
   two_plane,
   two_geometry,
   first_time = 1,
@@ -273,21 +271,10 @@ function ondblclick(event) {
   raycaster1.setFromCamera(mouse, camera);
   let intersects = raycaster1.intersectObjects(shapes);
   if (intersects.length > 0) {
-    console.log(
-      intersects[0].object.position.x,
-      intersects[0].object.position.y,
-      intersects[0].object.position.z
-    );
     const geometry = new THREE.SphereGeometry(1, 32, 16);
     const edges = new THREE.EdgesGeometry(geometry);
-    const line = new THREE.LineSegments(
-      edges,
-      new THREE.LineBasicMaterial({ color: 0xffffff })
-    );
-    line.position.set(
-      intersects[0].object.position.x,
-      intersects[0].object.position.y,
-      intersects[0].object.position.z
+    const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0xffffff }));
+    line.position.set( intersects[0].object.position.x, intersects[0].object.position.y, intersects[0].object.position.z
     );
     scene.add(line);
     document.getElementById("delete-shape-btn").onclick = function () {
@@ -297,12 +284,8 @@ function ondblclick(event) {
         no_of_shapes--;
         console.log(no_of_shapes);
       }
-      // if (no_of_shapes === 0) {
-      //   con = 0;
-      //    scene.add(dot_list[0]);
-      // }
     };
-    // geometry.translate(intersects[0].object.position.x,intersects[0].object.position.y,intersects[0].object.position.z);
+
     document.getElementById("edit-shape-btn").onclick = function () {
       document.getElementById("edit-modal").style.display = "block";
       document
@@ -416,7 +399,6 @@ function movePoint(e) {
 
   // if target.value is 0, then trans_matrix is identity
   if (target.value <= 0) {
-    trans_matrix = new THREE.Matrix4();
     trans_matrix.set(1, 0, 0, 0,
       0, 1, 0, 0,
       0, 0, 1, 0,
