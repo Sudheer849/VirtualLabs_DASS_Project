@@ -1,6 +1,12 @@
 import * as THREE from "https://threejsfundamentals.org/threejs/resources/threejs/r115/build/three.module.js";
 import { OrbitControls } from "https://threejsfundamentals.org/threejs/resources/threejs/r115/examples/jsm/controls/OrbitControls.js";
 import { MOUSE } from "https://unpkg.com/three@0.128.0/build/three.module.js";
+
+import { AddCam, OldCam } from "./js/camera.js";
+import { createCube, createDodecahedron, createOctahedron, createTetrahedron } from "./js/shapes.js";
+import { ProjectTo2D } from "./js/2dprojection.js";
+import { Triangle } from "./js/Triangle.js";
+
 const move_button = document.getElementById("move-button");
 const modalbutton1 = document.querySelector(".buttonisprimary");
 const modalbutton2 = document.querySelector(".buttonissecondary");
@@ -95,32 +101,12 @@ window.onclick = function (event) {
   }
 };
 
-function vertexShader() {
-  return `varying vec3 vUv; 
-    
-                void main() {
-                  vUv = position; 
-    
-                  vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0);
-                  gl_Position = projectionMatrix * modelViewPosition; 
-                }`;
-}
-function fragmentShader() {
-  return `uniform vec3 colorA; 
-                  uniform vec3 colorB; 
-                  varying vec3 vUv;
-    
-                  void main() {
-                gl_FragColor = vec4(mix(colorA, colorB, vUv.z), 1.0);
-                  }`;
-}
-
 // Section of Checkboxes
 // --------------------------------------------------------------------------------------------------
 // 2D
 threeD.addEventListener("click", () => {
   if (threeD.checked) {
-    //
+    ProjectTo2D(camera, orbit, is_2D, two_plane, first_time, two_geometry);
   } else {
     //
   }
@@ -175,6 +161,7 @@ xy_grid.addEventListener("click", () => {
     grid1.pop();
   }
 });
+
 // XZ Grid
 xz_grid.addEventListener("click", () => {
   if (xz_grid.checked) {
@@ -188,6 +175,7 @@ xz_grid.addEventListener("click", () => {
     //
   }
 });
+
 // YZ Grid
 yz_grid.addEventListener("click", () => {
   if (yz_grid.checked) {
@@ -205,75 +193,21 @@ yz_grid.addEventListener("click", () => {
 
 // Section of Buttons
 // --------------------------------------------------------------------------------------------------
-
 let buttons = document.getElementsByTagName("button");
 const size = 50;
 const divisions = 25;
 
-let camera2, scene2, controls;
-function AddCam(
-  near,
-  far,
-  left,
-  right,
-  bottom,
-  top,
-  camera_pos,
-  target,
-  up_vec,
-  ortho_persp
-) {
-  // 1 === orthographic, 0 === perspective
-  scene.remove(camera);
-  if (ortho_persp === 1) {
-    camera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
-  } else {
-    // cam2 = new THREE.PerspectiveCamera( Math.atan( ( (top - bottom)/( near + far ) ), (left - right) / (top - bottom) , near, far) );
-    camera = new THREE.PerspectiveCamera(
-      45,
-      window.innerWidth / window.innerHeight,
-      near,
-      far
-    );
-    camera.up.set(up_vec.x, up_vec.y, up_vec.z);
-  }
-
-  camera.position.set(camera_pos.x, camera_pos.y, camera_pos.z);
-  camera.lookAt(target);
-
-  scene.add(camera);
-  controls = new OrbitControls(camera, renderer.domElement);
-  controls.mouseButtons = {
-    // LEFT: THREE.MOUSE.PAN,
-    MIDDLE: THREE.MOUSE.DOLLY,
-    RIGHT: THREE.MOUSE.ROTATE,
-  };
-  controls.target.set(target.x, target.y, target.z);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.05;
-  controls.update();
-  // }
-  return camera;
-}
-
 function NewCam(event) {
   // function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp ) {
   // AddCam(0.1, 1000, -10, -10, -10, 10, new THREE.Vector3(7,-6,2), new THREE.Vector3(1,1,1), new THREE.Vector3(1,0,1), 0);
-  AddCam(
-    0.01,
-    100,
-    -3.2,
-    3.2,
-    -2.4,
-    2.4,
-    new THREE.Vector3(3, 5, 2),
-    new THREE.Vector3(0, 0, 0),
-    new THREE.Vector3(0, 1, 0),
-    1
-  );
+  AddCam(0.01, 100, -3.2, 3.2, -2.4, 2.4, new THREE.Vector3(3, 5, 2), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 1, 0), 1);
 }
 
 document.getElementById("new-cam").onclick = function () {
+  // function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp ) {
+  // AddCam(0.1, 1000, -10, -10, -10, 10, new THREE.Vector3(7,-6,2), new THREE.Vector3(1,1,1), new THREE.Vector3(1,0,1), 0);
+  // AddCam(0.01, 100, -3.2, 3.2, -2.4, 2.4, new THREE.Vector3(3,5,2), new THREE.Vector3(0,0,0), new THREE.Vector3(0,1,0), 1);
+
   let near = document.getElementById("near-coord").value;
   let far = document.getElementById("far-coord").value;
   let left = document.getElementById("left-coord").value;
@@ -281,109 +215,15 @@ document.getElementById("new-cam").onclick = function () {
   let bottom = document.getElementById("bottom-coord").value;
   let top = document.getElementById("top-coord").value;
 
-  let camera_pos = new THREE.Vector3(
-    document.getElementById("cam-x").value,
-    document.getElementById("cam-y").value,
-    document.getElementById("cam-z").value
-  );
-  let target = new THREE.Vector3(
-    document.getElementById("target-x").value,
-    document.getElementById("target-y").value,
-    document.getElementById("target-z").value
-  );
-  let up_vec = new THREE.Vector3(
-    document.getElementById("up-x").value,
-    document.getElementById("up-y").value,
-    document.getElementById("up-z").value
-  );
-  let ortho_persp = document.getElementById("ortho-id").value;
+  let camera_pos = new THREE.Vector3(document.getElementById("cam-x").value, document.getElementById("cam-y").value, document.getElementById("cam-z").value);
+  let target = new THREE.Vector3(document.getElementById("target-x").value, document.getElementById("target-y").value, document.getElementById("target-z").value);
+  let up_vec = new THREE.Vector3(document.getElementById("up-x").value, document.getElementById("up-y").value, document.getElementById("up-z").value);
+  let camtype = document.getElementById("cam-type").value;
 
-  AddCam(
-    near,
-    far,
-    left,
-    right,
-    bottom,
-    top,
-    camera_pos,
-    target,
-    up_vec,
-    parseInt(ortho_persp)
-  );
-};
+  // debug
+  // console.log(near, far, left, right, top, bottom, camera_pos, target, up_vec, parseInt(camtype));
 
-// Add a camera
-function OldCam() {
-  scene.remove(camera);
-
-  camera = new THREE.PerspectiveCamera(
-    30,
-    window.innerWidth / window.innerHeight,
-    1,
-    1000
-  );
-
-  camera.position.x = 2;
-  camera.position.y = 2;
-  camera.position.z = 5;
-
-  origin = new THREE.Vector3(0, 0, 0);
-  camera.lookAt(origin);
-
-  scene.add(camera);
-  orbit = new OrbitControls(camera, renderer.domElement);
-  orbit.mouseButtons = {
-    MIDDLE: MOUSE.DOLLY,
-    RIGHT: MOUSE.ROTATE,
-  };
-  orbit.target.set(0, 0, 0);
-  orbit.enableDamping = true;
-  orbit.dampingFactor = 0.05;
-
-  renderer.render(scene, camera);
-
-  return camera;
-}
-
-function Change(event) {
-  // scene.remove(arrowHelper2);
-  // scene.remove(arrowHelper5);
-  is_2D = 1;
-
-  camera_pos = new THREE.Vector3(3, 0, 0);
-  camera_up = new THREE.Vector3(0, 0, 1);
-  camera.position.set(camera_pos.x, camera_pos.y, camera_pos.z);
-  camera.up.set(0, 1, 0);
-  camera.lookAt(new THREE.Vector3(0, 0, 0));
-
-  orbit.screenSpacePanning = true;
-
-  if (first_time === 1) {
-    //create someplane to project to
-    two_plane = new THREE.Plane().setFromCoplanarPoints(
-      new THREE.Vector3(0, 1, 0),
-      new THREE.Vector3(1, 0, 0),
-      new THREE.Vector3(0, 0, 0)
-    );
-    //create some geometry to flatten..
-    // two_geometry = new THREE.BufferGeometry();
-    // fillGeometry(two_geometry);
-    first_time = 0;
-  }
-
-  var positionAttr = two_geometry.getAttribute("position");
-  for (var i = 0; i < positionAttr.array.length; i += 3) {
-    var point = new THREE.Vector3(
-      positionAttr.array[i],
-      positionAttr.array[i + 1],
-      positionAttr.array[i + 2]
-    );
-    var projectedPoint = two_plane.projectPoint();
-    positionAttr.array[i] = projectedPoint.x;
-    positionAttr.array[i + 1] = projectedPoint.y;
-    positionAttr.array[i + 2] = projectedPoint.z;
-  }
-  positionAttr.needsUpdate = true;
+  AddCam(parseFloat(near), parseFloat(far), parseFloat(left), parseFloat(right), parseFloat(top), parseFloat(bottom), camera_pos, target, up_vec, parseInt(camtype));
 }
 
 document.getElementById("add-shape-btn").onclick = function () {
@@ -392,23 +232,19 @@ document.getElementById("add-shape-btn").onclick = function () {
     let xcoord = document.getElementById("x1").value;
     let ycoord = document.getElementById("y1").value;
     let zcoord = document.getElementById("z1").value;
-    // alert(document.getElementById("hi").value);
     no_of_shapes++;
     console.log(document.getElementById("shape-add-dropdown").value);
     if (document.getElementById("shape-add-dropdown").value === "Cube") {
-      createCube(xcoord, ycoord, zcoord);
-      // createCube(xcoord, ycoord, zcoord);
+      createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
     }
     if (document.getElementById("shape-add-dropdown").value === "Tetrahedron") {
-      createTetrahedron(xcoord, ycoord, zcoord);
+      createTetrahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
     }
     if (document.getElementById("shape-add-dropdown").value === "Octahedron") {
-      createOctahedron(xcoord, ycoord, zcoord);
+      createOctahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
     }
-    if (
-      document.getElementById("shape-add-dropdown").value === "Dodecahedron"
-    ) {
-      createDodecahedron(xcoord, ycoord, zcoord);
+    if (document.getElementById("shape-add-dropdown").value === "Dodecahedron") {
+      createDodecahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
     }
     modal_add.style.display = "none";
   });
@@ -416,7 +252,6 @@ document.getElementById("add-shape-btn").onclick = function () {
 
 // Section of mouse control functions
 // --------------------------------------------------------------------------------------------------
-
 let raycaster = new THREE.Raycaster();
 let raycaster1 = new THREE.Raycaster();
 let mouse = new THREE.Vector2();
@@ -440,21 +275,10 @@ function ondblclick(event) {
   raycaster1.setFromCamera(mouse, camera);
   let intersects = raycaster1.intersectObjects(shapes);
   if (intersects.length > 0) {
-    console.log(
-      intersects[0].object.position.x,
-      intersects[0].object.position.y,
-      intersects[0].object.position.z
-    );
     const geometry = new THREE.SphereGeometry(1, 32, 16);
     const edges = new THREE.EdgesGeometry(geometry);
-    const line = new THREE.LineSegments(
-      edges,
-      new THREE.LineBasicMaterial({ color: 0xffffff })
-    );
-    line.position.set(
-      intersects[0].object.position.x,
-      intersects[0].object.position.y,
-      intersects[0].object.position.z
+    const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0xffffff }));
+    line.position.set( intersects[0].object.position.x, intersects[0].object.position.y, intersects[0].object.position.z
     );
     scene.add(line);
     document.getElementById("delete-shape-btn").onclick = function () {
@@ -465,7 +289,7 @@ function ondblclick(event) {
         console.log(no_of_shapes);
       }
     };
-    // geometry.translate(intersects[0].object.position.x,intersects[0].object.position.y,intersects[0].object.position.z);
+
     document.getElementById("edit-shape-btn").onclick = function () {
       document.getElementById("edit-modal").style.display = "block";
       document
@@ -481,17 +305,16 @@ function ondblclick(event) {
           // alert(document.querySelector("select").value);
           no_of_shapes++;
           if (document.querySelector("select").value === "Cube") {
-            createCube(xcoord, ycoord, zcoord);
-            // createCube(xcoord, ycoord, zcoord);
+            createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
           }
           if (document.querySelector("select").value === "Tetrahedron") {
-            createTetrahedron(xcoord, ycoord, zcoord);
+            createTetrahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
           }
           if (document.querySelector("select").value === "Octahedron") {
-            createOctahedron(xcoord, ycoord, zcoord);
+            createOctahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
           }
           if (document.querySelector("select").value === "Dodecahedron") {
-            createDodecahedron(xcoord, ycoord, zcoord);
+            createDodecahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
           }
           document.getElementById("edit-modal").style.display = "none";
         });

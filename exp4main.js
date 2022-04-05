@@ -31,8 +31,8 @@ let max_y_scale = document.getElementById("scale-y").value;
 let max_z_scale = document.getElementById("scale-z").value;
 
 let vertex_a = new THREE.Vector3(document.getElementById("vertex-00").value, document.getElementById("vertex-01").value, document.getElementById("vertex-02").value),
-  vertex_b = new THREE.Vector3(document.getElementById("vertex-10").value, document.getElementById("vertex-11").value, document.getElementById("vertex-12").value),
-  vertex_c = new THREE.Vector3(document.getElementById("vertex-20").value, document.getElementById("vertex-21").value, document.getElementById("vertex-22").value);
+    vertex_b = new THREE.Vector3(document.getElementById("vertex-10").value, document.getElementById("vertex-11").value, document.getElementById("vertex-12").value),
+    vertex_c = new THREE.Vector3(document.getElementById("vertex-20").value, document.getElementById("vertex-21").value, document.getElementById("vertex-22").value);
 
 let old_scale = [1, 1, 1];
 
