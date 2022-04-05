@@ -366,8 +366,8 @@ document.addEventListener("pointerdown", () => {
       break;
   }
 });
-// mouse release
 
+// mouse release
 document.addEventListener("pointerup", () => {
   isDragging = false;
   dragObject = null;
@@ -487,7 +487,6 @@ set_rotation_axis.addEventListener("click", () => {
   rot_axis = new THREE.Vector3( parseFloat( document.getElementById("x-comp").value), parseFloat( document.getElementById("y-comp").value), parseFloat( document.getElementById("z-comp").value) );
 });
 // --------------------------------------------------------------------------------------------------
-
 
 // Creating scene
 scene = new THREE.Scene();
