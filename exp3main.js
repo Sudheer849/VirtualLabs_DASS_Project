@@ -103,7 +103,7 @@ window.onclick = function (event) {
 // 2D
 threeD.addEventListener("click", () => {
   if (threeD.checked) {
-    //
+    ProjectTo2D(camera, orbit, is_2D, two_plane, first_time, two_geometry);
   } else {
     //
   }
@@ -158,6 +158,7 @@ xy_grid.addEventListener("click", () => {
     grid1.pop();
   }
 });
+
 // XZ Grid
 xz_grid.addEventListener("click", () => {
   if (xz_grid.checked) {
@@ -171,6 +172,7 @@ xz_grid.addEventListener("click", () => {
     //
   }
 });
+
 // YZ Grid
 yz_grid.addEventListener("click", () => {
   if (yz_grid.checked) {
@@ -227,26 +229,20 @@ document.getElementById("add-shape-btn").onclick = function () {
     let xcoord = document.getElementById("x1").value;
     let ycoord = document.getElementById("y1").value;
     let zcoord = document.getElementById("z1").value;
-    // alert(document.getElementById("hi").value);
     no_of_shapes++;
     console.log(document.getElementById("shape-add-dropdown").value);
     if (document.getElementById("shape-add-dropdown").value === "Cube") {
-      createCube(xcoord, ycoord, zcoord);
-      // createCube(xcoord, ycoord, zcoord);
+      createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
     }
     if (document.getElementById("shape-add-dropdown").value === "Tetrahedron") {
-      createTetrahedron(xcoord, ycoord, zcoord);
+      createTetrahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
     }
     if (document.getElementById("shape-add-dropdown").value === "Octahedron") {
-      createOctahedron(xcoord, ycoord, zcoord);
+      createOctahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
     }
-    if (
-      document.getElementById("shape-add-dropdown").value === "Dodecahedron"
-    ) {
-      createDodecahedron(xcoord, ycoord, zcoord);
+    if (document.getElementById("shape-add-dropdown").value === "Dodecahedron") {
+      createDodecahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
     }
-    // scene.remove(dot_list[0]);
-    //  con = 1;
     modal_add.style.display = "none";
   });
 };
@@ -428,7 +424,6 @@ function movePoint(e) {
     document.getElementById("matrix-33").value = trans_matrix.elements[15];
 
     present_theta += rot_angle;
-    console.log("present_theta ", present_theta);
 }
 
 document.getElementById("frames").onchange = function () {
@@ -468,7 +463,6 @@ document.getElementById("theta").onchange = function () {
     new_theta = total_angle;
   
   // console.log( new_theta, present_theta );
-  
   let quat = new THREE.Quaternion();
   let rot_matrix = new THREE.Matrix4();
   quat.setFromAxisAngle( rot_axis, (new_theta - present_theta) * Math.PI / 180 );

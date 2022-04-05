@@ -104,7 +104,6 @@ threeD.addEventListener("click", () => {
 });
 
 // lock vertices
-
 lock_vertices.addEventListener("click", () => {
   if (lock_vertices.checked) {
     lock = 1;
