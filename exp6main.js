@@ -50,10 +50,6 @@ let scene,
     dragx = [],
     dragy = [],
     dragz = [],
-    xcor = 3,
-    ycor = 3,
-    zcor = 3,
-    lock = 0,
     dir = [],
     two_plane,
     two_geometry,
@@ -360,32 +356,14 @@ move_button.addEventListener("click", () => {
 
 
 scene = new THREE.Scene();
-// scene.background = new THREE.Color(0x36393e);
 scene.background = new THREE.Color(0x121212);
 camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
-//  camera.position.set( cam_pos.x, cam_pos.y, cam_pos.z );
-// camera.lookAt(cam_target);
 camera.position.x, camera.position.y, camera.position.z = cam_pos.x, cam_pos.y, cam_pos.z;
 camera.updateProjectionMatrix();
-// 
-
-console.log(camera);
-// console.log(camera.position);
-// console.log(cam_pos);
 
 
-// Materials Function
-
-// Geometries Function
-function createGeometries() {
-    const cube = new THREE.BoxGeometry(1, 1, 1);
-    return {
-        cube,
-    };
-}
 // Main Function
 // --------------------------------------------------------------------------------------------------
-
 let init = function() {
     camera.position.z = 5;
     camera.position.x = 2;
