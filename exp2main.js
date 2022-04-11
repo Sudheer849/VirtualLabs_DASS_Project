@@ -341,7 +341,10 @@ document.addEventListener("pointermove", (event) => {
         planeIntersect.z + shift.z - dragz[i]
       );
     }
-  } else if (isDragging) {
+    raycaster.ray.intersectPlane(plane, planeIntersect);
+  }
+
+   else if (isDragging) {
     raycaster.ray.intersectPlane(plane, planeIntersect);
   }
 });
@@ -358,7 +361,14 @@ document.addEventListener("pointerdown", () => {
       plane.setFromNormalAndCoplanarPoint(pNormal, scene.position);
       raycaster.setFromCamera(mouse, camera);
       raycaster.ray.intersectPlane(plane, planeIntersect);
-      shift.subVectors(dot_list[0].geometry.getAttribute('position').array, planeIntersect);
+     // shift.subVectors(dot_list[0].geometry.getAttribute('position').array, planeIntersect);
+      let position = new THREE.Vector3();
+      position.x = shapevertex[0].position.x;
+      position.y = shapevertex[0].position.y;
+      position.z =  shapevertex[0].position.z;
+      
+      console.log(position)
+      shift.subVectors(position, planeIntersect);
       isDragging = true;
       dragObject = shapes[shapes.length - 1];
       break;
@@ -374,8 +384,18 @@ move_button.addEventListener("click", () => {
   let x = document.getElementById("quantityx").value;
   let y = document.getElementById("quantityy").value;
   let z = document.getElementById("quantityz").value;
-  dot_list[0].position.set(x - initial_pos[0], y - initial_pos[1], z - initial_pos[2]);
-
+  //console.log(dot_list[0].geometry.getAttribute('position').array[0]);
+  console.log(x, y, z);
+  let translate_M = new THREE.Matrix4();
+  translate_M.makeTranslation(x - dot_list[0].geometry.getAttribute('position').array[0], y - dot_list[0].geometry.getAttribute('position').array[1], z - dot_list[0].geometry.getAttribute('position').array[2]);
+  // console.log(translate_M);
+  dot_list[0].geometry.applyMatrix4(translate_M);
+  dot_list[0].geometry.verticesNeedUpdate = true;
+  trans_matrix.multiply(translate_M);
+  initial_pos[0] = x
+  initial_pos[1] = y
+  initial_pos[2] = z
+  console.log(dot_list[0].geometry.getAttribute('position').array[0], dot_list[0].geometry.getAttribute('position').array[1], dot_list[0].geometry.getAttribute('position').array[2]);
 });
 
 // Slider Implementation
@@ -384,6 +404,7 @@ function movePoint(e) {
   var target = e.target ? e.target : e.srcElement;
 
   let p = new THREE.Vector3(dot_list[0].geometry.getAttribute('position').array[0], dot_list[0].geometry.getAttribute('position').array[1], dot_list[0].geometry.getAttribute('position').array[2]);
+  console.log(p);
   let tx = initial_pos[0] + (target.value * (document.getElementById("finalx").value - initial_pos[0])) / target.max - p.x;
   let ty = initial_pos[1] + (target.value * (document.getElementById("finaly").value - initial_pos[1])) / target.max - p.y;
   let tz = initial_pos[2] + (target.value * (document.getElementById("finalz").value - initial_pos[2])) / target.max - p.z;
@@ -393,8 +414,10 @@ function movePoint(e) {
   // console.log(translate_M);
   dot_list[0].geometry.applyMatrix4(translate_M);
   dot_list[0].geometry.verticesNeedUpdate = true;
+  console.log(dot_list[0].geometry.getAttribute('position').array[0]);
 
   trans_matrix.multiply(translate_M);
+  console.log(tx,ty,tz);
 
   // if target.value is 0, then trans_matrix is identity
   if (target.value <= 0) {
