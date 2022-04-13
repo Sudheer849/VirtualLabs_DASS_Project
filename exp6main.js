@@ -4,9 +4,7 @@ import { MOUSE } from "https://unpkg.com/three@0.128.0/build/three.module.js";
 
 // importing internal files
 // import { createMaterials } from "./exp1/materials.js";
-import { AddCam, OldCam } from "./js/camera.js";
 import { createCube, createDodecahedron, createOctahedron, createTetrahedron } from "./js/shapes.js";
-import { ProjectTo2D } from "./js/2dprojection.js";
 import { createArm } from "./js/mech_arm.js";
 // import { scene, camera, orbit, renderer, shapes, grid1, grid2, grid3, dragx, dragy, dragz, two_geometry, two_plane, first_time, is_2D, arrowHelper } from "./js/global_vars.js";
 
@@ -21,19 +19,19 @@ let yz_grid = document.getElementById("yz-grid-cb");
 let xz_grid = document.getElementById("xz-grid-cb");
 let cam_pos = new THREE.Vector3(17, 15, 15);
 let cam_target = new THREE.Vector3(0, 0, 0);
-
 let modal_add = document.getElementById("add-modal");
 let modal_edit = document.getElementById("edit-modal");
 let initial_pos = [3,3,3];
 var slider = document.getElementById("slider");
 slider.addEventListener("input", movePoint);
-document.getElementById("slider").max = document.getElementById("finalx").value - initial_pos[0];
+
+document.getElementById("slider").max = document.getElementById("frames").value;
 document.getElementById("slider").min = 0;
-slider.step =(document.getElementById("slider").max - document.getElementById("slider").min) / document.getElementById("frames").value;
+slider.step = 1
+let slid_prev = 0;
+let frames = document.getElementById("frames").value;
 
 let final_pos = [ document.getElementById("finalx").value, document.getElementById("finaly").value, document.getElementById("finalz").value ];
-
-let frames = document.getElementById("frames").value;
 
 let span_edit_modal = document.getElementsByClassName("close")[0];
 let deletebutton = document.getElementById("deletebutton");
@@ -57,6 +55,12 @@ let scene,
     is_2D = 0,
     arrowHelper = [];
 
+    let arm_dim = new THREE.Vector3(1, 2, 1);
+    let arm_pos = new THREE.Vector3( (arm_dim.x/2), -(arm_dim.y/2), 0 );
+    let fore_dim = new THREE.Vector3( 5, 0.5, 1 );
+    let fore_pos = new THREE.Vector3( arm_dim.x + fore_dim.x/2, -arm_dim.y + fore_dim.y/2, 0 );
+    let palm_dim = new THREE.Vector3( 5, 1, 5 );
+    let palm_pos = new THREE.Vector3( arm_dim.x + + fore_dim.x + palm_dim.x/2, -arm_dim.y + palm_dim.y/2, 0 );
 
 // Modal controls for Add Shape Button
 let addModal = document.getElementById("add-modal");
@@ -95,13 +99,6 @@ window.onclick = function(event) {
 // Section of Checkboxes
 // --------------------------------------------------------------------------------------------------
 // 2D
-threeD.addEventListener("click", () => {
-    if (threeD.checked) {
-        ProjectTo2D(camera, orbit, is_2D, two_plane, first_time, two_geometry);
-    } else {
-        //
-    }
-});
 
 // lock vertices
 lock_vertices.addEventListener("click", () => {
@@ -185,35 +182,6 @@ yz_grid.addEventListener("click", () => {
 let buttons = document.getElementsByTagName("button");
 const size = 50;
 const divisions = 25;
-
-function NewCam(event) {
-    // function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp ) {
-    // AddCam(0.1, 1000, -10, -10, -10, 10, new THREE.Vector3(7,-6,2), new THREE.Vector3(1,1,1), new THREE.Vector3(1,0,1), 0);
-    AddCam(0.01, 100, -3.2, 3.2, -2.4, 2.4, new THREE.Vector3(3, 5, 2), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 1, 0), 1);
-}
-document.getElementById("new-cam").onclick = function() {
-    // function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp ) {
-    // AddCam(0.1, 1000, -10, -10, -10, 10, new THREE.Vector3(7,-6,2), new THREE.Vector3(1,1,1), new THREE.Vector3(1,0,1), 0);
-    // AddCam(0.01, 100, -3.2, 3.2, -2.4, 2.4, new THREE.Vector3(3,5,2), new THREE.Vector3(0,0,0), new THREE.Vector3(0,1,0), 1);
-    alert("hi");
-    let near = document.getElementById("near-coord").value;
-    let far = document.getElementById("far-coord").value;
-    let left = document.getElementById("left-coord").value;
-    let right = document.getElementById("right-coord").value;
-    let bottom = document.getElementById("bottom-coord").value;
-    let top = document.getElementById("top-coord").value;
-
-    let camera_pos = new THREE.Vector3(document.getElementById("cam-x").value, document.getElementById("cam-y").value, document.getElementById("cam-z").value);
-    let target = new THREE.Vector3(document.getElementById("target-x").value, document.getElementById("target-y").value, document.getElementById("target-z").value);
-    let up_vec = new THREE.Vector3(document.getElementById("up-x").value, document.getElementById("up-y").value, document.getElementById("up-z").value);
-    // let ortho_persp = document.getElementById("ortho-id").value;
-    let camtype = document.getElementById("cam-type").value;
-
-    // debug
-    console.log(near, far, left, right, top, bottom, camera_pos, target, up_vec, parseInt(camtype));
-
-    AddCam(parseFloat(near), parseFloat(far), parseFloat(left), parseFloat(right), parseFloat(top), parseFloat(bottom), camera_pos, target, up_vec, parseInt(camtype));
-}
 
 document.getElementById("add-shape-btn").onclick = function() {
     modal_add.style.display = "block";
@@ -334,7 +302,111 @@ span_edit_modal.onclick = function() {
 function movePoint(e) {
     var target = e.target ? e.target : e.srcElement;
   
+    if (target.value < frames/3)
+    {
+        let quat = new THREE.Quaternion();
+        let rot_axis = new THREE.Vector3(0, 1, 0);
+        let rot_matrix = new THREE.Matrix4();
+        let prev_angle = ( (slid_prev*3)/frames ) * 90;
+        if (prev_angle > 90)
+        {
+            prev_angle = 90;
+        }
+        let rot_angle = ( (target.value*3)/frames ) * 90 - prev_angle;
+
+        quat.setFromAxisAngle(rot_axis, rot_angle * Math.PI/180 );
+        rot_matrix.makeRotationFromQuaternion(quat);
+
+        for( let i = 0; i < hand_comp.length; i++ )
+        {
+            hand_comp[i].applyMatrix4(rot_matrix);
+            hand_comp[i].verticesNeedUpdate = true;
+        }
+    }
+
+    else if (target.value < 2*frames/3)
+    {
+        let farm_c_pos = new THREE.Vector3( hand_comp[1].position.x, hand_comp[1].position.y, hand_comp[1].position.z );
+        let palm_c_pos = new THREE.Vector3( hand_comp[2].position.x, hand_comp[2].position.y, hand_comp[2].position.z );
+        let farm_trans_m = new THREE.Matrix4();
+        farm_trans_m.makeTranslation( -(farm_c_pos.x/2 - fore_dim.x/2), -(farm_c_pos.y/2 - fore_dim.y/2), -(farm_c_pos.z/2 - fore_dim.z/2) );
+
+        hand_comp[1].geometry.applyMatrix4(farm_trans_m);
+        hand_comp[1].geometry.verticesNeedUpdate = true;
+
+        // let palm_trans_m = new THREE.Matrix4();
+        // palm_trans_m.makeTranslation( -(palm_c_pos.x/2 - palm_dim.x/2), -(palm_c_pos.y/2 - palm_dim.y/2), -(palm_c_pos.z/2 - palm_dim.z/2) );
+// 
+        // hand_comp[2].geometry.applyMatrix4(palm_trans_m);
+        // hand_comp[2].geometry.verticesNeedUpdate = true;
+
+        let quat = new THREE.Quaternion();
+        let rot_axis = new THREE.Vector3(1, 0, 0); 
+        let rot_matrix = new THREE.Matrix4();
+        let prev_angle = ( (slid_prev*3)/frames ) * 45;
+        if (slid_prev > 45)
+        {
+            slid_prev = 45;
+        }
+        let rot_angle = ( (target.value*3)/frames ) * 45 - prev_angle;
+
+        quat.setFromAxisAngle(rot_axis, rot_angle * Math.PI/180 );
+        rot_matrix.makeRotationFromQuaternion(quat);
+
+        for( let i = 1; i < hand_comp.length; i++ )
+        {
+            // hand_comp[i].applyMatrix4(rot_matrix);
+            // hand_comp[i].geometry.rotateZ( rot_angle * Math.PI/180 );
+            // hand_comp[i].verticesNeedUpdate = true;
+        }
+
+        hand_comp[1].geometry.rotateZ( rot_angle * Math.PI/180 );
+        hand_comp[1].verticesNeedUpdate = true;
+
+        hand_comp[2].applyMatrix4(rot_matrix);
+        hand_comp[2].verticesNeedUpdate = true;
+
+        // hand_comp[2].geometry.rotateZ( rot_angle * Math.PI/180 );
+        // hand_comp[2].verticesNeedUpdate = true;
+
+        farm_trans_m = new THREE.Matrix4();
+        farm_trans_m.makeTranslation( (farm_c_pos.x/2 - fore_dim.x/2), (farm_c_pos.y/2 - fore_dim.y/2), (farm_c_pos.z/2 - fore_dim.z/2) );
     
+        hand_comp[1].geometry.applyMatrix4(farm_trans_m);
+        hand_comp[1].verticesNeedUpdate = true;
+
+        // palm_trans_m = new THREE.Matrix4();
+        // palm_trans_m.makeTranslation( (palm_c_pos.x/2 - palm_dim.x/2), (palm_c_pos.y/2 - palm_dim.y/2), (palm_c_pos.z/2 - palm_dim.z/2) );
+// 
+        // hand_comp[2].geometry.applyMatrix4(palm_trans_m);
+        // hand_comp[2].verticesNeedUpdate = true;
+
+    }
+
+    else
+    {
+        let quat = new THREE.Quaternion();
+        let rot_axis = new THREE.Vector3(1, 0, 0); 
+        let rot_matrix = new THREE.Matrix4();
+        let prev_angle = ( (slid_prev*3)/frames ) * 45;
+        if (slid_prev > 45)
+        {
+            slid_prev = 45;
+        }
+        let rot_angle = ( (target.value*3)/frames ) * 45 - prev_angle;
+
+        quat.setFromAxisAngle(rot_axis, rot_angle * Math.PI/180 );
+        rot_matrix.makeRotationFromQuaternion(quat);
+
+        for( let i = 2; i < hand_comp.length; i++ )
+        {
+            // hand_comp[i].applyMatrix4(rot_matrix);
+            hand_comp[i].rotateZ( rot_angle * Math.PI/180 );
+            hand_comp[i].verticesNeedUpdate = true;
+        }
+    }
+
+    slid_prev = target.value;
   }
   
   document.getElementById("finalx").onchange = function () {
@@ -388,7 +460,7 @@ let init = function() {
     for (let i = 0; i < 6; i++) {
         scene.add(arrowHelper[i]);
     }
-    let PointGeometry = createArm(scene, hand_comp);
+    let PointGeometry = createArm(scene, hand_comp, arm_dim, arm_pos, fore_dim, fore_pos, palm_dim, palm_pos);
     renderer = new THREE.WebGLRenderer();
     let container = document.getElementById("canvas-main");
     let w = container.offsetWidth;
