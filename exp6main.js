@@ -21,7 +21,6 @@ let yz_grid = document.getElementById("yz-grid-cb");
 let xz_grid = document.getElementById("xz-grid-cb");
 let cam_pos = new THREE.Vector3(17, 15, 15);
 let cam_target = new THREE.Vector3(0, 0, 0);
-
 let modal_add = document.getElementById("add-modal");
 let modal_edit = document.getElementById("edit-modal");
 let initial_pos = [3,3,3];
@@ -212,7 +211,6 @@ document.getElementById("new-cam").onclick = function() {
     // debug
     console.log(near, far, left, right, top, bottom, camera_pos, target, up_vec, parseInt(camtype));
 
-    AddCam(parseFloat(near), parseFloat(far), parseFloat(left), parseFloat(right), parseFloat(top), parseFloat(bottom), camera_pos, target, up_vec, parseInt(camtype));
 }
 
 document.getElementById("add-shape-btn").onclick = function() {

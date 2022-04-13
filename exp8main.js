@@ -1,4 +1,7 @@
 let canvas = document.getElementById("canvas");
+var heightRatio = 1;
+canvas.height = canvas.width * heightRatio;
+resize(canvas);
 let ctx = canvas.getContext("2d");
 let status = 0; //edge detection
 //window.devicePixelRatio=1; //Blury Text
@@ -1087,6 +1090,18 @@ reset_button.addEventListener("click", () => {
   line("white");
   //
 });
+function resize(canvas) {
+  // Lookup the size the browser is displaying the canvas.
+  var displayWidth = canvas.clientWidth;
+  var displayHeight = canvas.clientHeight;
+
+  // Check if the canvas is not the same size.
+  if (canvas.width !== displayWidth || canvas.height !== displayHeight) {
+    // Make the canvas the same size
+    canvas.width = 2 * displayWidth;
+    canvas.height = displayHeight;
+  }
+}
 
 //check();
 //intersection();

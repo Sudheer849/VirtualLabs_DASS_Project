@@ -1,89 +1,87 @@
 <!DOCTYPE html>
 <html>
 
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.5-b/css/style.min.css">
-        <link rel="stylesheet" href="exp8main.css">
-    </head>
-    <br>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.8-b/css/style.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.5-b/css/style.min.css">
+    <link rel="stylesheet" href="exp8main.css">
+</head>
+<br>
 
-    <body class="page">
-        <div class="columns is-centered is-flex">
-            <div class="column mt-2 is-6-desktop is-8-tablet is-8-mobile has-text-centered">
-                <div id="inp" class="v-instruction-container">
-                    <div class="v-instruction-title">Instructions</div>
-                    <div id="procedure-message" class="v-instruction-text">
+<body class="page has-text-centered">
+
+    <div class="columns is-centered is-flex">
+        <div class="column has-text-centered">
+            <div class="v-collapsible-instruction-container">
+                <div class="v-collapsible">Instructions</div>
+                <div id="procedure-message" class="v-content">
                     <ul style="font-size: 0.9rem;">
                         <li>Use the Reset button to reset the simulation</li>
-                        <li>Enter the co-ordinates of points on the right</li>
                         <li>Click on Next button to go to next iteration</li>
                         <li>Click on Previous button to go to previous iteration</li>
+                        <li>Change the positions of rectangle coordinates and line coordinates</li>
                     </ul>
-                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div style="margin-left: 10%;">
-            <button  class="button is-small is-primary is-responsive" id="start_button">Start</button>
-            <button style="margin-left: 5%;" class="button is-small is-success is-responsive" id="next_button">Next</button>
-            <button style="margin-left: 5%;" class="button is-small is-warning is-responsive" id= "prev_button">Prev</button>
-            <button style="margin-left: 5%;" class="button is-small is-link is-responsive" id = "reset_button">Reset</button>
-        </div>
+    <div style="margin:auto; width: auto;">
+        <button style="margin-left: 1%;" class="button is-small is-success is-responsive" id="next_button">Next</button>
+        <button style="margin-left: 1%;" class="button is-small is-warning is-responsive" id="prev_button">Prev</button>
+        <button style="margin-left: 1%;" class="button is-small is-link is-responsive" id="reset_button">Reset</button>
+    </div>
 
     <br>
 
-        <div class="columns is-centered is-variable is-1-mobile is-flex is-flex-wrap-wrap workspace">
+    <div class="columns is-centered is-variable is-1-mobile is-flex is-flex-wrap-wrap workspace left">
 
-            <div id="observations" class="column has-text-centered is-2-desktop is-5-tablet is-one-thirds-mobile observations">
-                <div class="v-datalist-container">
-                    <div class="v-datalist-title">Input</div>
-                    <div class="v-datalist-row">
-                        <p class="is-size-7-mobile" style="float: left;">Rectangular Co-ordinates -</p>
-                        <br>
-                        Top Left:
-                        <div style="display: flexbox;">
-                            <input class="input is-small" style="width:30%" type="number" id="cnt-top-left-x"  value="100" placeholder="X">
-                            <input class="input is-small" style="width:30%" type="number" id="cnt-top-left-y"  value="100" placeholder="Y">
-                        </div>
-                        Bottom Right:
-                        <div style="display: flexbox;">
-                            <input class="input is-small" style="width:30%" type="number" id="cnt-bottom-right-x"  value="600" placeholder="X">
-                            <input class="input is-small" style="width:30%" type="number" id="cnt-bottom-right-y"  value="300" placeholder="Y">
-                        </div>
+        <div id="observations" class="column has-text-centered is-2-desktop is-5-tablet is-one-thirds-mobile observations">
+            <div class="v-datalist-container">
+                <div class="v-datalist-title">Input</div>
+                <div class="v-datalist-row">
+                    <p class="is-size-7-mobile" style="float: left;">Rectangular Co-ordinates:</p>
+                    <br> Top Left:
+                    <div style="display: flexbox;">
+                        <input class="input is-small" style="width:30%" type="number" id="cnt-top-left-x" value="100" placeholder="X">
+                        <input class="input is-small" style="width:30%" type="number" id="cnt-top-left-y" value="100" placeholder="Y">
                     </div>
-                    <div class="v-datalist-row" id="top-border">
-                        <p style="float: left;">Line Co-ordinates -</p>
-                        <br>
-                        Top Left:
-                        <div style="display: flexbox;">
-                            <input class="input is-small" style="width:30%" type="number" id="ln-top-left-x"  value="50" placeholder="X">
-                            <input class="input is-small" style="width:30%" type="number" id="ln-top-left-y"  value="450" placeholder="Y">
-                        </div>
-                        Bottom Right:
-                        <div style="display: flexbox;">
-                            <input class="input is-small" style="width:30%" type="number" id="ln-bottom-right-x"  value="1020" placeholder="X">
-                            <input class="input is-small" style="width:30%" type="number" id="ln-bottom-right-y"  value="50" placeholder="Y">
-    
-
-                        </div>
-    
+                    Bottom Right:
+                    <div style="display: flexbox;">
+                        <input class="input is-small" style="width:30%" type="number" id="cnt-bottom-right-x" value="600" placeholder="X">
+                        <input class="input is-small" style="width:30%" type="number" id="cnt-bottom-right-y" value="300" placeholder="Y">
                     </div>
-
-                  <br>
-
-                    <button class="button is-small is-primary is-responsive" id="submit">Submit</button>
-                    <p id="text" style="color:red"></p>
-                    <p id="logic_text" style="color:blue"></p>
-                    <p id="pointstat_text" style="color:green"></p>
                 </div>
-            </div>
+                <div class="v-datalist-row" id="top-border">
+                    <p style="float: left;">Line Co-ordinates:</p>
+                    <br> Top Left:
+                    <div style="display: flexbox;">
+                        <input class="input is-small" style="width:30%" type="number" id="ln-top-left-x" value="50" placeholder="X">
+                        <input class="input is-small" style="width:30%" type="number" id="ln-top-left-y" value="450" placeholder="Y">
+                    </div>
+                    Bottom Right:
+                    <div style="display: flexbox;">
+                        <input class="input is-small" style="width:30%" type="number" id="ln-bottom-right-x" value="1020" placeholder="X">
+                        <input class="input is-small" style="width:30%" type="number" id="ln-bottom-right-y" value="50" placeholder="Y">
 
-            <div class="column is-centered is-variable column is-8-desktop is-10-tablet is-two-thirds-mobile is-flex-wrap-wrap workspace">
-                <canvas class="v-canvas-container" id="canvas" style="border:2px solid #c3c3c3;"></canvas>
+
+                    </div>
+
+                </div>
+
+                <button class="button is-small is-primary is-responsive" id="submit">Submit</button>
+                <p id="text" style="color:red"></p>
+                <p id="logic_text" style="color:blue"></p>
+                <p id="pointstat_text" style="color:green"></p>
             </div>
-            <script src="exp8main.js"></script>
         </div>
+
+        <div class="column is-centered is-variable column is-8-desktop is-10-tablet is-two-thirds-mobile is-flex-wrap-wrap workspace">
+            <canvas class="v-canvas-container" id="canvas" style="border:2px solid #c3c3c3;"></canvas>
+        </div>
+        <script src="exp8main.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.8-b/js/script.js"></script>
+    </div>
