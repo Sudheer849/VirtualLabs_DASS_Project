@@ -27,13 +27,14 @@ let modal_edit = document.getElementById("edit-modal");
 let initial_pos = [3,3,3];
 var slider = document.getElementById("slider");
 slider.addEventListener("input", movePoint);
-document.getElementById("slider").max = document.getElementById("finalx").value - initial_pos[0];
+
+document.getElementById("slider").max = document.getElementById("frames").value;
 document.getElementById("slider").min = 0;
-slider.step =(document.getElementById("slider").max - document.getElementById("slider").min) / document.getElementById("frames").value;
+slider.step = 1
+let slid_prev = 0;
+let frames = document.getElementById("frames").value;
 
 let final_pos = [ document.getElementById("finalx").value, document.getElementById("finaly").value, document.getElementById("finalz").value ];
-
-let frames = document.getElementById("frames").value;
 
 let span_edit_modal = document.getElementsByClassName("close")[0];
 let deletebutton = document.getElementById("deletebutton");
@@ -57,6 +58,12 @@ let scene,
     is_2D = 0,
     arrowHelper = [];
 
+    let arm_dim = new THREE.Vector3(1, 2, 1);
+    let arm_pos = new THREE.Vector3( (arm_dim.x/2), -(arm_dim.y/2), 0 );
+    let fore_dim = new THREE.Vector3( 5, 0.5, 1 );
+    let fore_pos = new THREE.Vector3( arm_dim.x + fore_dim.x/2, -arm_dim.y + fore_dim.y/2, 0 );
+    let palm_dim = new THREE.Vector3( 5, 1, 5 );
+    let palm_pos = new THREE.Vector3( arm_dim.x + + fore_dim.x + palm_dim.x/2, -arm_dim.y + palm_dim.y/2, 0 );
 
 // Modal controls for Add Shape Button
 let addModal = document.getElementById("add-modal");
@@ -334,7 +341,111 @@ span_edit_modal.onclick = function() {
 function movePoint(e) {
     var target = e.target ? e.target : e.srcElement;
   
+    if (target.value < frames/3)
+    {
+        let quat = new THREE.Quaternion();
+        let rot_axis = new THREE.Vector3(0, 1, 0);
+        let rot_matrix = new THREE.Matrix4();
+        let prev_angle = ( (slid_prev*3)/frames ) * 90;
+        if (prev_angle > 90)
+        {
+            prev_angle = 90;
+        }
+        let rot_angle = ( (target.value*3)/frames ) * 90 - prev_angle;
+
+        quat.setFromAxisAngle(rot_axis, rot_angle * Math.PI/180 );
+        rot_matrix.makeRotationFromQuaternion(quat);
+
+        for( let i = 0; i < hand_comp.length; i++ )
+        {
+            hand_comp[i].applyMatrix4(rot_matrix);
+            hand_comp[i].verticesNeedUpdate = true;
+        }
+    }
+
+    else if (target.value < 2*frames/3)
+    {
+        let farm_c_pos = new THREE.Vector3( hand_comp[1].position.x, hand_comp[1].position.y, hand_comp[1].position.z );
+        let palm_c_pos = new THREE.Vector3( hand_comp[2].position.x, hand_comp[2].position.y, hand_comp[2].position.z );
+        let farm_trans_m = new THREE.Matrix4();
+        farm_trans_m.makeTranslation( -(farm_c_pos.x/2 - fore_dim.x/2), -(farm_c_pos.y/2 - fore_dim.y/2), -(farm_c_pos.z/2 - fore_dim.z/2) );
+
+        hand_comp[1].geometry.applyMatrix4(farm_trans_m);
+        hand_comp[1].geometry.verticesNeedUpdate = true;
+
+        // let palm_trans_m = new THREE.Matrix4();
+        // palm_trans_m.makeTranslation( -(palm_c_pos.x/2 - palm_dim.x/2), -(palm_c_pos.y/2 - palm_dim.y/2), -(palm_c_pos.z/2 - palm_dim.z/2) );
+// 
+        // hand_comp[2].geometry.applyMatrix4(palm_trans_m);
+        // hand_comp[2].geometry.verticesNeedUpdate = true;
+
+        let quat = new THREE.Quaternion();
+        let rot_axis = new THREE.Vector3(1, 0, 0); 
+        let rot_matrix = new THREE.Matrix4();
+        let prev_angle = ( (slid_prev*3)/frames ) * 45;
+        if (slid_prev > 45)
+        {
+            slid_prev = 45;
+        }
+        let rot_angle = ( (target.value*3)/frames ) * 45 - prev_angle;
+
+        quat.setFromAxisAngle(rot_axis, rot_angle * Math.PI/180 );
+        rot_matrix.makeRotationFromQuaternion(quat);
+
+        for( let i = 1; i < hand_comp.length; i++ )
+        {
+            // hand_comp[i].applyMatrix4(rot_matrix);
+            // hand_comp[i].geometry.rotateZ( rot_angle * Math.PI/180 );
+            // hand_comp[i].verticesNeedUpdate = true;
+        }
+
+        hand_comp[1].geometry.rotateZ( rot_angle * Math.PI/180 );
+        hand_comp[1].verticesNeedUpdate = true;
+
+        hand_comp[2].applyMatrix4(rot_matrix);
+        hand_comp[2].verticesNeedUpdate = true;
+
+        // hand_comp[2].geometry.rotateZ( rot_angle * Math.PI/180 );
+        // hand_comp[2].verticesNeedUpdate = true;
+
+        farm_trans_m = new THREE.Matrix4();
+        farm_trans_m.makeTranslation( (farm_c_pos.x/2 - fore_dim.x/2), (farm_c_pos.y/2 - fore_dim.y/2), (farm_c_pos.z/2 - fore_dim.z/2) );
     
+        hand_comp[1].geometry.applyMatrix4(farm_trans_m);
+        hand_comp[1].verticesNeedUpdate = true;
+
+        // palm_trans_m = new THREE.Matrix4();
+        // palm_trans_m.makeTranslation( (palm_c_pos.x/2 - palm_dim.x/2), (palm_c_pos.y/2 - palm_dim.y/2), (palm_c_pos.z/2 - palm_dim.z/2) );
+// 
+        // hand_comp[2].geometry.applyMatrix4(palm_trans_m);
+        // hand_comp[2].verticesNeedUpdate = true;
+
+    }
+
+    else
+    {
+        let quat = new THREE.Quaternion();
+        let rot_axis = new THREE.Vector3(1, 0, 0); 
+        let rot_matrix = new THREE.Matrix4();
+        let prev_angle = ( (slid_prev*3)/frames ) * 45;
+        if (slid_prev > 45)
+        {
+            slid_prev = 45;
+        }
+        let rot_angle = ( (target.value*3)/frames ) * 45 - prev_angle;
+
+        quat.setFromAxisAngle(rot_axis, rot_angle * Math.PI/180 );
+        rot_matrix.makeRotationFromQuaternion(quat);
+
+        for( let i = 2; i < hand_comp.length; i++ )
+        {
+            // hand_comp[i].applyMatrix4(rot_matrix);
+            hand_comp[i].rotateZ( rot_angle * Math.PI/180 );
+            hand_comp[i].verticesNeedUpdate = true;
+        }
+    }
+
+    slid_prev = target.value;
   }
   
   document.getElementById("finalx").onchange = function () {
@@ -388,7 +499,7 @@ let init = function() {
     for (let i = 0; i < 6; i++) {
         scene.add(arrowHelper[i]);
     }
-    let PointGeometry = createArm(scene, hand_comp);
+    let PointGeometry = createArm(scene, hand_comp, arm_dim, arm_pos, fore_dim, fore_pos, palm_dim, palm_pos);
     renderer = new THREE.WebGLRenderer();
     let container = document.getElementById("canvas-main");
     let w = container.offsetWidth;
