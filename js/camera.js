@@ -3,7 +3,6 @@ import { OrbitControls } from "https://threejsfundamentals.org/threejs/resources
 import { MOUSE } from "https://unpkg.com/three@0.128.0/build/three.module.js";
 
 export function AddCam(near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp) {
-    // 1 == orthographic, 0 == perspective
     scene.remove(camera);
     if (ortho_persp == 1) {
         camera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
@@ -17,17 +16,8 @@ export function AddCam(near, far, left, right, bottom, top, camera_pos, target, 
     camera.lookAt(target);
 
     scene.add(camera);
-    // renderer.render(scene, camera);
-
-    // let newRenderer = new THREE.WebGLRenderer();
-    // newRenderer.setSize(window.innerWidth, window.innerHeight);
-    // document.body.appendChild(newRenderer.domElement);
-
-    // orbit controls
-    // if (ortho_persp == 0) {
     controls = new OrbitControls(camera, renderer.domElement);
     controls.mouseButtons = {
-        // LEFT: THREE.MOUSE.PAN,
         MIDDLE: THREE.MOUSE.DOLLY,
         RIGHT: THREE.MOUSE.ROTATE,
     };
