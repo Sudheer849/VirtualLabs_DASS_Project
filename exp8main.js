@@ -992,70 +992,72 @@ previous_button.addEventListener("click", () => {
   no_of_iterations--;
 });
 submit_button.addEventListener("click", () => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (no_of_iterations == 0) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  topleft_rect_x = document.getElementById("cnt-top-left-x").value;
-  topleft_rect_y = document.getElementById("cnt-top-left-y").value;
-  bottomright_rect_x = document.getElementById("cnt-bottom-right-x").value;
-  bottomright_rect_y = document.getElementById("cnt-bottom-right-y").value;
-  topleft_ln_x = document.getElementById("ln-top-left-x").value;
-  topleft_ln_y = document.getElementById("ln-top-left-y").value;
-  bottomright_ln_x = document.getElementById("ln-bottom-right-x").value;
-  bottomright_ln_y = document.getElementById("ln-bottom-right-y").value;
-  initialtopleft_ln_x = topleft_ln_x;
-  initialtopleft_ln_y = topleft_ln_y;
-  initialbottomright_ln_x = bottomright_ln_x;
-  initialbottomright_ln_y = bottomright_ln_y;
-  duptopleft_ln_x = topleft_ln_x;
-  duptopleft_ln_y = topleft_ln_y;
-  dupbottomright_ln_x = bottomright_ln_x;
-  dupbottomright_ln_y = bottomright_ln_y;
-  //TBRL
-  first_point = 0;
-  second_point = 0;
-  // first_point = change_firstpoint();
-  // second_point = change_secondpoint();
-  // console.log(first_point);
-  if (topleft_ln_x - topleft_rect_x < 0) {
-    first_point = first_point + Math.pow(2, 0);
-  }
-  if (topleft_ln_x - bottomright_rect_x > 0) {
-    first_point = first_point + Math.pow(2, 1);
-  }
-  if (topleft_ln_y - bottomright_rect_y > 0) {
-    first_point = first_point + Math.pow(2, 2);
-  }
-  if (topleft_ln_y - topleft_rect_y < 0) {
-    first_point = first_point + Math.pow(2, 3);
-  }
+    topleft_rect_x = document.getElementById("cnt-top-left-x").value;
+    topleft_rect_y = document.getElementById("cnt-top-left-y").value;
+    bottomright_rect_x = document.getElementById("cnt-bottom-right-x").value;
+    bottomright_rect_y = document.getElementById("cnt-bottom-right-y").value;
+    topleft_ln_x = document.getElementById("ln-top-left-x").value;
+    topleft_ln_y = document.getElementById("ln-top-left-y").value;
+    bottomright_ln_x = document.getElementById("ln-bottom-right-x").value;
+    bottomright_ln_y = document.getElementById("ln-bottom-right-y").value;
+    initialtopleft_ln_x = topleft_ln_x;
+    initialtopleft_ln_y = topleft_ln_y;
+    initialbottomright_ln_x = bottomright_ln_x;
+    initialbottomright_ln_y = bottomright_ln_y;
+    duptopleft_ln_x = topleft_ln_x;
+    duptopleft_ln_y = topleft_ln_y;
+    dupbottomright_ln_x = bottomright_ln_x;
+    dupbottomright_ln_y = bottomright_ln_y;
+    //TBRL
+    first_point = 0;
+    second_point = 0;
+    // first_point = change_firstpoint();
+    // second_point = change_secondpoint();
+    // console.log(first_point);
+    if (topleft_ln_x - topleft_rect_x < 0) {
+      first_point = first_point + Math.pow(2, 0);
+    }
+    if (topleft_ln_x - bottomright_rect_x > 0) {
+      first_point = first_point + Math.pow(2, 1);
+    }
+    if (topleft_ln_y - bottomright_rect_y > 0) {
+      first_point = first_point + Math.pow(2, 2);
+    }
+    if (topleft_ln_y - topleft_rect_y < 0) {
+      first_point = first_point + Math.pow(2, 3);
+    }
 
-  if (bottomright_ln_x - topleft_rect_x < 0) {
-    second_point = second_point + Math.pow(2, 0);
-  }
-  if (bottomright_ln_x - bottomright_rect_x > 0) {
-    second_point = second_point + Math.pow(2, 1);
-  }
-  if (bottomright_ln_y - bottomright_rect_y > 0) {
-    second_point = second_point + Math.pow(2, 2);
-  }
-  if (bottomright_ln_y - topleft_rect_y < 0) {
-    second_point = second_point + Math.pow(2, 3);
-  }
+    if (bottomright_ln_x - topleft_rect_x < 0) {
+      second_point = second_point + Math.pow(2, 0);
+    }
+    if (bottomright_ln_x - bottomright_rect_x > 0) {
+      second_point = second_point + Math.pow(2, 1);
+    }
+    if (bottomright_ln_y - bottomright_rect_y > 0) {
+      second_point = second_point + Math.pow(2, 2);
+    }
+    if (bottomright_ln_y - topleft_rect_y < 0) {
+      second_point = second_point + Math.pow(2, 3);
+    }
 
-  if (first_point_status == 0) {
-    current_point = first_point;
-  } else {
-    current_point = second_point;
-  }
-  console.log(first_point);
-  console.log(second_point);
+    if (first_point_status == 0) {
+      current_point = first_point;
+    } else {
+      current_point = second_point;
+    }
+    console.log(first_point);
+    console.log(second_point);
 
-  ctx.beginPath();
-  ctx.rect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "black";
-  ctx.fill();
-  grid();
-  line("white");
+    ctx.beginPath();
+    ctx.rect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "black";
+    ctx.fill();
+    grid();
+    line("white");
+  }
 });
 
 reset_button.addEventListener("click", () => {
