@@ -12,9 +12,7 @@ import { Dot } from "./js/point.js";
 const move_button = document.getElementById("move-button");
 const modalbutton1 = document.querySelector(".buttonisprimary");
 const modalbutton2 = document.querySelector(".buttonissecondary");
-let threeD = document.getElementById("3d-toggle-cb");
 let lock_vertices = document.getElementById("lock-vertices-cb");
-let transform_axes = document.getElementById("transform-axes-cb");
 let xy_grid = document.getElementById("xy-grid-cb");
 let yz_grid = document.getElementById("yz-grid-cb");
 let xz_grid = document.getElementById("xz-grid-cb");
@@ -104,14 +102,6 @@ lock_vertices.addEventListener("click", () => {
     }
 });
 
-// Transformation
-transform_axes.addEventListener("click", () => {
-    if (transform_axes.checked) {
-        //
-    } else {
-        //
-    }
-});
 
 // XY Grid
 xy_grid.addEventListener("click", () => {

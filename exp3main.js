@@ -14,9 +14,8 @@ const move_button = document.getElementById("move-button");
 const set_rotation_axis = document.getElementById("set-rotation-axis");
 const modalbutton1 = document.querySelector(".buttonisprimary");
 const modalbutton2 = document.querySelector(".buttonissecondary");
-let threeD = document.getElementById("3d-toggle-cb");
+
 let lock_vertices = document.getElementById("lock-vertices-cb");
-let transform_axes = document.getElementById("transform-axes-cb");
 let xy_grid = document.getElementById("xy-grid-cb");
 let yz_grid = document.getElementById("yz-grid-cb");
 let xz_grid = document.getElementById("xz-grid-cb");
@@ -105,15 +104,6 @@ lock_vertices.addEventListener("click", () => {
         orbit.target.set(0, 0, 0);
         orbit.dampingFactor = 0.05;
         orbit.enableDamping = true;
-    }
-});
-
-// Transformation
-transform_axes.addEventListener("click", () => {
-    if (transform_axes.checked) {
-        //
-    } else {
-        //
     }
 });
 

@@ -38,7 +38,7 @@
             <div class="v-datalist-container">
                 <div class="v-datalist-title">Display Settings</div>
                 <div style="display: flex; flex-wrap: wrap; flex-direction: row; justify-content: space-around;">
-        
+
                     <label class="v-checkbox" style="align-items:flex-start; flex: 50%; display: flex;">
                         <input type="checkbox" id="lock-vertices-cb">
                         <span style="font-size: x-small;">Lock Vertices </span>
@@ -64,9 +64,10 @@
 
                 <div class="v-datalist-title" id="top-border">Camera Options</div>
                 <p>
-                    <button id="add-shape-btn" style="margin:0.25rem;" class="button is-small is-responsive is-info" onclick="addShape()">Add</button>
-                    <button id="edit-shape-btn" style="margin:0.25rem;" class="button is-small is-responsive  is-success" onclick="editShape()">Edit</button>
-                    <button id="delete-shape-btn" style="margin:0.25rem;" class="button is-small is-responsive  is-danger" onclick="deleteShape()">Delete</button>
+
+                    <button id="add-shape-btn" style="margin:0.25rem;" class="v-button is-small is-responsive is-info" onclick="addShape()">Add</button>
+                    <button id="edit-shape-btn" style="margin:0.25rem;" class="v-button is-small is-responsive  is-success" onclick="editShape()">Edit</button>
+                    <button id="delete-shape-btn" style="margin:0.25rem;" class="v-button is-small is-responsive  is-danger" onclick="deleteShape()">Delete</button>
 
                     <div id="edit-modal" class="modal is-responsive">
                         <div class="modal-content">
@@ -127,9 +128,6 @@
 
                     </div>
 
-
-
-
                 </p>
 
                 <div class="v-datalist-title" id="top-border">Point Co-ordinates</div>
@@ -144,12 +142,20 @@
 
                 <div class="v-datalist-title" id="top-border">World and Instances</div>
 
-                <div style="display: flexbox;">
-                    X:
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="h-x" value="3" placeholder="X"> Y:
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="h-y" value="3" placeholder="Y"> Z:
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="h-z" value="3" placeholder="Z"> Scaling Factor
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="h-s" value="1" step="0.01" placeholder="Scale">
+                <div>
+                    <div style="margin: 0.2rem;">
+                        <label for="quantity">X:</label>
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="h-x" value="3" placeholder="X">
+                        <label for="quantity">Y:</label>
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="h-y" value="3" placeholder="Y">
+                        <label for="quantity">Z:</label>
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="h-z" value="3" placeholder="Z">
+                    </div>
+
+                    <div style="margin: 0.2rem;">
+                        <label for="quantity" style="margin-top: 0.2rem;">Scaling Factor</label>
+                        <input class="input is-responsive is-small" style="width:20%; margin: 0.2rem;" type="number" id="h-s" value="1" step="0.01" placeholder="Scale">
+                    </div>
                 </div>
 
 

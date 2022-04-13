@@ -190,3 +190,25 @@
 .input {
     margin-bottom: 0.5rem;
 }
+
+.v-button {
+    background-color: #04AA6D;
+    border-radius: 0.5rem;
+    font-size: small;
+    /* width: 30%; */
+}
+
+#add-shape-btn {
+    background-color: #3298dc;
+    border-radius: 0.5rem;
+}
+
+#edit-shape-btn {
+    background-color: #48c774;
+    border-radius: 0.5rem;
+}
+
+#delete-shape-btn {
+    background-color: #f14668;
+    border-radius: 0.5rem;
+}
