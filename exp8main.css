@@ -1,0 +1,58 @@
+.page {
+	overflow-x: hidden;
+}
+.text 
+{
+	text-align: center;
+}
+
+.v-canvas-container {
+	width: 101%;
+	height: 100%;
+    color : black;
+}
+
+.v-datalist-container {
+	height: 100%;
+}
+
+.v-slider-full {
+	width: 80%;
+}
+
+.input-form {
+	display: none;
+	color: black;
+}
+
+.add {
+	font-size: 0.90rem; 
+}
+
+.simulation {
+	order: 2;
+}
+
+.observations {
+	order: 1;
+}
+
+/* @media screen and (max-width: 1023px) {
+
+    .observations {
+		order: 1;
+	}
+
+	.simulation {
+		order: 1;
+	}
+
+    #inp {
+        /* height: 100%;
+    }
+} */
+
+
+#top-border {
+    border-top: 1px solid black;
+}

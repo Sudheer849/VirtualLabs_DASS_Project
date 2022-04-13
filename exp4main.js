@@ -16,13 +16,14 @@ let transform_axes = document.getElementById("transform-axes-cb");
 let xy_grid = document.getElementById("xy-grid-cb");
 let yz_grid = document.getElementById("yz-grid-cb");
 let xz_grid = document.getElementById("xz-grid-cb");
+let container = document.getElementById("canvas-main");
 
 let modal_add = document.getElementById("add-modal");
 let modal_edit = document.getElementById("edit-modal");
 let span_edit_modal = document.getElementsByClassName("close")[0];
 var slider = document.getElementById("slider");
 slider.addEventListener("input", movePoint);
-document.getElementById("slider").max = document.getElementById("frames").value;
+document.getElementById("slider").max = document.getElementById("noofframes").value;
 document.getElementById("slider").min = 0;
 slider.step = 1;
 
@@ -36,7 +37,7 @@ let vertex_a = new THREE.Vector3(document.getElementById("vertex-00").value, doc
 
 let old_scale = [1, 1, 1];
 
-let frames = document.getElementById("frames").value;
+let noofframes = document.getElementById("noofframes").value;
 let deletebutton = document.getElementById("deletebutton");
 let scene,
   camera,
@@ -325,48 +326,69 @@ span_edit_modal.onclick = function () {
 
 // mouse drag
 document.addEventListener("pointermove", (event) => {
-  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-  raycaster.setFromCamera(mouse, camera);
-  if (isDragging && lock === 0) {
-    for (let i = 0; i < shapes.length; i++) {
-      raycaster.ray.intersectPlane(plane, planeIntersect);
-      shapes[i].geometry.vertices[0].set(
-        planeIntersect.x + shift.x,
-        planeIntersect.y + shift.y,
-        planeIntersect.z + shift.z
-      );
-      shapes[i].geometry.verticesNeedUpdate = true;
-      shapevertex[i].position.set(
-        planeIntersect.x + shift.x - dragx[i],
-        planeIntersect.y + shift.y - dragy[i],
-        planeIntersect.z + shift.z - dragz[i]
-      );
-    }
+  const rect = renderer.domElement.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
 
-  } else if (isDragging) {
-    raycaster.ray.intersectPlane(plane, planeIntersect);
+  mouse.x = (x / container.clientWidth) * 2 - 1;
+  mouse.y = (y / container.clientHeight) * -2 + 1;
+  if (mouse.x < 1 && mouse.x > -1 && mouse.y < 1 && mouse.y > -1) {
+    raycaster.setFromCamera(mouse, camera);
+    if (isDragging && lock === 0) {
+      for (let i = 0; i < shapes.length; i++) {
+        raycaster.ray.intersectPlane(plane, planeIntersect);
+        shapes[i].geometry.vertices[0].set(
+          planeIntersect.x + shift.x,
+          planeIntersect.y + shift.y,
+          planeIntersect.z + shift.z
+        );
+        shapes[i].geometry.verticesNeedUpdate = true;
+        shapevertex[i].position.set(
+          planeIntersect.x + shift.x - dragx[i],
+          planeIntersect.y + shift.y - dragy[i],
+          planeIntersect.z + shift.z - dragz[i]
+        );
+      }
+      raycaster.ray.intersectPlane(plane, planeIntersect);
+    } else if (isDragging) {
+      raycaster.ray.intersectPlane(plane, planeIntersect);
+    }
   }
 });
 
 // mouse click
+
 document.addEventListener("pointerdown", () => {
   switch (event.which) {
     case 1:
       //  Left mouse button pressed
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      const rect = renderer.domElement.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      mouse.x = (x / container.clientWidth) * 2 - 1;
+      mouse.y = (y / container.clientHeight) * -2 + 1;
       pNormal.copy(camera.position).normalize();
       plane.setFromNormalAndCoplanarPoint(pNormal, scene.position);
       raycaster.setFromCamera(mouse, camera);
       raycaster.ray.intersectPlane(plane, planeIntersect);
-      shift.subVectors(dot_list[0].geometry.getAttribute('position').array, planeIntersect);
+      // shift.subVectors(dot_list[0].geometry.getAttribute('position').array, planeIntersect);
+      let position = new THREE.Vector3(
+        shapevertex[0].position.x,
+        shapevertex[0].position.y,
+        shapevertex[0].position.z
+      );
+      // position.x = shapevertex[0].position.x;
+      // position.y = shapevertex[0].position.y;
+      // position.z =  shapevertex[0].position.z;
+
+      // console.log(position)
+      shift.subVectors(position, planeIntersect);
       isDragging = true;
       dragObject = shapes[shapes.length - 1];
       break;
   }
 });
-
 // mouse release
 document.addEventListener("pointerup", () => {
   isDragging = false;
@@ -378,9 +400,9 @@ document.addEventListener("pointerup", () => {
 function movePoint(e) {
   var target = e.target ? e.target : e.srcElement;
   let scale = new Array();
-  scale[0] = 1 + (target.value / frames) * (max_x_scale - 1);
-  scale[1] = 1 + (target.value / frames) * (max_y_scale - 1);
-  scale[2] = 1 + (target.value / frames) * (max_z_scale - 1);
+  scale[0] = 1 + (target.value / noofframes) * (max_x_scale - 1);
+  scale[1] = 1 + (target.value / noofframes) * (max_y_scale - 1);
+  scale[2] = 1 + (target.value / noofframes) * (max_z_scale - 1);
 
   let scale_m = new THREE.Matrix4();
   scale_m.makeScale(scale[0] / old_scale[0], scale[1] / old_scale[1], scale[2] / old_scale[2]);
@@ -423,11 +445,11 @@ function movePoint(e) {
   document.getElementById("matrix-33").value = trans_matrix.elements[15];
 }
 
-document.getElementById("frames").onchange = function () {
-  let new_value = document.getElementById("frames").value; // new value
-  // slider adjusts according to the new number of frames
-
-  let new_factor = [frames / new_value, frames / new_value, frames / new_value];
+document.getElementById("noofframes").onchange = function() {
+  let new_value = document.getElementById("noofframes").value; // new value
+  // slider adjusts according to the new number of noofframes
+  let new_factor = [noofframes / new_value, noofframes / new_value, noofframes / new_value];
+  console.log(new_factor);
   for (let i = 0; i < 3; i++) {
     if (old_scale[i] === 1) {
       new_factor[i] = 1;
@@ -440,7 +462,7 @@ document.getElementById("frames").onchange = function () {
   dot_list[0].geometry.verticesNeedUpdate = true;
 
   for (let i = 0; i < 3; i++)
-    old_scale[i] *= frames / new_value;
+    old_scale[i] *= noofframes / new_value;
 
   trans_matrix.multiply(scale_m);
   document.getElementById("matrix-00").value = trans_matrix.elements[0];
@@ -547,7 +569,6 @@ let init = function () {
   }
   let tri_geo = Triangle(vertex_a, vertex_b, vertex_c, scene, dot_list);
   renderer = new THREE.WebGLRenderer();
-  let container = document.getElementById("canvas-main");
   let w = container.offsetWidth;
   let h = container.offsetHeight;
   renderer.setSize(w, h);
