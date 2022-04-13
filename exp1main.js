@@ -86,7 +86,7 @@ xy_grid.addEventListener("click", () => {
     grid.lookAt(vector3);
     xygrid.push(grid);
     scene.add(xygrid[0]);
-  } //
+  } 
   else {
     scene.remove(xygrid[0]);
     xygrid.pop();
@@ -473,21 +473,21 @@ let init = function () {
   camera.position.y = 2;
   const gridHelper = new THREE.GridHelper(size, divisions);
   const count = 1;
-  dir[0] = new THREE.Vector3(1, 0, 0);
-  dir[1] = new THREE.Vector3(0, 1, 0);
-  dir[2] = new THREE.Vector3(0, 0, 1);
-  dir[3] = new THREE.Vector3(-1, 0, 0);
-  dir[4] = new THREE.Vector3(0, -1, 0);
-  dir[5] = new THREE.Vector3(0, 0, -1);
+  dir_x = new THREE.Vector3(1, 0, 0);
+  dir_y = new THREE.Vector3(0, 1, 0);
+  dir_z = new THREE.Vector3(0, 0, 1);
+  negdir_x = new THREE.Vector3(-1, 0, 0);
+  negdir_y = new THREE.Vector3(0, -1, 0);
+  negdir_z = new THREE.Vector3(0, 0, -1);
 
   const origin = new THREE.Vector3(0, 0, 0);
   const length = 10;
-  arrowHelper[0] = new THREE.ArrowHelper(dir[0], origin, length, "red");
-  arrowHelper[1] = new THREE.ArrowHelper(dir[1], origin, length, "yellow");
-  arrowHelper[2] = new THREE.ArrowHelper(dir[2], origin, length, "blue");
-  arrowHelper[3] = new THREE.ArrowHelper(dir[3], origin, length, "red");
-  arrowHelper[4] = new THREE.ArrowHelper(dir[4], origin, length, "yellow");
-  arrowHelper[5] = new THREE.ArrowHelper(dir[5], origin, length, "blue");
+  arrowHelper[0] = new THREE.ArrowHelper(dir_x, origin, length, "red");
+  arrowHelper[1] = new THREE.ArrowHelper(dir_y, origin, length, "yellow");
+  arrowHelper[2] = new THREE.ArrowHelper(dir_z, origin, length, "blue");
+  arrowHelper[3] = new THREE.ArrowHelper(negdir_x, origin, length, "red");
+  arrowHelper[4] = new THREE.ArrowHelper(negdir_y, origin, length, "yellow");
+  arrowHelper[5] = new THREE.ArrowHelper(negdir_z, origin, length, "blue");
   for (let i = 0; i < 6; i++) {
     scene.add(arrowHelper[i]);
   }
