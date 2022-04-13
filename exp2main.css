@@ -115,11 +115,13 @@
 #add-modal {
     /* width: auto; */
     width: 50%;
+    margin: auto;
 }
 
 #edit-modal {
     /* width: auto; */
     width: 50%;
+    margin: auto;
 }
 
 .slidecontainer {
@@ -183,4 +185,8 @@
 
 .v-checkbox {
     margin-bottom: 0.1rem;
+}
+
+.input {
+    margin-bottom: 0.5rem;
 }
