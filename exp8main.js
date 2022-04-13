@@ -3,22 +3,16 @@ var heightRatio = 1;
 canvas.height = canvas.width * heightRatio;
 resize(canvas);
 let ctx = canvas.getContext("2d");
-let status = 0; //edge detection
-//window.devicePixelRatio=1; //Blury Text
-//ctx.fillRect(0, 0, canvas.width, canvas.height);
-window.devicePixelRatio = 2; //Clear Text
-//(CSS pixels).
-//Display width
+let status = 0;
+window.devicePixelRatio = 2;
 let width = 1200;
 let height = 600;
 canvas.style.width = width + "px";
 canvas.style.height = height + "px";
-// set background colour to black
 let scale = window.devicePixelRatio;
 canvas.width = Math.floor(width * scale);
 canvas.height = Math.floor(height * scale);
 ctx.fillRect(0, 0, canvas.width, canvas.height);
-//CSS pixels for coordinate systems
 ctx.scale(scale, scale);
 ctx.font = "10px Arial";
 ctx.textAlign = "center";
@@ -49,8 +43,8 @@ let duptopleft_ln_y = topleft_ln_y;
 let dupbottomright_ln_x = bottomright_ln_x;
 let dupbottomright_ln_y = bottomright_ln_y;
 let intersection_x, intersection_y;
-let first_point = 5; // 1001 // TBRL  0101
-let second_point = 10; // 0110 // 1010 0110
+let first_point = 5; // 1001
+let second_point = 10; // 0110
 let current_point = first_point;
 let inside = 0; // 0000
 let left_side = 1; // 0001
@@ -63,7 +57,32 @@ let first_point_status = 0;
 let is_clipped = 0;
 let no_of_iterations = 0,
   transition_iteration = 0;
+function convertToBinary(x) {
 
+  let bin = "";
+  for (let i = 3; i >= 0; i--) {
+    if (x & (1 << i)) {
+      bin = bin + "1";
+    } else {
+      bin = bin + "0";
+    }
+  }
+  return bin;
+}
+function coordinates_text(x, y) {
+  ctx.fillStyle = "red";
+  ctx.font = "16px serif";
+  ctx.fillText("(" + x + "," + y + ")", x - 30, y - 10);
+}
+function draw_line(x1, y1, x2, y2, width, color) {
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  // make line thicker
+  ctx.lineWidth = width;
+  ctx.strokeStyle = color;
+  ctx.stroke();
+}
 function point(colour1, colour2, colour3) {
   ctx.beginPath();
   ctx.arc(topleft_ln_x, topleft_ln_y, 2, 0, 2 * Math.PI, false);
@@ -93,160 +112,38 @@ function point(colour1, colour2, colour3) {
 function grid() {
   document.getElementById("text").style.font = "20px serif";
   point("blue", "red", "red");
-  ctx.fillStyle = "red";
-  ctx.font = "16px serif";
-  ctx.fillText(
-    "(" + topleft_rect_x + "," + topleft_rect_y + ")",
-    topleft_rect_x - 30,
-    topleft_rect_y - 10
-  );
-  ctx.fillStyle = "red";
-  ctx.font = "16px serif";
-  ctx.fillText(
-    "(" + topleft_rect_x + "," + bottomright_rect_y + ")",
-    topleft_rect_x - 30,
-    bottomright_rect_y - 10
-  );
-  ctx.fillStyle = "red";
-  ctx.font = "16px serif";
-  ctx.fillText(
-    "(" + bottomright_rect_x + "," + topleft_rect_y + ")",
-    bottomright_rect_x - 30,
-    topleft_rect_y - 10
-  );
-  ctx.fillStyle = "red";
-  ctx.font = "16px serif";
-  ctx.fillText(
-    "(" + bottomright_rect_x + "," + bottomright_rect_y + ")",
-    bottomright_rect_x - 30,
-    bottomright_rect_y - 10
-  );
-  ctx.beginPath();
-  ctx.moveTo(0, 0);
-  ctx.lineTo(0, height);
-  // make line thicker
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = "yellow";
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(topleft_rect_x, 0);
-  ctx.lineTo(topleft_rect_x, height);
-  // make line thicker
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = "yellow";
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(bottomright_rect_x, 0);
-  ctx.lineTo(bottomright_rect_x, height);
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = "yellow";
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.moveTo(0, 0);
-  ctx.lineTo(width, 0);
-  // make line thicker
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = "yellow";
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(0, topleft_rect_y);
-  ctx.lineTo(width, topleft_rect_y);
-  // make line thicker
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = "yellow";
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(0, bottomright_rect_y);
-  ctx.lineTo(width, bottomright_rect_y);
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = "yellow";
-  ctx.stroke();
-}
-// take user input
-function line(colour) {
-  ctx.beginPath();
-  ctx.moveTo(topleft_ln_x, topleft_ln_y);
-  ctx.lineTo(bottomright_ln_x, bottomright_ln_y);
-  // make line thicker
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = colour;
-  ctx.stroke();
+  coordinates_text(topleft_rect_x, topleft_rect_y);
+  coordinates_text(bottomright_rect_x, bottomright_rect_y);
+  coordinates_text(topleft_rect_x, bottomright_rect_y);
+  coordinates_text(bottomright_rect_x, topleft_rect_y);
+  draw_line(0, 0, 0, height, 2, "yellow");
+  draw_line(topleft_rect_x, 0, topleft_rect_x, height, 2, "yellow");
+  draw_line(bottomright_rect_x, 0, bottomright_rect_x, height, 2, "yellow");
+  draw_line(0, 0, width, 0, 2, "yellow");
+  draw_line(0, topleft_rect_y, width, topleft_rect_y, 2, "yellow");
+  draw_line(0, bottomright_rect_y, width, bottomright_rect_y, 2, "yellow");
 }
 function main() {
   grid();
-  line("white");
-}
-function convertToBinary(x) {
-  console.log(x);
-  // current_point
-  let bin = "";
-  for (let i = 3; i >= 0; i--) {
-    if (x & (1 << i)) {
-      bin = bin + "1";
-    } else {
-      bin = bin + "0";
-    }
-  }
-  return bin;
+  draw_line(topleft_ln_x, topleft_ln_y, bottomright_ln_x, bottomright_ln_y, 2, "white");
 }
 function check() {
-  console.log(current_point, top_side, current_point & top_side);
   if (
-    (current_point == 0 && first_point_status == 1) ||
-    findintersection() == 0
-  ) {
-    //console.log("inside");
+    (current_point == 0 && first_point_status == 1) || findintersection() == 0) {
     is_clipped = 1;
     text.innerHTML = "<br><br>Line is Clipped";
     logic_text.innerHTML = "";
     pointstat_text.innerHTML = "";
-    ctx.beginPath();
-    //ctx.setLineDash([5, 6]); //dashed line
-    ctx.moveTo(topleft_rect_x, topleft_rect_y);
-    ctx.lineTo(topleft_rect_x, bottomright_rect_y);
-    // make line thicker
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "green";
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(bottomright_rect_x, topleft_rect_y);
-    ctx.lineTo(bottomright_rect_x, bottomright_rect_y);
-    // make line thicker
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "green";
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(topleft_rect_x, topleft_rect_y);
-    ctx.lineTo(bottomright_rect_x, topleft_rect_y);
-    // make line thicker
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "green";
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(topleft_rect_x, bottomright_rect_y);
-    ctx.lineTo(bottomright_rect_x, bottomright_rect_y);
-    // make line thicker
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "green";
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(topleft_rect_x, topleft_rect_y);
-    ctx.lineTo(bottomleft_rect_x, bottomright_rect_y);
-    // make line thicker
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "green";
-    ctx.stroke();
+    draw_line(topleft_rect_x, topleft_rect_y, topleft_rect_x, bottomright_rect_y, 2, "green");
+    draw_line(bottomright_rect_x, topleft_rect_y, bottomright_rect_x, bottomright_rect_y, 2, "green");
+    draw_line(topleft_rect_x, topleft_rect_y, bottomright_rect_x, topleft_rect_y, 2, "green");
+    draw_line(topleft_rect_x, bottomright_rect_y, bottomright_rect_x, bottomright_rect_y, 2, "green");
+    draw_line(topleft_rect_x, topleft_rect_y, bottomleft_rect_x, bottomright_rect_y);
   }
   if (current_point == 0) {
     current_point = second_point;
     first_point_status = 1;
     transition_iteration = no_of_iterations;
-  }
-
-  console.log(status);
-  if (current_point == 0 && second_point == 0) {
-    alert("The line is clipped");
   }
   if (status == 0) {
     let eqornq = "==";
@@ -255,220 +152,110 @@ function check() {
     }
     text.innerHTML =
       "<br> <br> Left edge is selected for clipping the line aganist the left point";
-    logic_text.innerHTML =
-      "0" +
-      "0" +
-      "0" +
-      "1" +
-      " " +
-      "&" +
-      " " +
-      convertToBinary(current_point) +
-      " " +
-      eqornq +
-      " " +
-      "0";
+    logic_text.innerHTML = "0" + "0" + "0" + "1" + " " + "&" + " " + convertToBinary(current_point) + " " + eqornq + " " + "0";
     if (first_point_status == 0) {
       pointstat_text.innerHTML = "First Point is Selected";
-    } else {
+    }
+    else {
       pointstat_text.innerHTML = "Second Point is Selected";
     }
     if (is_dark == 0) {
-      // text.innerHTML =
-      //"Clipping through left edge";
-      console.log("dark");
-      ctx.beginPath();
-      //ctx.setLineDash([5, 6]); //dashed line
-      ctx.moveTo(topleft_rect_x, topleft_rect_y);
-      ctx.lineTo(topleft_rect_x, bottomright_rect_y);
-      // make line thicker
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "violet";
-      ctx.stroke();
+      draw_line(topleft_rect_x, topleft_rect_y, topleft_rect_x, bottomright_rect_y, 2, "violet");
       is_dark = 1;
-    } else {
+    }
+    else {
       if ((left_side & current_point) != 0) {
         point("#606060", "#606060", "#606060");
         intersection();
         if (first_point_status == 0) {
           point("blue", "red", "red");
-          // line("white");
           if_completed++;
         }
       }
-      ctx.beginPath();
-      //ctx.setLineDash([5, 6]); //dashed line
-      console.log(topleft_rect_x, bottomright_rect_y);
-      ctx.moveTo(topleft_rect_x, topleft_rect_y);
-      ctx.lineTo(topleft_rect_x, bottomright_rect_y);
-      // make line thicker
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "yellow";
-      ctx.stroke();
+      draw_line(topleft_rect_x, topleft_rect_y, topleft_rect_x, bottomright_rect_y, 2, "yellow");
       status = 1;
       is_dark = 0;
     }
-  } else if (status == 1) {
-    console.log(right_side);
+  }
+  else if (status == 1) {
     let eqornq = "==";
     if ((right_side & current_point) != 0) {
       eqornq = "!=";
     }
     text.innerHTML = "<br> <br> Right edge is selected for clipping";
-    logic_text.innerHTML =
-      "0" +
-      "0" +
-      "1" +
-      "0" +
-      " " +
-      "&" +
-      " " +
-      convertToBinary(current_point) +
-      " " +
-      eqornq +
-      " " +
-      "0";
+    logic_text.innerHTML = "0" + "0" + "1" + "0" + " " + "&" + " " + convertToBinary(current_point) + " " + eqornq + " " + "0";
     if (first_point_status == 0) {
       pointstat_text.innerHTML = "First Point is Selected";
     } else {
       pointstat_text.innerHTML = "Second Point is Selected";
     }
     if (is_dark == 0) {
-      console.log("dark");
-      ctx.beginPath();
-      //ctx.setLineDash([5, 6]); //dashed line
-      ctx.moveTo(bottomright_rect_x, topleft_rect_y);
-      ctx.lineTo(bottomright_rect_x, bottomright_rect_y);
-      // make line thicker
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "violet";
-      ctx.stroke();
+      draw_line(bottomright_rect_x, topleft_rect_y, bottomright_rect_x, bottomright_rect_y, 2, "violet");
       is_dark = 1;
-    } else {
+    }
+    else {
       if ((right_side & current_point) != 0) {
         if_completed++;
         point("#606060", "#606060", "#606060");
         intersection();
         point("blue", "red", "red");
       }
-      ctx.beginPath();
-      //ctx.setLineDash([5, 6]); //dashed line
-      ctx.moveTo(bottomright_rect_x, topleft_rect_y);
-      ctx.lineTo(bottomright_rect_x, bottomright_rect_y);
-      // make line thicker
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "yellow";
-      ctx.stroke();
+      draw_line(bottomright_rect_x, topleft_rect_y, bottomright_rect_x, bottomright_rect_y, 2, "yellow");
       status = 2;
       is_dark = 0;
     }
-  } else if (status == 2) {
-    text.innerHTML = "<br> <br> Bottom edge is selected for clipping";
+  }
+  else if (status == 2) {
     let eqornq = "==";
     if ((bottom_side & current_point) != 0) {
       eqornq = "!=";
     }
-    logic_text.innerHTML =
-      "0" +
-      "1" +
-      "0" +
-      "0" +
-      " " +
-      "&" +
-      " " +
-      convertToBinary(current_point) +
-      " " +
-      eqornq +
-      " " +
-      "0";
+    logic_text.innerHTML = "0" + "1" + "0" + "0" + " " + "&" + " " + convertToBinary(current_point) + " " + eqornq + " " + "0";
     if (first_point_status == 0) {
       pointstat_text.innerHTML = "First Point is Selected";
     } else {
       pointstat_text.innerHTML = "Second Point is Selected";
     }
     if (is_dark == 0) {
-      console.log("dark");
-      ctx.beginPath();
-      //ctx.setLineDash([5, 6]); //dashed line
-      ctx.moveTo(topleft_rect_x, bottomright_rect_y);
-      ctx.lineTo(bottomright_rect_x, bottomright_rect_y);
-      // make line thicker
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "violet";
-      ctx.stroke();
+      draw_line(topleft_rect_x, bottomright_rect_y, bottomright_rect_x, bottomright_rect_y, 2, "violet");
       is_dark = 1;
-    } else {
-      console.log(bottom_side, current_point);
+    }
+    else {
       if ((bottom_side & current_point) != 0) {
         if_completed++;
         point("#606060", "#606060", "#606060");
         intersection();
         point("blue", "red", "red");
       }
-      ctx.beginPath();
-      //ctx.setLineDash([5, 6]); //dashed line
-      ctx.moveTo(topleft_rect_x, bottomright_rect_y);
-      ctx.lineTo(bottomright_rect_x, bottomright_rect_y);
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "yellow";
-      ctx.stroke();
+      draw_line(topleft_rect_x, bottomright_rect_y, bottomright_rect_x, bottomright_rect_y, 2, "yellow");
       status = 3;
       is_dark = 0;
     }
-  } else if (status == 3) {
+  }
+  else if (status == 3) {
     let eqornq = "==";
     console.log(current_point / 8);
     if ((top_side & current_point) != 0) {
       eqornq = "!=";
     }
     text.innerHTML = "<br> <br> Top edge is selected for clipping";
-    logic_text.innerHTML =
-      "1" +
-      "0" +
-      "0" +
-      "0" +
-      " " +
-      "&" +
-      " " +
-      convertToBinary(current_point) +
-      " " +
-      eqornq +
-      " " +
-      "0";
+    logic_text.innerHTML = "1" + "0" + "0" + "0" + " " + "&" + " " + convertToBinary(current_point) + " " + eqornq + " " + "0";
     if (first_point_status == 0) {
       pointstat_text.innerHTML = "First Point is Selected";
     } else {
       pointstat_text.innerHTML = "Second Point is Selected";
     }
-    console.log(top_side);
-    console.log(current_point);
     if (is_dark == 0) {
-      console.log("dark");
-      ctx.beginPath();
-      //ctx.setLineDash([5, 6]); //dashed line
-      ctx.moveTo(topleft_rect_x, topleft_rect_y);
-      ctx.lineTo(bottomright_rect_x, topleft_rect_y);
-      // make line thicker
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "violet";
-      ctx.stroke();
+      draw_line(topleft_rect_x, topleft_rect_y, bottomright_rect_x, topleft_rect_y, 2, "violet");
       is_dark = 1;
     } else {
       if ((top_side & current_point) != 0) {
         if_completed++;
-        console.log(top_side);
         point("#606060", "#606060", "#606060");
         intersection();
         point("blue", "red", "red");
       }
-      ctx.beginPath();
-      //ctx.setLineDash([5, 6]); //dashed line
-      ctx.moveTo(topleft_rect_x, topleft_rect_y);
-      ctx.lineTo(bottomright_rect_x, topleft_rect_y);
-      // make line thicker
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "yellow";
-      ctx.stroke();
+      draw_line(topleft_rect_x, topleft_rect_y, bottomright_rect_x, topleft_rect_y, 2, "yellow");
       status = 0;
       is_dark = 0;
     }
@@ -479,54 +266,34 @@ function findintersection() {
     (bottomright_ln_y - topleft_ln_y) / (bottomright_ln_x - topleft_ln_x);
   let y_intercept = topleft_ln_y - slope * topleft_ln_x;
   let variable = 0;
-  if (
-    slope * topleft_rect_x + y_intercept < topleft_rect_y ||
-    slope * topleft_rect_x + y_intercept > bottomright_rect_y
-  ) {
+  if (slope * topleft_rect_x + y_intercept < topleft_rect_y || slope * topleft_rect_x + y_intercept > bottomright_rect_y) {
     variable = variable + 1;
   }
-  if (
-    slope * bottomright_rect_x + y_intercept < topleft_rect_y ||
-    slope * bottomright_rect_x + y_intercept > bottomright_rect_y
-  ) {
+  if (slope * bottomright_rect_x + y_intercept < topleft_rect_y || slope * bottomright_rect_x + y_intercept > bottomright_rect_y) {
     variable = variable + 1;
   }
-  if (
-    (bottomright_rect_y - y_intercept) / slope < topleft_rect_x ||
-    (bottomright_rect_y - y_intercept) / slope > bottomright_rect_x
-  ) {
+  if ((bottomright_rect_y - y_intercept) / slope < topleft_rect_x || (bottomright_rect_y - y_intercept) / slope > bottomright_rect_x) {
     variable = variable + 1;
   }
-  if (
-    (topleft_rect_y - y_intercept) / slope < topleft_rect_x ||
-    (topleft_rect_y - y_intercept) / slope > bottomright_rect_x
-  ) {
+  if ((topleft_rect_y - y_intercept) / slope < topleft_rect_x || (topleft_rect_y - y_intercept) / slope > bottomright_rect_x) {
     variable = variable + 1;
   }
   if (variable == 4) {
-    ctx.beginPath();
-    ctx.moveTo(topleft_ln_x, topleft_ln_y);
-    ctx.lineTo(bottomright_ln_x, bottomright_ln_y);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "#606060";
-    ctx.stroke();
+    draw_line(topleft_rect_x, topleft_rect_y, bottomright_rect_x, bottomright_rect_y, 2, "#606060");
     return 0;
-  } else {
+  }
+  else {
     return 1;
   }
 }
-
 function intersection() {
   // find the intersection of point with the line edges
   if (status == 0) {
-    let slope =
-      (bottomright_ln_y - topleft_ln_y) / (bottomright_ln_x - topleft_ln_x);
+    let slope = (bottomright_ln_y - topleft_ln_y) / (bottomright_ln_x - topleft_ln_x);
     let y_intercept = topleft_ln_y - slope * topleft_ln_x;
     intersection_y = slope * topleft_rect_x + y_intercept;
     intersection_x = topleft_rect_x;
-    // (intersection_x,intersection_y) represents the point of intersection
     ctx.beginPath();
-    //ctx.setLineDash([5, 6]); //dashed line
     if (first_point_status == 0) {
       ctx.moveTo(duptopleft_ln_x, duptopleft_ln_y);
     } else {
@@ -544,28 +311,23 @@ function intersection() {
       bottomright_ln_x = intersection_x;
       bottomright_ln_y = intersection_y;
     }
-    // make line thicker
     ctx.lineWidth = 2;
     ctx.strokeStyle = "#606060";
     ctx.stroke();
-    current_point = current_point & (15 - left_side); // 1001 & (1110) = (1000)
-  } else if (status == 1) {
-    let slope =
-      (bottomright_ln_y - topleft_ln_y) / (bottomright_ln_x - topleft_ln_x);
+    current_point = current_point & (15 - left_side);
+  }
+  else if (status == 1) {
+    let slope = (bottomright_ln_y - topleft_ln_y) / (bottomright_ln_x - topleft_ln_x);
     let y_intercept = topleft_ln_y - slope * topleft_ln_x;
     intersection_y = slope * bottomright_rect_x + y_intercept;
     intersection_x = bottomright_rect_x;
-    // (intersection_x,intersection_y) represents the point of intersection
     ctx.beginPath();
-    // ctx.setLineDash([5, 6]); //dashed line
-    //ctx.moveTo(topleft_ln_x, topleft_ln_y);
     if (first_point_status == 0) {
       ctx.moveTo(duptopleft_ln_x, duptopleft_ln_y);
     } else {
       ctx.moveTo(dupbottomright_ln_x, dupbottomright_ln_y);
     }
     ctx.lineTo(intersection_x, intersection_y);
-    // make line thicker
     if (first_point_status == 0) {
       duptopleft_ln_x = topleft_ln_x;
       duptopleft_ln_y = topleft_ln_y;
@@ -581,16 +343,13 @@ function intersection() {
     ctx.strokeStyle = "#606060";
     ctx.stroke();
     current_point = current_point & (15 - right_side);
-  } else if (status == 2) {
-    let slope =
-      (bottomright_ln_y - topleft_ln_y) / (bottomright_ln_x - topleft_ln_x);
+  }
+  else if (status == 2) {
+    let slope = (bottomright_ln_y - topleft_ln_y) / (bottomright_ln_x - topleft_ln_x);
     let y_intercept = topleft_ln_y - slope * topleft_ln_x;
     intersection_x = (bottomright_rect_y - y_intercept) / slope;
     intersection_y = bottomright_rect_y;
-    // (intersection_x,intersection_y) represents the point of intersection
     ctx.beginPath();
-    //  ctx.setLineDash([5, 6]); //dashed line
-    //ctx.moveTo(topleft_ln_x, topleft_ln_y);
     if (first_point_status == 0) {
       ctx.moveTo(duptopleft_ln_x, duptopleft_ln_y);
     } else {
@@ -608,21 +367,17 @@ function intersection() {
       bottomright_ln_x = intersection_x;
       bottomright_ln_y = intersection_y;
     }
-    // make line thicker
     ctx.lineWidth = 2;
     ctx.strokeStyle = "#606060";
     ctx.stroke();
     current_point = current_point & (15 - bottom_side);
-  } else if (status == 3) {
-    let slope =
-      (bottomright_ln_y - topleft_ln_y) / (bottomright_ln_x - topleft_ln_x);
+  }
+  else if (status == 3) {
+    let slope = (bottomright_ln_y - topleft_ln_y) / (bottomright_ln_x - topleft_ln_x);
     let y_intercept = topleft_ln_y - slope * topleft_ln_x;
     intersection_x = (topleft_rect_y - y_intercept) / slope;
     intersection_y = topleft_rect_y;
-    // (intersection_x,intersection_y) represents the point of intersection
     ctx.beginPath();
-    // ctx.setLineDash([5, 6]); //dashed line
-    // ctx.moveTo(topleft_ln_x, topleft_ln_y);
     if (first_point_status == 0) {
       ctx.moveTo(duptopleft_ln_x, duptopleft_ln_y);
     } else {
@@ -661,81 +416,40 @@ previous_button.addEventListener("click", () => {
   if (no_of_iterations == 0 || is_clipped == 1) {
     return;
   }
-  //no_of_iterations--;
   if (no_of_iterations == transition_iteration) {
     first_point_status = 0;
     current_point = 0;
   }
   if (is_dark == 1) {
     if (status == 0) {
-      ctx.beginPath();
-      //ctx.setLineDash([5, 6]); //dashed line
-      ctx.moveTo(topleft_rect_x, topleft_rect_y);
-      ctx.lineTo(topleft_rect_x, bottomright_rect_y);
-      // make line thicker
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "yellow";
-      ctx.stroke();
+      draw_line(topleft_rect_x, topleft_rect_y, topleft_rect_x, bottomright_rect_y, 2, "yellow");
       is_dark = 0;
     } else if (status == 1) {
-      ctx.beginPath();
-      //ctx.setLineDash([5, 6]); //dashed line
-      ctx.moveTo(bottomright_rect_x, bottomright_rect_y);
-      ctx.lineTo(bottomright_rect_x, topleft_rect_y);
-      // make line thicker
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "yellow";
-      ctx.stroke();
+      draw_line(bottomright_rect_x, bottomright_rect_y, bottomright_rect_x, topleft_rect_y, 2, "yellow");
       is_dark = 0;
     } else if (status == 2) {
-      ctx.beginPath();
-      //ctx.setLineDash([5, 6]); //dashed line
-      ctx.moveTo(topleft_rect_x, bottomright_rect_y);
-      ctx.lineTo(bottomright_rect_x, bottomright_rect_y);
-      // make line thicker
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "yellow";
-      ctx.stroke();
+      draw_line(topleft_rect_x, bottomright_rect_y, bottomright_rect_x, bottomright_rect_y, 2, "yellow");
       is_dark = 0;
     } else if (status == 3) {
-      ctx.beginPath();
-      //ctx.setLineDash([5, 6]); //dashed line
-      ctx.moveTo(topleft_rect_x, topleft_rect_y);
-      ctx.lineTo(bottomright_rect_x, topleft_rect_y);
-      // make line thicker
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "yellow";
-      ctx.stroke();
+      draw_line(topleft_rect_x, topleft_rect_y, bottomright_rect_x, topleft_rect_y, 2, "yellow");
       is_dark = 0;
     }
-  } else {
-    console.log(status);
+  }
+  else {
     if (status == 0) {
       status = 3;
     } else {
       status = (status - 1) % 4;
     }
-    // get the previous state
-    console.log(first_point & left_side);
     if (status == 0) {
-      if (
-        (first_point_status == 0) & ((first_point & left_side) != 0) ||
-        (first_point_status == 1) & ((second_point & left_side) != 0)
-      ) {
+      if ((first_point_status == 0) & ((first_point & left_side) != 0) || (first_point_status == 1) & ((second_point & left_side) != 0)) {
         point("#606060", "#606060", "#606060");
         ctx.beginPath();
-        // ctx.setLineDash([5, 6]); //dashed line
-        // ctx.moveTo(topleft_ln_x, topleft_ln_y);
         if (first_point_status == 0) {
           ctx.moveTo(duptopleft_ln_x, duptopleft_ln_y);
           topleft_ln_x = duptopleft_ln_x;
           topleft_ln_y = duptopleft_ln_y;
-          if (
-            duptopleft_ln_x == topleft_ln_x &&
-            duptopleft_ln_y == topleft_ln_y &&
-            topleft_ln_x != initialtopleft_ln_x &&
-            topleft_ln_y != initialtopleft_ln_y
-          ) {
+          if (duptopleft_ln_x == topleft_ln_x && duptopleft_ln_y == topleft_ln_y && topleft_ln_x != initialtopleft_ln_x & topleft_ln_y != initialtopleft_ln_y) {
             duptopleft_ln_x = initialtopleft_ln_x;
             duptopleft_ln_y = initialtopleft_ln_y;
           }
@@ -743,74 +457,32 @@ previous_button.addEventListener("click", () => {
           ctx.moveTo(dupbottomright_ln_x, dupbottomright_ln_y);
           bottomright_ln_x = dupbottomright_ln_x;
           bottomright_ln_y = dupbottomright_ln_y;
-          if (
-            dupbottomright_ln_x == bottomright_ln_x &&
-            dupbottomright_ln_y == bottomright_ln_y &&
-            bottomright_ln_x != initialbottomright_ln_x &&
-            bottomright_ln_y != initialbottomright_ln_y
-          ) {
+          if (dupbottomright_ln_x == bottomright_ln_x && dupbottomright_ln_y == bottomright_ln_y && bottomright_ln_x != initialbottomright_ln_x & bottomright_ln_y != initialbottomright_ln_y) {
             dupbottomright_ln_x = initialbottomright_ln_x;
             dupbottomright_ln_y = initialbottomright_ln_y;
           }
         }
         ctx.lineTo(intersection_x, intersection_y);
-        //point("red","black");
-
-        // make line thicker
         ctx.lineWidth = 2;
         ctx.strokeStyle = "white";
         ctx.stroke();
-        ctx.beginPath();
-        //ctx.setLineDash([5, 6]); //dashed line
-        ctx.moveTo(topleft_rect_x, topleft_rect_y);
-        ctx.lineTo(topleft_rect_x, bottomright_rect_y);
-        // make line thicker
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "violet";
-        ctx.stroke();
+        draw_line(topleft_rect_x, topleft_rect_y, topleft_rect_x, bottomright_rect_y, 2, "violet");
         is_dark = 1;
         current_point = current_point + 1;
         point("blue", "red", "red");
       } else {
-        ctx.beginPath();
-        //ctx.setLineDash([5, 6]); //dashed line
-        ctx.moveTo(topleft_rect_x, topleft_rect_y);
-        ctx.lineTo(topleft_rect_x, bottomright_rect_y);
-        // make line thicker
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "violet";
-        ctx.stroke();
+        draw_line(topleft_rect_x, topleft_rect_y, topleft_rect_x, bottomright_rect_y, 2, "violet");
         is_dark = 1;
-        // status = 3;
-        // current_point = current_point & (15 - top_side);
       }
     } else if (status == 1) {
-      console.log(status);
-      console.log(
-        first_point,
-        right_side,
-        first_point_status,
-        first_point & right_side
-      );
-      if (
-        (first_point_status == 0) & ((first_point & right_side) != 0) ||
-        (first_point_status == 1) & ((second_point & right_side) != 0)
-      ) {
+      if ((first_point_status == 0) & ((first_point & right_side) != 0) || (first_point_status == 1) & ((second_point & right_side) != 0)) {
         point("#606060", "#606060", "#606060");
-        console.log("Hey I am here");
         ctx.beginPath();
-        // ctx.setLineDash([5, 6]); //dashed line
-        // ctx.moveTo(topleft_ln_x, topleft_ln_y);
         if (first_point_status == 0) {
           ctx.moveTo(duptopleft_ln_x, duptopleft_ln_y);
           topleft_ln_x = duptopleft_ln_x;
           topleft_ln_y = duptopleft_ln_y;
-          if (
-            duptopleft_ln_x == topleft_ln_x &&
-            duptopleft_ln_y == topleft_ln_y &&
-            topleft_ln_x != initialtopleft_ln_x &&
-            topleft_ln_y != initialtopleft_ln_y
-          ) {
+          if (duptopleft_ln_x == topleft_ln_x && duptopleft_ln_y == topleft_ln_y && topleft_ln_x != initialtopleft_ln_x && topleft_ln_y != initialtopleft_ln_y) {
             duptopleft_ln_x = initialtopleft_ln_x;
             duptopleft_ln_y = initialtopleft_ln_y;
           }
@@ -818,55 +490,27 @@ previous_button.addEventListener("click", () => {
           ctx.moveTo(dupbottomright_ln_x, dupbottomright_ln_y);
           bottomright_ln_x = dupbottomright_ln_x;
           bottomright_ln_y = dupbottomright_ln_y;
-          if (
-            dupbottomright_ln_x == bottomright_ln_x &&
-            dupbottomright_ln_y == bottomright_ln_y &&
-            bottomright_ln_x != initialbottomright_ln_x &&
-            bottomright_ln_y != initialbottomright_ln_y
-          ) {
+          if (dupbottomright_ln_x == bottomright_ln_x && dupbottomright_ln_y == bottomright_ln_y && bottomright_ln_x != initialbottomright_ln_x && bottomright_ln_y != initialbottomright_ln_y) {
             dupbottomright_ln_x = initialbottomright_ln_x;
             dupbottomright_ln_y = initialbottomright_ln_y;
           }
         }
         ctx.lineTo(intersection_x, intersection_y);
-        // make line thicker
         ctx.lineWidth = 2;
         ctx.strokeStyle = "white";
         ctx.stroke();
-        ctx.beginPath();
-        //ctx.setLineDash([5, 6]); //dashed line
-        ctx.moveTo(bottomright_rect_x, topleft_rect_y);
-        ctx.lineTo(bottomright_rect_x, bottomright_rect_y);
-        // make line thicker
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "violet";
-        ctx.stroke();
+        draw_line(bottomright_rect_x, topleft_rect_y, bottomright_rect_x, bottomright_rect_y, 2, "violet");
         is_dark = 1;
         current_point = current_point + 2;
         point("blue", "red", "red");
       } else {
-        ctx.beginPath();
-        //ctx.setLineDash([5, 6]); //dashed line
-        ctx.moveTo(bottomright_rect_x, topleft_rect_y);
-        ctx.lineTo(bottomright_rect_x, bottomright_rect_y);
-        // make line thicker
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "violet";
-        ctx.stroke();
+        draw_line(bottomright_rect_x, topleft_rect_y, bottomright_rect_x, bottomright_rect_y, 2, "violet");
         is_dark = 1;
-        // status = 0;
-        // current_point = current_point & (15 - left_side);
       }
     } else if (status == 2) {
-      if (
-        (first_point_status == 0) & ((first_point & bottom_side) != 0) ||
-        (first_point_status == 1) & ((second_point & bottom_side) != 0)
-      ) {
+      if ((first_point_status == 0) & ((first_point & bottom_side) != 0) || (first_point_status == 1) & ((second_point & bottom_side) != 0)) {
         point("#606060", "#606060", "#606060");
-        console.log("Hello");
         ctx.beginPath();
-        // ctx.setLineDash([5, 6]); //dashed line
-        // ctx.moveTo(topleft_ln_x, topleft_ln_y);
         if (first_point_status == 0) {
           ctx.moveTo(duptopleft_ln_x, duptopleft_ln_y);
           topleft_ln_x = duptopleft_ln_x;
@@ -895,59 +539,33 @@ previous_button.addEventListener("click", () => {
           }
         }
         ctx.lineTo(intersection_x, intersection_y);
-        // make line thicker
         ctx.lineWidth = 2;
         ctx.strokeStyle = "white";
         ctx.stroke();
-        ctx.beginPath();
-        //ctx.setLineDash([5, 6]); //dashed line
-        ctx.moveTo(topleft_rect_x, bottomright_rect_y);
-        ctx.lineTo(bottomright_rect_x, bottomright_rect_y);
-        // make line thicker
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "violet";
-        ctx.stroke();
+        draw_line(topleft_rect_x, bottomright_rect_y, bottomright_rect_x, bottomright_rect_y, 2, "violet");
         is_dark = 1;
         current_point = current_point + 4;
         point("blue", "red", "red");
       } else {
-        console.log("bye");
-        ctx.beginPath();
-        //ctx.setLineDash([5, 6]); //dashed line
-        ctx.moveTo(topleft_rect_x, bottomright_rect_y);
-        ctx.lineTo(bottomright_rect_x, bottomright_rect_y);
-        // make line thicker
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "violet";
-        ctx.stroke();
+        draw_line(topleft_rect_x, bottomright_rect_y, bottomright_rect_x, bottomright_rect_y, 2, "violet");
         is_dark = 1;
-        //  status = 1;
-        //  current_point = current_point & (15 - right_side);
-        console.log(current_point);
       }
     } else if (status == 3) {
-      if (
-        (first_point_status == 0) & ((first_point & top_side) != 0) ||
-        (first_point_status == 1) & ((second_point & top_side) != 0)
+      if ((first_point_status == 0) & ((first_point & top_side) != 0) || (first_point_status == 1) & ((second_point & top_side) != 0)
       ) {
         point("#606060", "#606060", "#606060");
         console.log("Hello");
         ctx.beginPath();
-        // ctx.setLineDash([5, 6]); //dashed line
         if (first_point_status == 0) {
           ctx.moveTo(duptopleft_ln_x, duptopleft_ln_y);
           topleft_ln_x = duptopleft_ln_x;
           topleft_ln_y = duptopleft_ln_y;
-          if (
-            duptopleft_ln_x == topleft_ln_x &&
-            duptopleft_ln_y == topleft_ln_y &&
-            topleft_ln_x != initialtopleft_ln_x &&
-            topleft_ln_y != initialtopleft_ln_y
-          ) {
+          if (duptopleft_ln_x == topleft_ln_x && duptopleft_ln_y == topleft_ln_y && topleft_ln_x != initialtopleft_ln_x && topleft_ln_y != initialtopleft_ln_y) {
             duptopleft_ln_x = initialtopleft_ln_x;
             duptopleft_ln_y = initialtopleft_ln_y;
           }
-        } else {
+        }
+        else {
           ctx.moveTo(dupbottomright_ln_x, dupbottomright_ln_y);
           bottomright_ln_x = dupbottomright_ln_x;
           bottomright_ln_y = dupbottomright_ln_y;
@@ -962,33 +580,15 @@ previous_button.addEventListener("click", () => {
           }
         }
         ctx.lineTo(intersection_x, intersection_y);
-        // make line thicker
         ctx.lineWidth = 2;
         ctx.strokeStyle = "white"; //
         ctx.stroke();
-        ctx.beginPath();
-        //ctx.setLineDash([5, 6]); //dashed line
-        ctx.moveTo(topleft_rect_x, topleft_rect_y);
-        ctx.lineTo(bottomright_rect_x, topleft_rect_y);
-        // make line thicker
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "violet";
-        ctx.stroke();
+        draw_line(topleft_rect_x, topleft_rect_y, bottomright_rect_x, topleft_rect_y, 2, "violet");
         is_dark = 1;
         current_point = current_point + 8;
         point("blue", "red", "red");
       } else {
-        ctx.beginPath();
-        //ctx.setLineDash([5, 6]); //dashed line
-        ctx.moveTo(topleft_rect_x, topleft_rect_y);
-        ctx.lineTo(bottomright_rect_x, topleft_rect_y);
-        // make line thicker
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "violet";
-        ctx.stroke();
-        is_dark = 1;
-        //  status = 2;
-        //  current_point = current_point & (15 - bottom_side);
+        draw_line(topleft_rect_x, topleft_rect_y, bottomright_rect_x, topleft_rect_y, 2, "violet");
       }
     }
   }
@@ -1059,7 +659,7 @@ submit_button.addEventListener("click", () => {
     ctx.fillStyle = "black";
     ctx.fill();
     grid();
-    line("white");
+    draw_line(topleft_ln_x, topleft_ln_y, bottomright_ln_x, bottomright_ln_y, 2, "white");
   }
 });
 
@@ -1075,8 +675,6 @@ reset_button.addEventListener("click", () => {
   duptopleft_ln_y = topleft_ln_y;
   dupbottomright_ln_x = bottomright_ln_x;
   dupbottomright_ln_y = bottomright_ln_y;
-  first_point = 5; // 1001 // TBRL  0101
-  second_point = 10; // 0110 // 1010 0110
   current_point = first_point;
   inside = 0; // 0000
   is_dark = 0;
@@ -1087,23 +685,18 @@ reset_button.addEventListener("click", () => {
   ctx.fillStyle = "black";
   ctx.fill();
   grid();
-  line("white");
+  draw_line(topleft_ln_x, topleft_ln_y, bottomright_ln_x, bottomright_ln_y, 2, "white");
+  text.innerHTML = "";
+  logic_text.innerHTML = "";
+  pointstat_text.innerHTML = "";
+  is_clipped = 0;
   //
 });
 function resize(canvas) {
-  // Lookup the size the browser is displaying the canvas.
   var displayWidth = canvas.clientWidth;
   var displayHeight = canvas.clientHeight;
-
-  // Check if the canvas is not the same size.
   if (canvas.width !== displayWidth || canvas.height !== displayHeight) {
-    // Make the canvas the same size
     canvas.width = 2 * displayWidth;
     canvas.height = displayHeight;
   }
 }
-
-//check();
-//intersection();
-
-//ctx.fillStyle = "yellow";
