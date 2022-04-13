@@ -56,7 +56,7 @@ threeD.addEventListener("click", () => {
     if (threeD.checked) {
         ProjectTo2D(camera, orbit, is_2D, two_plane, first_time, two_geometry);
     } else {
-        //
+
     }
 });
 
