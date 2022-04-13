@@ -193,6 +193,7 @@ function check() {
     (current_point == 0 && first_point_status == 1) ||
     findintersection() == 0
   ) {
+    //console.log("inside");
     is_clipped = 1;
     text.innerHTML = "<br><br>Line is Clipped";
     logic_text.innerHTML = "";
