@@ -12,11 +12,7 @@ export function ProjectTo2D(camera, orbit, is_2D, two_plane, first_time, two_geo
     orbit.screenSpacePanning = true;
 
     if (first_time === 1) {
-        //create someplane to project to
         two_plane = new THREE.Plane().setFromCoplanarPoints(new THREE.Vector3(0, 1, 0), new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 0, 0));
-        //create some geometry to flatten..
-        // two_geometry = new THREE.BufferGeometry();
-        // fillGeometry(two_geometry);
         first_time = 0;
     }
 
@@ -29,7 +25,4 @@ export function ProjectTo2D(camera, orbit, is_2D, two_plane, first_time, two_geo
         positionAttr.array[i + 2] = projectedPoint.z;
     }
     positionAttr.needsUpdate = true;
-
-    // orbit.minPolarAngle = 0;
-    // orbit.maxPolarAngle = 0;
 }

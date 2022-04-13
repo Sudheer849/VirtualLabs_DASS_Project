@@ -361,12 +361,12 @@ span_edit_modal.onclick = function () {
 };
 
 document.addEventListener("pointermove", (event) => {
-  const rect = renderer.domElement.getBoundingClientRect();
-  const x = event.clientX - rect.left;
-  const y = event.clientY - rect.top;
+    const rect = renderer.domElement.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
 
-  mouse.x = (x / container.clientWidth) * 2 - 1;
-  mouse.y = (y / container.clientHeight) * -2 + 1;
+    mouse.x = (x / container.clientWidth) * 2 - 1;
+    mouse.y = (y / container.clientHeight) * -2 + 1;
   if (mouse.x < 1 && mouse.x > -1 && mouse.y < 1 && mouse.y > -1) {
     raycaster.setFromCamera(mouse, camera);
     if (isDragging && lock === 0) {
@@ -473,12 +473,12 @@ let init = function () {
   camera.position.y = 2;
   const gridHelper = new THREE.GridHelper(size, divisions);
   const count = 1;
-  dir_x = new THREE.Vector3(1, 0, 0);
-  dir_y = new THREE.Vector3(0, 1, 0);
-  dir_z = new THREE.Vector3(0, 0, 1);
-  negdir_x = new THREE.Vector3(-1, 0, 0);
-  negdir_y = new THREE.Vector3(0, -1, 0);
-  negdir_z = new THREE.Vector3(0, 0, -1);
+  let dir_x = new THREE.Vector3(1, 0, 0);
+  let dir_y = new THREE.Vector3(0, 1, 0);
+  let dir_z = new THREE.Vector3(0, 0, 1);
+  let negdir_x = new THREE.Vector3(-1, 0, 0);
+  let negdir_y = new THREE.Vector3(0, -1, 0);
+  let negdir_z = new THREE.Vector3(0, 0, -1);
 
   const origin = new THREE.Vector3(0, 0, 0);
   const length = 10;
