@@ -23,6 +23,7 @@ let modal_add = document.getElementById("add-modal");
 let modal_edit = document.getElementById("edit-modal");
 let container = document.getElementById("canvas-main");
 let initial_pos = [3, 3, 3];
+let xcomp =1 , ycomp = 0, zcomp = 0;
 let span_edit_modal = document.getElementsByClassName("close")[0];
 var slider = document.getElementById("slider");
 slider.addEventListener("input", movePoint);
@@ -33,10 +34,11 @@ slider.step =
         document.getElementById("slider").min) /
     document.getElementById("frames").value;
 
+
 let rot_axis = new THREE.Vector3(
-    document.getElementById("x-comp").value,
-    document.getElementById("y-comp").value,
-    document.getElementById("z-comp").value
+    xcomp,
+    ycomp,
+    zcomp
 );
 rot_axis.normalize();
 let total_angle = document.getElementById("theta").value;
@@ -515,10 +517,26 @@ document.getElementById("theta").onchange = function() {
 };
 
 set_rotation_axis.addEventListener("click", () => {
+    if(document.getElementById("axis-change-dropdown").value == 0){
+        xcomp = 1;
+        ycomp = 0;
+        zcomp = 0;
+    }
+    if(document.getElementById("axis-change-dropdown").value == 1){
+        ycomp = 1;
+        xcomp = 0;
+        zcomp = 0;
+    }
+    if(document.getElementById("axis-change-dropdown").value == 2){
+        zcomp = 1;
+        xcomp = 0;
+        ycomp = 0;
+    }
+
     rot_axis = new THREE.Vector3(
-        parseFloat(document.getElementById("x-comp").value),
-        parseFloat(document.getElementById("y-comp").value),
-        parseFloat(document.getElementById("z-comp").value)
+        parseFloat(xcomp),
+        parseFloat(ycomp),
+        parseFloat(zcomp)
     );
 });
 
