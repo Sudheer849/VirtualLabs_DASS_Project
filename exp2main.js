@@ -21,7 +21,7 @@ let modal_add = document.getElementById("add-modal");
 let modal_edit = document.getElementById("edit-modal");
 let initial_pos = [3, 3, 3];
 let span_edit_modal = document.getElementsByClassName("close")[0];
-var slider = document.getElementById("slider");
+let slider = document.getElementById("slider");
 slider.addEventListener("input", movePoint);
 document.getElementById("slider").max =
     document.getElementById("finalx").value - initial_pos[0];
@@ -93,8 +93,8 @@ lock_vertices.addEventListener("click", () => {
 
 xy_grid.addEventListener("click", () => {
     if (xy_grid.checked) {
-        var grid = new THREE.GridHelper(size, divisions);
-        var vector3 = new THREE.Vector3(0, 0, 1);
+        let grid = new THREE.GridHelper(size, divisions);
+        let vector3 = new THREE.Vector3(0, 0, 1);
         grid.lookAt(vector3);
         xygrid.push(grid);
         scene.add(xygrid[0]);
@@ -106,7 +106,7 @@ xy_grid.addEventListener("click", () => {
 });
 xz_grid.addEventListener("click", () => {
     if (xz_grid.checked) {
-        var grid = new THREE.GridHelper(size, divisions);
+        let grid = new THREE.GridHelper(size, divisions);
         grid.geometry.rotateZ(Math.PI / 2);
         xzgrid.push(grid);
         scene.add(xzgrid[0]);
@@ -117,8 +117,8 @@ xz_grid.addEventListener("click", () => {
 });
 yz_grid.addEventListener("click", () => {
     if (yz_grid.checked) {
-        var grid = new THREE.GridHelper(size, divisions);
-        var vector3 = new THREE.Vector3(0, 1, 0);
+        let grid = new THREE.GridHelper(size, divisions);
+        let vector3 = new THREE.Vector3(0, 1, 0);
         grid.lookAt(vector3);
         yzgrid.push(grid);
         scene.add(yzgrid[0]);
@@ -251,9 +251,9 @@ function ondblclick(event) {
                         scene.remove(intersects[i].object);
                         scene.remove(line);
                     }
-                    var xcoord = document.getElementById("x").value;
-                    var ycoord = document.getElementById("y").value;
-                    var zcoord = document.getElementById("z").value;
+                    let xcoord = document.getElementById("x").value;
+                    let ycoord = document.getElementById("y").value;
+                    let zcoord = document.getElementById("z").value;
                     no_of_shapes++;
                     if (document.querySelector("select").value === "Cube") {
                         createCube(
@@ -401,7 +401,7 @@ move_button.addEventListener("click", () => {
 
 
 function movePoint(e) {
-    var target = e.target ? e.target : e.srcElement;
+    let target = e.target ? e.target : e.srcElement;
 
     let p = new THREE.Vector3(
         dot_list[0].geometry.getAttribute("position").array[0],
