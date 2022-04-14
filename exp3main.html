@@ -61,7 +61,7 @@
                     </label>
                 </div>
 
-                <div class="v-datalist-title" id="top-border">Camera Options</div>
+                <div class="v-datalist-title" id="top-border">Shape Controls</div>
                 <p>
                     <button id="add-shape-btn" style="margin:0.25rem;" class="v-button is-small is-responsive is-info" onclick="addShape()">Add</button>
                     <button id="edit-shape-btn" style="margin:0.25rem;" class="v-button is-small is-responsive  is-success" onclick="editShape()">Edit</button>
@@ -149,14 +149,14 @@
                 </div>
                 <input class="button is-responsive is-small is-link" style="margin: 0.5rem;" id="set-rotation-axis" type="submit" value="Change Axis">
 
-                <div style="display: inline; ">
-                    <div style="margin: 0.2rem; text-align: left;">
-                        <label for="quantity" style="margin-top: 0.2rem;">Frames</label>
+                <div style="vertical-align: middle; ">
+                    <div style="margin: 0.2rem; text-align: center;">
+                        <label for="quantity" style="margin: 0.5rem;">Frames</label>
                         <input class="input is-responsive is-small" style="width:30%;" type="number" id="frames" min="1" value="100" step="1" placeholder="Frames">
                     </div>
 
-                    <div style="margin: 0.2rem; text-align: left;">
-                        <label for="quantity" style="margin-top: 0.2rem;">Theta</label>
+                    <div style="margin: 0.2rem; text-align: center;">
+                        <label for="quantity" style="margin: 0.5rem;">Theta<nbsp></nbsp></label>
                         <input class="input is-responsive is-small" style="width:30%;" type="number" id="theta" value="180" step="0.01" placeholder="Theta">
                     </div>
                 </div>
@@ -218,6 +218,7 @@
     <input class="v-slider-full is-centered column exptwoslider is-fullwidth" id="slider" step="1" min="0" max="100" value="0" type="range">
 
     <script src="https://unpkg.com/mathjs@9.2.0/lib/browser/math.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.8-b/js/script.js"></script>
     <script type="module" src="exp3main.js"></script>
 </body>
 
