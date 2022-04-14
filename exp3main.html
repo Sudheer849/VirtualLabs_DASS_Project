@@ -18,7 +18,7 @@
                 <div class="v-collapsible">Instructions</div>
                 <div id="procedure-message" class="v-content">
                     <li style="font-size: 0.9rem;">
-                        This experiment explains how points and co-ordinate systems are used together to represent two and three dimensional shapes.
+                        This experiment explains how points get rotated with respect to axes.
                     </li>
                     <li style="font-size: 0.9rem;">
                         This experiment is designed to teach how points and co-ordinate systems are represented in computer graphics. Start by editing the co-ordinates of the point and comparing how the point gets displayed. The co-ordinates can be edited by changing the text
@@ -136,17 +136,19 @@
                     <input class="input is-responsive is-small" style="width:20%" type="number" id="quantityy" step="0.01" value="3" placeholder="Y"> Z:
                     <input class="input is-responsive is-small" style="width:20%" type="number" id="quantityz" step="0.01" value="3" placeholder="Z">
                 </div>
-                <input class="button is-responsive is-small is-link" style="margin: 2px;" id="move-button" type="submit" value="Move">
+
+                <input class="v-button is-responsive is-small is-link" style="margin: 2px;" id="move-button" type="submit" value="Move">
 
                 <div class="v-datalist-title" id="top-border">Rotation Controls</div>
 
-                <div style="display: flexbox;">
-                    X:
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="x-comp" value="1" placeholder="X"> Y:
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="y-comp" value="0" placeholder="Y"> Z:
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="z-comp" value="0" placeholder="Z">
+                <div class="select" style="float:left;">
+                    <select name="" id="axis-change-dropdown" value="dropdown">
+                        <option value="x">X-axis</option>
+                        <option value="y">Y-axis</option>
+                        <option value="z">Z-axis</option>
+                    </select>
                 </div>
-                <input class="button is-responsive is-small is-link" style="margin: 0.5rem;" id="set-rotation-axis" type="submit" value="Change Axis">
+                <input class="v-button is-responsive is-small" style="margin: 0.5rem;" id="set-rotation-axis" type="submit" value="Change Axis">
 
                 <div style="vertical-align: middle; ">
                     <div style="margin: 0.2rem; text-align: center;">
