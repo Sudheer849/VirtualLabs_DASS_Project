@@ -38,10 +38,7 @@ let rot_axis = new THREE.Vector3(
     document.getElementById("y-comp").value,
     document.getElementById("z-comp").value
 );
-// convert axis to unit vector
 rot_axis.normalize();
-// console.log("normalised axis ", rot_axis);
-
 let total_angle = document.getElementById("theta").value;
 let frames = document.getElementById("frames").value;
 let deletebutton = document.getElementById("deletebutton");
@@ -51,9 +48,9 @@ let scene,
     renderer,
     orbit,
     shapes = [],
-    grid1 = [],
-    grid2 = [],
-    grid3 = [],
+    xygrid = [],
+    yzgrid = [],
+    xzgrid = [],
     dragx = [],
     dragy = [],
     dragz = [],
@@ -75,17 +72,9 @@ let span_add_modal = document.getElementsByClassName("close")[1];
 span_add_modal.onclick = function() {
     addModal.style.display = "none";
 };
-
-
-// Section of Checkboxes
-// --------------------------------------------------------------------------------------------------
-// 2D
-
-// lock vertices
 lock_vertices.addEventListener("click", () => {
     if (lock_vertices.checked) {
         lock = 1;
-        //console.log("hello");
         orbit.mouseButtons = {
             LEFT: MOUSE.PAN,
             MIDDLE: MOUSE.DOLLY,
@@ -97,7 +86,6 @@ lock_vertices.addEventListener("click", () => {
     } else {
         lock = 0;
         orbit.mouseButtons = {
-            //  LEFT: MOUSE.PAN,
             MIDDLE: MOUSE.DOLLY,
             RIGHT: MOUSE.ROTATE,
         };
@@ -106,53 +94,43 @@ lock_vertices.addEventListener("click", () => {
         orbit.enableDamping = true;
     }
 });
-
-// XY Grid
 xy_grid.addEventListener("click", () => {
     if (xy_grid.checked) {
         var grid = new THREE.GridHelper(size, divisions);
         var vector3 = new THREE.Vector3(0, 0, 1);
         grid.lookAt(vector3);
-        grid1.push(grid);
-        scene.add(grid1[0]);
-    } //
+        xygrid.push(grid);
+        scene.add(xygrid[0]);
+    } 
     else {
-        scene.remove(grid1[0]);
-        grid1.pop();
+        scene.remove(xygrid[0]);
+        xygrid.pop();
     }
 });
-
-// XZ Grid
 xz_grid.addEventListener("click", () => {
     if (xz_grid.checked) {
         var grid = new THREE.GridHelper(size, divisions);
         grid.geometry.rotateZ(Math.PI / 2);
-        grid3.push(grid);
-        scene.add(grid3[0]);
+        xzgrid.push(grid);
+        scene.add(xzgrid[0]);
     } else {
-        scene.remove(grid3[0]);
-        grid3.pop();
-        //
+        scene.remove(xzgrid[0]);
+        xzgrid.pop();
+        
     }
 });
-
-// YZ Grid
 yz_grid.addEventListener("click", () => {
     if (yz_grid.checked) {
         var grid = new THREE.GridHelper(size, divisions);
         var vector3 = new THREE.Vector3(0, 1, 0);
         grid.lookAt(vector3);
-        grid2.push(grid);
-        scene.add(grid2[0]);
+        yzgrid.push(grid);
+        scene.add(yzgrid[0]);
     } else {
-        scene.remove(grid2[0]);
-        grid2.pop();
-        //
+        scene.remove(yzgrid[0]);
+        yzgrid.pop();
     }
 });
-
-// Section of Buttons
-// --------------------------------------------------------------------------------------------------
 let buttons = document.getElementsByTagName("button");
 const size = 50;
 const divisions = 25;
@@ -165,7 +143,6 @@ document.getElementById("add-shape-btn").onclick = function() {
         let ycoord = document.getElementById("y1").value;
         let zcoord = document.getElementById("z1").value;
         no_of_shapes++;
-        console.log(document.getElementById("shape-add-dropdown").value);
         if (document.getElementById("shape-add-dropdown").value === "Cube") {
             createCube(
                 xcoord,
@@ -227,17 +204,13 @@ document.getElementById("add-shape-btn").onclick = function() {
         modal_add.style.display = "none";
     });
 };
-
-// Section of mouse control functions
-// --------------------------------------------------------------------------------------------------
 let raycaster = new THREE.Raycaster();
-let raycaster1 = new THREE.Raycaster();
 let mouse = new THREE.Vector2();
 let plane = new THREE.Plane();
-let pNormal = new THREE.Vector3(0, 1, 0); // plane's normal
-let planeIntersect = new THREE.Vector3(); // point of intersection with the plane
-let pIntersect = new THREE.Vector3(); // point of intersection with an object (plane's point)
-let shift = new THREE.Vector3(); // distance between position of an object and points of intersection with the object
+let pNormal = new THREE.Vector3(0, 1, 0);
+let planeIntersect = new THREE.Vector3();
+let pIntersect = new THREE.Vector3();
+let shift = new THREE.Vector3(); 
 let isDragging = false;
 let dragObject;
 let point = [];
@@ -250,8 +223,8 @@ document.addEventListener("dblclick", ondblclick, false);
 function ondblclick(event) {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    raycaster1.setFromCamera(mouse, camera);
-    let intersects = raycaster1.intersectObjects(shapes);
+    raycaster.setFromCamera(mouse, camera);
+    let intersects = raycaster.intersectObjects(shapes);
     if (intersects.length > 0) {
         const geometry = new THREE.SphereGeometry(1, 32, 16);
         const edges = new THREE.EdgesGeometry(geometry);
@@ -270,7 +243,6 @@ function ondblclick(event) {
             for (let i = 0; i < intersects.length; i++) {
                 scene.remove(intersects[i].object);
                 no_of_shapes--;
-                console.log(no_of_shapes);
             }
         };
 
@@ -353,8 +325,6 @@ function ondblclick(event) {
 span_edit_modal.onclick = function() {
     modal_edit.style.display = "none";
 };
-
-// mouse drag
 document.addEventListener("pointermove", (event) => {
     const rect = renderer.domElement.getBoundingClientRect();
     const x = event.clientX - rect.left;
@@ -385,13 +355,9 @@ document.addEventListener("pointermove", (event) => {
         }
     }
 });
-
-// mouse click
-
 document.addEventListener("pointerdown", () => {
     switch (event.which) {
         case 1:
-            //  Left mouse button pressed
             const rect = renderer.domElement.getBoundingClientRect();
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
@@ -402,24 +368,17 @@ document.addEventListener("pointerdown", () => {
             plane.setFromNormalAndCoplanarPoint(pNormal, scene.position);
             raycaster.setFromCamera(mouse, camera);
             raycaster.ray.intersectPlane(plane, planeIntersect);
-            // shift.subVectors(dot_list[0].geometry.getAttribute('position').array, planeIntersect);
             let position = new THREE.Vector3(
                 shapevertex[0].position.x,
                 shapevertex[0].position.y,
                 shapevertex[0].position.z
             );
-            // position.x = shapevertex[0].position.x;
-            // position.y = shapevertex[0].position.y;
-            // position.z =  shapevertex[0].position.z;
-
-            // console.log(position)
             shift.subVectors(position, planeIntersect);
             isDragging = true;
             dragObject = shapes[shapes.length - 1];
             break;
     }
 });
-// mouse release
 document.addEventListener("pointerup", () => {
     isDragging = false;
     dragObject = null;
@@ -428,22 +387,15 @@ move_button.addEventListener("click", () => {
     let x = document.getElementById("quantityx").value;
     let y = document.getElementById("quantityy").value;
     let z = document.getElementById("quantityz").value;
-    //console.log(dot_list[0].geometry.getAttribute('position').array[0]);
-    console.log(x, y, z);
     let translate_M = new THREE.Matrix4();
     translate_M.makeTranslation(x - dot_list[0].geometry.getAttribute('position').array[0], y - dot_list[0].geometry.getAttribute('position').array[1], z - dot_list[0].geometry.getAttribute('position').array[2]);
-    // console.log(translate_M);
     dot_list[0].geometry.applyMatrix4(translate_M);
     dot_list[0].geometry.verticesNeedUpdate = true;
     trans_matrix.multiply(translate_M);
     initial_pos[0] = x
     initial_pos[1] = y
     initial_pos[2] = z
-    console.log(dot_list[0].geometry.getAttribute('position').array[0], dot_list[0].geometry.getAttribute('position').array[1], dot_list[0].geometry.getAttribute('position').array[2]);
 });
-
-// Slider Implementation
-// ---------------------------------------------------------------------------------------
 function movePoint(e) {
     var target = e.target ? e.target : e.srcElement;
     let rot_angle =
@@ -496,17 +448,15 @@ function movePoint(e) {
 }
 
 document.getElementById("frames").onchange = function() {
-    let new_value = document.getElementById("frames").value; // new value
+    let new_value = document.getElementById("frames").value; 
 
     let quat = new THREE.Quaternion();
     let rot_matrix = new THREE.Matrix4();
-    let rot_angle = slider.value * (frames / new_value - 1); // , (slider.max - slider.value)* Math.PI / 180 );
+    let rot_angle = slider.value * (frames / new_value - 1); 
     if (rot_angle + present_theta > total_angle)
         rot_angle = total_angle - present_theta;
 
     quat.setFromAxisAngle(rot_axis, (rot_angle * Math.PI) / 180);
-    // console.log( slider.value, frames, new_value );
-
     rot_matrix.makeRotationFromQuaternion(quat);
     dot_list[0].geometry.applyMatrix4(rot_matrix);
     dot_list[0].geometry.verticesNeedUpdate = true;
@@ -527,17 +477,14 @@ document.getElementById("frames").onchange = function() {
     let no_of_frames = frames * (slider.value / slider.max);
     slider.value =
         document.getElementById("slider").max * (no_of_frames / new_value);
-    //  document.getElementById("slider").value =  * (new_value/frames)
     frames = new_value;
 };
 
 document.getElementById("theta").onchange = function() {
     let old_sli_val = document.getElementById("slider").value;
-    let new_tot_angle = document.getElementById("theta").value; // new value
+    let new_tot_angle = document.getElementById("theta").value; 
     let new_theta = present_theta * (new_tot_angle / total_angle);
     if (new_theta > total_angle) new_theta = total_angle;
-
-    // console.log( new_theta, present_theta );
     let quat = new THREE.Quaternion();
     let rot_matrix = new THREE.Matrix4();
     quat.setFromAxisAngle(
@@ -564,7 +511,6 @@ document.getElementById("theta").onchange = function() {
         (document.getElementById("slider").max -
             document.getElementById("slider").min) /
         frames;
-    // console.log( document.getElementById("slider").value, old_sli_val, new_tot_angle, total_angle );
     present_theta = new_theta;
 };
 
@@ -575,9 +521,7 @@ set_rotation_axis.addEventListener("click", () => {
         parseFloat(document.getElementById("z-comp").value)
     );
 });
-// --------------------------------------------------------------------------------------------------
 
-// Creating scene
 scene = new THREE.Scene();
 scene.background = new THREE.Color(0x121212);
 camera = new THREE.PerspectiveCamera(
@@ -586,30 +530,27 @@ camera = new THREE.PerspectiveCamera(
     1,
     1000
 );
-
-// Main Function
-// --------------------------------------------------------------------------------------------------
 let init = function() {
     camera.position.z = 5;
     camera.position.x = 2;
     camera.position.y = 2;
     const gridHelper = new THREE.GridHelper(size, divisions);
     const count = 1;
-    dir[0] = new THREE.Vector3(1, 0, 0);
-    dir[1] = new THREE.Vector3(0, 1, 0);
-    dir[2] = new THREE.Vector3(0, 0, 1);
-    dir[3] = new THREE.Vector3(-1, 0, 0);
-    dir[4] = new THREE.Vector3(0, -1, 0);
-    dir[5] = new THREE.Vector3(0, 0, -1);
-    //dir1.normalize();
+    let dir_x = new THREE.Vector3(1, 0, 0);
+    let dir_y = new THREE.Vector3(0, 1, 0);
+    let dir_z = new THREE.Vector3(0, 0, 1);
+    let negdir_x = new THREE.Vector3(-1, 0, 0);
+    let negdir_y = new THREE.Vector3(0, -1, 0);
+    let negdir_z = new THREE.Vector3(0, 0, -1);
+
     const origin = new THREE.Vector3(0, 0, 0);
     const length = 10;
-    arrowHelper[0] = new THREE.ArrowHelper(dir[0], origin, length, "red");
-    arrowHelper[1] = new THREE.ArrowHelper(dir[1], origin, length, "yellow");
-    arrowHelper[2] = new THREE.ArrowHelper(dir[2], origin, length, "blue");
-    arrowHelper[3] = new THREE.ArrowHelper(dir[3], origin, length, "red");
-    arrowHelper[4] = new THREE.ArrowHelper(dir[4], origin, length, "yellow");
-    arrowHelper[5] = new THREE.ArrowHelper(dir[5], origin, length, "blue");
+    arrowHelper[0] = new THREE.ArrowHelper(dir_x, origin, length, "red");
+    arrowHelper[1] = new THREE.ArrowHelper(dir_y, origin, length, "yellow");
+    arrowHelper[2] = new THREE.ArrowHelper(dir_z, origin, length, "blue");
+    arrowHelper[3] = new THREE.ArrowHelper(negdir_x, origin, length, "red");
+    arrowHelper[4] = new THREE.ArrowHelper(negdir_y, origin, length, "yellow");
+    arrowHelper[5] = new THREE.ArrowHelper(negdir_z, origin, length, "blue");
     for (let i = 0; i < 6; i++) {
         scene.add(arrowHelper[i]);
     }

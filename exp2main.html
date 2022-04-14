@@ -146,16 +146,14 @@
 
                 <div class="v-datalist-title" id="top-border">Experiment Controls</div>
 
-
-                <label for="quantity">No of Frames:</label>
-                <input class="input is-responsive is-small" type="number" id="frames" name="noofframes" min="1" step="1" value="1000">
-                <label for="quantity">Final X-coordinate:</label>
-                <input class="input is-responsive is-small" type="number" id="finalx" name="finalx" step=".01" value="9">
-                <label for="quantity">Final Y-coordinate:</label>
-                <input class="input is-responsive is-small" type="number" id="finaly" name="finaly" step=".01" value="6">
-                <label for="quantity">Final Z-coordinate:</label>
-                <input class="input is-responsive is-small" type="number" id="finalz" name="finalz" step=".01" value="7">
-
+                    <label for="quantity">Frames</label>
+                    <input style="width:40%" class="input is-responsive is-small" type="number" id="frames" name="noofframes" min="1" step="1" value="1000">
+                <div style="margin: 0.5rem">
+                    <label for="quantity">Final coordinates</label></br>
+                    <input style="width: 20%" class="input is-responsive is-small" type="number" id="finalx" name="finalx" step=".01" value="9">
+                    <input style="width: 20%" class="input is-responsive is-small" type="number" id="finaly" name="finaly" step=".01" value="6">
+                    <input style="width: 20%" class="input is-responsive is-small" type="number" id="finalz" name="finalz" step=".01" value="7">
+                </div>
 
             </div>
         </div>
@@ -211,13 +209,6 @@
     </div>
 
     <input class="v-slider-full is-centered column exptwoslider is-fullwidth" id="slider" step="1" min="0" max="100" value="0" type="range">
-
-
-    <!-- <script>
-                                instance = THREE.getInstance();
-                                instance.setContainer("hello");
-                            </script> -->
-
     <script src="https://unpkg.com/mathjs@9.2.0/lib/browser/math.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.8-b/js/script.js"></script>
     <script type="module" src="exp2main.js"></script>
