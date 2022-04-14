@@ -1,0 +1,72 @@
+.page {
+    overflow-x: hidden;
+}
+
+.text {
+    text-align: center;
+}
+
+.v-canvas-container {
+    width: 101%;
+    height: 100%;
+    color: black;
+}
+
+.v-datalist-container {
+    height: 100%;
+}
+
+.v-slider-full {
+    width: 80%;
+}
+
+.input-form {
+    display: none;
+    color: black;
+}
+
+.add {
+    font-size: 0.90rem;
+}
+
+.left {
+    order: 1;
+}
+
+.exp {
+    order: 2;
+}
+
+.right {
+    order: 3;
+}
+
+#top-border {
+    border-top: 1px solid black;
+}
+
+.v-datalist-title {
+    /* background-color: #2C9AD1; */
+    /* background-blend-mode: overlay; */
+    /* border-radius: 1rem; */
+    border-bottom: 0;
+}
+
+.v-collapsible-instruction-container {
+    width: 60%;
+    margin: auto;
+    border-radius: 0.25rem;
+}
+
+.v-collapsible {
+    width: 98%;
+    margin: auto;
+}
+
+.v-collapsible::after {
+    size: 1rem;
+}
+
+.v-checkbox {
+    margin-bottom: 0.1rem;
+}
