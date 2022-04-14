@@ -64,9 +64,9 @@
 
                 <div class="v-datalist-title" id="top-border">Camera Options</div>
                 <p>
-                    <button id="add-shape-btn" style="margin:2px;" class="button is-small is-responsive is-info" onclick="addShape()">Add</button>
-                    <button id="edit-shape-btn" style="margin:2px;" class="button is-small is-responsive  is-success" onclick="editShape()">Edit</button>
-                    <button id="delete-shape-btn" style="margin:2px;" class="button is-small is-responsive  is-danger" onclick="deleteShape()">Delete</button>
+                    <button id="add-shape-btn" style="margin:2px;" class="v-button is-small is-responsive is-info" onclick="addShape()">Add</button>
+                    <button id="edit-shape-btn" style="margin:2px;" class="v-button is-small is-responsive  is-success" onclick="editShape()">Edit</button>
+                    <button id="delete-shape-btn" style="margin:2px;" class="v-button is-small is-responsive  is-danger" onclick="deleteShape()">Delete</button>
 
                     <div id="edit-modal" class="modal is-responsive">
                         <div class="modal-content">
@@ -141,12 +141,12 @@
                     <input class="input is-responsive is-small" style="width:20%" type="number" id="quantityy" value="3" placeholder="Y"> Z:
                     <input class="input is-responsive is-small" style="width:20%" type="number" id="quantityz" value="3" placeholder="Z">
                 </div>
-                <input class="button is-responsive is-small is-link" style="margin: 2px;" id="move-button" type="submit" value="Move">
+                <input class="v-button is-responsive is-small is-link" style="margin: 2px;" id="move-button" type="submit" value="Move">
 
                 <div class="v-datalist-title" id="top-border">Experiment Controls</div>
 
-                    <label for="quantity">Frames</label>
-                    <input style="width:40%" class="input is-responsive is-small" type="number" id="frames" name="noofframes" min="1" step="1" value="1000">
+                <label for="quantity">Frames</label>
+                <input style="width:40%" class="input is-responsive is-small" type="number" id="frames" name="noofframes" min="1" step="1" value="1000">
                 <div style="margin: 0.5rem">
                     <label for="quantity">Final coordinates</label></br>
                     <input style="width: 20%" class="input is-responsive is-small" type="number" id="finalx" name="finalx" step=".01" value="9">
