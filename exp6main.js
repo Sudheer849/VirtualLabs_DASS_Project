@@ -60,9 +60,9 @@ let scene,
     let arm_dim = new THREE.Vector3(1, 2, 1);
     let arm_pos = new THREE.Vector3( (arm_dim.x/2), -(arm_dim.y/2), 0 );
     let fore_dim = new THREE.Vector3( 5, 0.5, 1 );
-    let fore_pos = new THREE.Vector3( arm_dim.x + fore_dim.x/2, -arm_dim.y + fore_dim.y/2, 0 );
+    let fore_pos = new THREE.Vector3( (fore_dim.x/2 + arm_dim.x/2), (fore_dim.y/2 - arm_dim.y/2), 0 ); 
     let palm_dim = new THREE.Vector3( 5, 1, 5 );
-    let palm_pos = new THREE.Vector3( arm_dim.x + + fore_dim.x + palm_dim.x/2, -arm_dim.y + palm_dim.y/2, 0 );
+    let palm_pos = new THREE.Vector3( (fore_dim.x/2 + palm_dim.x/2), 0, 0 );
 
 // Modal controls for Add Shape Button
 let addModal = document.getElementById("add-modal");
@@ -334,115 +334,91 @@ span_edit_modal.onclick = function() {
     modal_edit.style.display = "none";
 };
 
+// let once = false;
 // Slider Implementation
 // ---------------------------------------------------------------------------------------
 function movePoint(e) {
     var target = e.target ? e.target : e.srcElement;
-  
+    // console.log(target.value);
+    let quat = new THREE.Quaternion();
+    let rot_matrix = new THREE.Matrix4();
+    let prev_val = slid_prev;
+
+    console.log("frames " + frames);
     if (target.value < frames/3)
     {
-        let quat = new THREE.Quaternion();
+        console.log( frames + " nani1 " + target.value );
         let rot_axis = new THREE.Vector3(0, 1, 0);
-        let rot_matrix = new THREE.Matrix4();
-        let prev_angle = ( (slid_prev*3)/frames ) * 90;
-        if (prev_angle > 90)
+        if ( slid_prev > frames/3 )
         {
-            prev_angle = 90;
+            let tmp_angle = ( (frames/3 - slid_prev) * Math.PI / 180 );
+            hand_comp[1].rotateOnAxis( new THREE.Vector3(0, 0, 1), tmp_angle );
+            prev_val = frames/3;
         }
-        let rot_angle = ( (target.value*3)/frames ) * 90 - prev_angle;
-
-        quat.setFromAxisAngle(rot_axis, rot_angle * Math.PI/180 );
-        rot_matrix.makeRotationFromQuaternion(quat);
-
-        for( let i = 0; i < hand_comp.length; i++ )
+        else if( slid_prev < 0 )
         {
-            hand_comp[i].applyMatrix4(rot_matrix);
-            hand_comp[i].verticesNeedUpdate = true;
+            prev_val = 0;
         }
+
+        let rot_angle = ( (target.value - prev_val)/(frames/3) ) * 90;
+        // quat.setFromAxisAngle(rot_axis, (rot_angle * Math.PI) /180 );
+        // rot_matrix.makeRotationFromQuaternion(quat);
+
+        hand_comp[0].rotateOnAxis(rot_axis, (rot_angle * Math.PI) /180 );
+        // hand_comp[0].verticesNeedUpdate = true;
     }
-
     else if (target.value < 2*frames/3)
     {
-        let farm_c_pos = new THREE.Vector3( hand_comp[1].position.x, hand_comp[1].position.y, hand_comp[1].position.z );
-        let palm_c_pos = new THREE.Vector3( hand_comp[2].position.x, hand_comp[2].position.y, hand_comp[2].position.z );
-        let farm_trans_m = new THREE.Matrix4();
-        farm_trans_m.makeTranslation( -(farm_c_pos.x/2 - fore_dim.x/2), -(farm_c_pos.y/2 - fore_dim.y/2), -(farm_c_pos.z/2 - fore_dim.z/2) );
-
-        hand_comp[1].geometry.applyMatrix4(farm_trans_m);
-        hand_comp[1].geometry.verticesNeedUpdate = true;
-
-        // let palm_trans_m = new THREE.Matrix4();
-        // palm_trans_m.makeTranslation( -(palm_c_pos.x/2 - palm_dim.x/2), -(palm_c_pos.y/2 - palm_dim.y/2), -(palm_c_pos.z/2 - palm_dim.z/2) );
-// 
-        // hand_comp[2].geometry.applyMatrix4(palm_trans_m);
-        // hand_comp[2].geometry.verticesNeedUpdate = true;
-
-        let quat = new THREE.Quaternion();
-        let rot_axis = new THREE.Vector3(1, 0, 0); 
-        let rot_matrix = new THREE.Matrix4();
-        let prev_angle = ( (slid_prev*3)/frames ) * 45;
-        if (slid_prev > 45)
+        console.log( frames + " nani2 " + target.value );
+        let rot_axis = new THREE.Vector3(0, 0, 1);
+        if ( slid_prev > 2*frames/3 )
         {
-            slid_prev = 45;
+            let tmp_angle = ( (2*frames/3 - slid_prev) * Math.PI / 180 ) * 45;
+            hand_comp[2].rotateOnAxis( new THREE.Vector3(0, 0, 1), tmp_angle );
+            prev_val = 2*frames/3;
         }
-        let rot_angle = ( (target.value*3)/frames ) * 45 - prev_angle;
-
-        quat.setFromAxisAngle(rot_axis, rot_angle * Math.PI/180 );
-        rot_matrix.makeRotationFromQuaternion(quat);
-
-        for( let i = 1; i < hand_comp.length; i++ )
+        else if( slid_prev < frames/3 )
         {
-            // hand_comp[i].applyMatrix4(rot_matrix);
-            // hand_comp[i].geometry.rotateZ( rot_angle * Math.PI/180 );
-            // hand_comp[i].verticesNeedUpdate = true;
+            let tmp_angle = ( (frames/3 - slid_prev) * Math.PI / 180 ) * 90;
+            hand_comp[0].rotateOnAxis( new THREE.Vector3(0, 1, 0), tmp_angle );
+            prev_val = frames/3;
         }
 
-        hand_comp[1].geometry.rotateZ( rot_angle * Math.PI/180 );
-        hand_comp[1].verticesNeedUpdate = true;
-
-        hand_comp[2].applyMatrix4(rot_matrix);
-        hand_comp[2].verticesNeedUpdate = true;
-
-        // hand_comp[2].geometry.rotateZ( rot_angle * Math.PI/180 );
-        // hand_comp[2].verticesNeedUpdate = true;
-
-        farm_trans_m = new THREE.Matrix4();
-        farm_trans_m.makeTranslation( (farm_c_pos.x/2 - fore_dim.x/2), (farm_c_pos.y/2 - fore_dim.y/2), (farm_c_pos.z/2 - fore_dim.z/2) );
-    
-        hand_comp[1].geometry.applyMatrix4(farm_trans_m);
-        hand_comp[1].verticesNeedUpdate = true;
-
-        // palm_trans_m = new THREE.Matrix4();
-        // palm_trans_m.makeTranslation( (palm_c_pos.x/2 - palm_dim.x/2), (palm_c_pos.y/2 - palm_dim.y/2), (palm_c_pos.z/2 - palm_dim.z/2) );
+        let rot_angle = ( (target.value - prev_val)/(frames/3) ) * 45;
+        // quat.setFromAxisAngle(rot_axis, (rot_angle * Math.PI) /180 );
+        // rot_matrix.makeRotationFromQuaternion(quat);
 // 
-        // hand_comp[2].geometry.applyMatrix4(palm_trans_m);
-        // hand_comp[2].verticesNeedUpdate = true;
-
+        // hand_comp[1].applyMatrix4(rot_matrix);
+        // hand_comp[1].verticesNeedUpdate = true;
+        hand_comp[1].rotateOnAxis(rot_axis, (rot_angle * Math.PI) /180 );
+        // hand_comp[1].verticesNeedUpdate = true;
     }
-
-    else
+    else if (target.value <= frames/1 )
     {
-        let quat = new THREE.Quaternion();
-        let rot_axis = new THREE.Vector3(1, 0, 0); 
-        let rot_matrix = new THREE.Matrix4();
-        let prev_angle = ( (slid_prev*3)/frames ) * 45;
-        if (slid_prev > 45)
+        console.log( frames + " nani3 " + target.value );
+        let rot_axis = new THREE.Vector3(0, 0, 1);
+        if ( slid_prev > frames /1)
         {
-            slid_prev = 45;
+            prev_val = frames/1;
         }
-        let rot_angle = ( (target.value*3)/frames ) * 45 - prev_angle;
-
-        quat.setFromAxisAngle(rot_axis, rot_angle * Math.PI/180 );
-        rot_matrix.makeRotationFromQuaternion(quat);
-
-        for( let i = 2; i < hand_comp.length; i++ )
+        else if( slid_prev < 2*frames/3 )
         {
-            // hand_comp[i].applyMatrix4(rot_matrix);
-            hand_comp[i].rotateZ( rot_angle * Math.PI/180 );
-            hand_comp[i].verticesNeedUpdate = true;
+            let tmp_angle = ( (2*frames/3 - slid_prev) * Math.PI / 180 ) * 45;
+            hand_comp[1].rotateOnAxis( new THREE.Vector3(0, 0, 1), tmp_angle );
+            prev_val = 2*frames/3;
         }
+
+        let rot_angle = ( (target.value - prev_val)/(frames/3) ) * 45; 
+        console.log(rot_angle)
+        // quat.setFromAxisAngle(rot_axis, (rot_angle * Math.PI) /180 );
+        // rot_matrix.makeRotationFromQuaternion(quat);
+// 
+        // hand_comp[2].applyMatrix4(rot_matrix);
+        // hand_comp[2].verticesNeedUpdate = true;
+        hand_comp[2].rotateOnAxis(rot_axis, (rot_angle * Math.PI) /180 );
     }
 
+    console.log(frames, target.value);
     slid_prev = target.value;
   }
   
@@ -502,7 +478,7 @@ let init = function() {
     let container = document.getElementById("canvas-main");
     let w = container.offsetWidth;
     let h = container.offsetHeight;
-    console.log(w, h);
+    // console.log(w, h);
     renderer.setSize(w, h);
     container.appendChild(renderer.domElement);
     orbit = new OrbitControls(camera, renderer.domElement);

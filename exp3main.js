@@ -273,62 +273,16 @@ document.getElementById("add-shape-btn").onclick = function () {
     no_of_shapes++;
     console.log(document.getElementById("shape-add-dropdown").value);
     if (document.getElementById("shape-add-dropdown").value === "Cube") {
-      createCube(
-        xcoord,
-        ycoord,
-        zcoord,
-        shapes,
-        scene,
-        point,
-        shapevertex,
-        dragx,
-        dragy,
-        dragz
-      );
+      createCube( xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz );
     }
     if (document.getElementById("shape-add-dropdown").value === "Tetrahedron") {
-      createTetrahedron(
-        xcoord,
-        ycoord,
-        zcoord,
-        shapes,
-        scene,
-        point,
-        shapevertex,
-        dragx,
-        dragy,
-        dragz
-      );
+      createTetrahedron( xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz );
     }
     if (document.getElementById("shape-add-dropdown").value === "Octahedron") {
-      createOctahedron(
-        xcoord,
-        ycoord,
-        zcoord,
-        shapes,
-        scene,
-        point,
-        shapevertex,
-        dragx,
-        dragy,
-        dragz
-      );
+      createOctahedron( xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz );
     }
-    if (
-      document.getElementById("shape-add-dropdown").value === "Dodecahedron"
-    ) {
-      createDodecahedron(
-        xcoord,
-        ycoord,
-        zcoord,
-        shapes,
-        scene,
-        point,
-        shapevertex,
-        dragx,
-        dragy,
-        dragz
-      );
+    if (document.getElementById("shape-add-dropdown").value === "Dodecahedron") {
+      createDodecahedron( xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz );
     }
     modal_add.style.display = "none";
   });
@@ -395,60 +349,16 @@ function ondblclick(event) {
           // alert(document.querySelector("select").value);
           no_of_shapes++;
           if (document.querySelector("select").value === "Cube") {
-            createCube(
-              xcoord,
-              ycoord,
-              zcoord,
-              shapes,
-              scene,
-              point,
-              shapevertex,
-              dragx,
-              dragy,
-              dragz
-            );
+            createCube( xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
           }
           if (document.querySelector("select").value === "Tetrahedron") {
-            createTetrahedron(
-              xcoord,
-              ycoord,
-              zcoord,
-              shapes,
-              scene,
-              point,
-              shapevertex,
-              dragx,
-              dragy,
-              dragz
-            );
+            createTetrahedron( xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
           }
           if (document.querySelector("select").value === "Octahedron") {
-            createOctahedron(
-              xcoord,
-              ycoord,
-              zcoord,
-              shapes,
-              scene,
-              point,
-              shapevertex,
-              dragx,
-              dragy,
-              dragz
-            );
+            createOctahedron( xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
           }
           if (document.querySelector("select").value === "Dodecahedron") {
-            createDodecahedron(
-              xcoord,
-              ycoord,
-              zcoord,
-              shapes,
-              scene,
-              point,
-              shapevertex,
-              dragx,
-              dragy,
-              dragz
-            );
+            createDodecahedron( xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
           }
           document.getElementById("edit-modal").style.display = "none";
         });
@@ -552,10 +462,7 @@ move_button.addEventListener("click", () => {
 // ---------------------------------------------------------------------------------------
 function movePoint(e) {
   var target = e.target ? e.target : e.srcElement;
-  let rot_angle =
-    (target.value * parseFloat(document.getElementById("theta").value)) /
-      target.max -
-    present_theta;
+  let rot_angle = (target.value * parseFloat(document.getElementById("theta").value)) /target.max - present_theta;
 
   let quat = new THREE.Quaternion();
   let rot_matrix = new THREE.Matrix4();
