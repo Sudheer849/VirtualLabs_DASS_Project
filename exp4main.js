@@ -2,9 +2,7 @@ import * as THREE from "https://threejsfundamentals.org/threejs/resources/threej
 import { OrbitControls } from "https://threejsfundamentals.org/threejs/resources/threejs/r115/examples/jsm/controls/OrbitControls.js";
 import { MOUSE } from "https://unpkg.com/three@0.128.0/build/three.module.js";
 
-import { AddCam, OldCam } from "./js/camera.js";
 import { createCube, createDodecahedron, createOctahedron, createTetrahedron } from "./js/shapes.js";
-import { ProjectTo2D } from "./js/2dprojection.js";
 import { Triangle } from "./js/Triangle.js";
 
 const move_button = document.getElementById("move-button");
@@ -102,13 +100,6 @@ window.onclick = function (event) {
 // Section of Checkboxes
 // --------------------------------------------------------------------------------------------------
 // 2D
-threeD.addEventListener("click", () => {
-  if (threeD.checked) {
-    ProjectTo2D(camera, orbit, is_2D, two_plane, first_time, two_geometry);
-  } else {
-    //
-  }
-});
 
 // lock vertices
 lock_vertices.addEventListener("click", () => {
@@ -194,35 +185,6 @@ yz_grid.addEventListener("click", () => {
 let buttons = document.getElementsByTagName("button");
 const size = 50;
 const divisions = 25;
-
-function NewCam(event) {
-  // function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp ) {
-  // AddCam(0.1, 1000, -10, -10, -10, 10, new THREE.Vector3(7,-6,2), new THREE.Vector3(1,1,1), new THREE.Vector3(1,0,1), 0);
-  AddCam(0.01, 100, -3.2, 3.2, -2.4, 2.4, new THREE.Vector3(3, 5, 2), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 1, 0), 1);
-}
-
-document.getElementById("new-cam").onclick = function () {
-  // function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp ) {
-  // AddCam(0.1, 1000, -10, -10, -10, 10, new THREE.Vector3(7,-6,2), new THREE.Vector3(1,1,1), new THREE.Vector3(1,0,1), 0);
-  // AddCam(0.01, 100, -3.2, 3.2, -2.4, 2.4, new THREE.Vector3(3,5,2), new THREE.Vector3(0,0,0), new THREE.Vector3(0,1,0), 1);
-
-  let near = document.getElementById("near-coord").value;
-  let far = document.getElementById("far-coord").value;
-  let left = document.getElementById("left-coord").value;
-  let right = document.getElementById("right-coord").value;
-  let bottom = document.getElementById("bottom-coord").value;
-  let top = document.getElementById("top-coord").value;
-
-  let camera_pos = new THREE.Vector3(document.getElementById("cam-x").value, document.getElementById("cam-y").value, document.getElementById("cam-z").value);
-  let target = new THREE.Vector3(document.getElementById("target-x").value, document.getElementById("target-y").value, document.getElementById("target-z").value);
-  let up_vec = new THREE.Vector3(document.getElementById("up-x").value, document.getElementById("up-y").value, document.getElementById("up-z").value);
-  let camtype = document.getElementById("cam-type").value;
-
-  // debug
-  // console.log(near, far, left, right, top, bottom, camera_pos, target, up_vec, parseInt(camtype));
-
-  AddCam(parseFloat(near), parseFloat(far), parseFloat(left), parseFloat(right), parseFloat(top), parseFloat(bottom), camera_pos, target, up_vec, parseInt(camtype));
-}
 
 document.getElementById("add-shape-btn").onclick = function () {
   modal_add.style.display = "block";
