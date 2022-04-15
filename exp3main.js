@@ -393,38 +393,38 @@ document.getElementById("frames").onchange = function () {
     present_theta += rot_angle;
 }
 
-document.getElementById("frames").onchange = function() {
-    let new_value = document.getElementById("frames").value; 
-
-    let quat = new THREE.Quaternion();
-    let rot_matrix = new THREE.Matrix4();
-    let rot_angle = slider.value * (frames / new_value - 1); 
-    if (rot_angle + present_theta > total_angle)
-        rot_angle = total_angle - present_theta;
-
-    quat.setFromAxisAngle(rot_axis, (rot_angle * Math.PI) / 180);
-    rot_matrix.makeRotationFromQuaternion(quat);
-    dot_list[0].geometry.applyMatrix4(rot_matrix);
-    dot_list[0].geometry.verticesNeedUpdate = true;
-
-    document.getElementById("quantityx").value =
-        dot_list[0].geometry.getAttribute("position").array[0];
-    document.getElementById("quantityy").value =
-        dot_list[0].geometry.getAttribute("position").array[1];
-    document.getElementById("quantityz").value =
-        dot_list[0].geometry.getAttribute("position").array[2];
-
-    present_theta += slider.value * (frames / new_value - 1);
-
-    slider.step =
-        (document.getElementById("slider").max -
-            document.getElementById("slider").min) /
-        new_value;
-    let no_of_frames = frames * (slider.value / slider.max);
-    slider.value =
-        document.getElementById("slider").max * (no_of_frames / new_value);
-    frames = new_value;
-};
+// document.getElementById("frames").onchange = function() {
+    // let new_value = document.getElementById("frames").value; 
+// 
+    // let quat = new THREE.Quaternion();
+    // let rot_matrix = new THREE.Matrix4();
+    // let rot_angle = slider.value * (frames / new_value - 1); 
+    // if (rot_angle + present_theta > total_angle)
+        // rot_angle = total_angle - present_theta;
+// 
+    // quat.setFromAxisAngle(rot_axis, (rot_angle * Math.PI) / 180);
+    // rot_matrix.makeRotationFromQuaternion(quat);
+    // dot_list[0].geometry.applyMatrix4(rot_matrix);
+    // dot_list[0].geometry.verticesNeedUpdate = true;
+// 
+    // document.getElementById("quantityx").value =
+        // dot_list[0].geometry.getAttribute("position").array[0];
+    // document.getElementById("quantityy").value =
+        // dot_list[0].geometry.getAttribute("position").array[1];
+    // document.getElementById("quantityz").value =
+        // dot_list[0].geometry.getAttribute("position").array[2];
+// 
+    // present_theta += slider.value * (frames / new_value - 1);
+// 
+    // slider.step =
+        // (document.getElementById("slider").max -
+            // document.getElementById("slider").min) /
+        // new_value;
+    // let no_of_frames = frames * (slider.value / slider.max);
+    // slider.value =
+        // document.getElementById("slider").max * (no_of_frames / new_value);
+    // frames = new_value;
+// };
 
 document.getElementById("theta").onchange = function() {
     let old_sli_val = document.getElementById("slider").value;
