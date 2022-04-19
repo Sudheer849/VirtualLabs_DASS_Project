@@ -150,6 +150,7 @@
 .v-collapsible-instruction-container {
     width: 60%;
     margin: auto;
+    margin-top: 1rem;
     border-radius: 0.25rem;
 }
 

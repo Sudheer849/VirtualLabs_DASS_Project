@@ -13,7 +13,9 @@
     border: none;
 }
 
-#finalx, #finaly, #finalz {
+#finalx,
+#finaly,
+#finalz {
     display: inline;
 }
 
@@ -192,5 +194,15 @@
 
 #delete-shape-btn {
     background-color: #f14668;
+    border-radius: 0.5rem;
+}
+
+#move-button {
+    background-color: #48c774;
+    border-radius: 0.5rem;
+}
+
+#set-rotation-axis {
+    background-color: #3298dc;
     border-radius: 0.5rem;
 }

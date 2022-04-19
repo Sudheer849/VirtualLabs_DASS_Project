@@ -239,61 +239,12 @@
                     <input class="button is-responsive is-small is-link" style="margin: 2px;" id="move-button" type="submit" value="Move">
 
                     <div class="v-datalist-title" id="top-border">World and Instances</div>
-
-                    <form style="margin: 1rem">
+                    
+                    <div>
                         <label style="margin: 1rem" for="quantity">Frames</label>
-                        <input style="width:20%" type="number" id="frames" name="noofframes" min="1" step="1" value="1000"></br>
-                        <label style="margin: 1rem" for="quantity" >Final X-coordinate:</label>
-                        <input style="width: 20%" type="number" id="finalx" name="finalx" step=".01" value="9"></br>
-                        <label style="margin: 1rem" for="quantity">Final Y-coordinate:</label>
-                        <input style="width: 20%" type="number" id="finaly" name="finaly" step=".01" value="6"> </br>
-                        <label style="margin: 1rem" for="quantity">Final Z-coordinate:</label>
-                        <input style="width: 20%" type="number" id="finalz" name="finalz" step=".01" value="7"> </br>
-                    </form>
-    
-                    <div class="v-datalist-title" id="top-border">Transformation Matrix</div>
-                    <br>
-                    <div style="display: flexbox;">
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-00" value="1"
-                            placeholder="X">
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-01" value="0"
-                            placeholder="X">
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-02" value="0"
-                            placeholder="X">
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-03" value="0"
-                            placeholder="X">
+                        <input style="width:30%" type="number" id="frames" name="noofframes" min="1" step="1" value="1000"></br>
                     </div>
-                    <div style="display: flexbox;">
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-10" value="0"
-                            placeholder="X">
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-11" value="1"
-                            placeholder="X">
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-12" value="0"
-                            placeholder="X">
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-13" value="0"
-                            placeholder="X">
-                    </div>
-                    <div style="display: flexbox;">
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-20" value="0"
-                            placeholder="X">
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-21" value="0"
-                            placeholder="X">
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-22" value="1"
-                            placeholder="X">
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-22" value="0"
-                            placeholder="X">
-                    </div>
-                    <div style="display: flexbox;">
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-30" value="0"
-                            placeholder="X">
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-31" value="0"
-                            placeholder="X">
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-32" value="0"
-                            placeholder="X">
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-33" value="1"
-                            placeholder="X">
-                    </div>
-
+                    
                     <div class="v-datalist-row v-bold" id="output1"></div>
                     <div class="v-datalist-row v-bold" id="output2"></div>
                     <div class="v-datalist-row">
@@ -311,22 +262,11 @@
 
             </div>
         </div>
-
-
-        <!-- <div id="observations" class="column has-text-centered is-2-desktop is-5-tablet is-5-mobile right">
-            <div class="v-datalist-container">
-
-            </div>
-        </div> -->
     </div>
 
-    <input class="slider exptwoslider is-fullwidth" id="slider" step="1" min="0" max="100" value="0" type="range">
-
-
-    <!-- <script>
-                                instance = THREE.getInstance();
-                                instance.setContainer("hello");
-                            </script> -->
+    <input class="slider exptwoslider is-fullwidth" id="shoulder" step="1" min="0" max="100" value="0" type="range">
+    <input class="slider exptwoslider is-fullwidth" id="elbow"    step="1" min="0" max="100" value="0" type="range">
+    <input class="slider exptwoslider is-fullwidth" id="wrist"    step="1" min="0" max="100" value="0" type="range">
 
     <script src="https://unpkg.com/mathjs@9.2.0/lib/browser/math.js"></script>
     <script type="module" src="exp6main.js"></script>
