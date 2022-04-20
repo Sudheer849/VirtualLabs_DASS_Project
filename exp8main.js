@@ -262,6 +262,10 @@ function check() {
   }
 }
 function findintersection() {
+  if (((topleft_ln_x - topleft_rect_x <= 0) && (bottomright_ln_x - topleft_rect_x <= 0)) || ((topleft_ln_x - bottomright_rect_x >= 0) && (bottomright_ln_x - bottomleft_rect_x >= 0)) || ((topleft_ln_y - topleft_rect_y <= 0) && (bottomright_ln_y - topleft_rect_y <= 0)) || ((topleft_ln_y - bottomright_rect_y >= 0) && (bottomright_ln_y - bottomright_rect_y >= 0))) {
+    draw_line(topleft_ln_x, topleft_ln_y, bottomright_ln_x, bottomright_ln_y, 2, "#606060");
+    return 0;
+  }
   let slope =
     (bottomright_ln_y - topleft_ln_y) / (bottomright_ln_x - topleft_ln_x);
   let y_intercept = topleft_ln_y - slope * topleft_ln_x;
@@ -279,7 +283,7 @@ function findintersection() {
     variable = variable + 1;
   }
   if (variable == 4) {
-    draw_line(topleft_rect_x, topleft_rect_y, bottomright_rect_x, bottomright_rect_y, 2, "#606060");
+    draw_line(topleft_ln_x, topleft_ln_y, bottomright_ln_x, bottomright_ln_y, 2, "#606060");
     return 0;
   }
   else {
@@ -400,7 +404,7 @@ function intersection() {
     ctx.strokeStyle = "#606060";
     ctx.stroke();
     console.log(current_point);
-    current_point = current_point & (15 - top_side); // 1111 - 1000 = 0111 & 1000 = 0000
+    current_point = current_point & (15 - top_side);
     console.log("Hello");
     console.log(current_point);
   }
@@ -614,12 +618,8 @@ submit_button.addEventListener("click", () => {
     duptopleft_ln_y = topleft_ln_y;
     dupbottomright_ln_x = bottomright_ln_x;
     dupbottomright_ln_y = bottomright_ln_y;
-    //TBRL
     first_point = 0;
     second_point = 0;
-    // first_point = change_firstpoint();
-    // second_point = change_secondpoint();
-    // console.log(first_point);
     if (topleft_ln_x - topleft_rect_x < 0) {
       first_point = first_point + Math.pow(2, 0);
     }

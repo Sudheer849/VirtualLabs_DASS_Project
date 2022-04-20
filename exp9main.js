@@ -1,9 +1,12 @@
+
 let canvas = document.getElementById("canvas");
 var heightRatio = 1;
 canvas.height = canvas.width * heightRatio;
 resize(canvas);
 let ctx = canvas.getContext("2d");
 let status = 0;
+let statusPrev = [];
+statusPrev[0] = status;
 window.devicePixelRatio = 2;
 let width = 1200;
 let height = 600;
@@ -21,6 +24,7 @@ let x = width / 2;
 let y = height / 2;
 let noofLines = 5;
 let currentLine = 0;
+let previousLine = 0;
 let topleft_rect_x = document.getElementById("cnt-top-left-x").value;
 let topleft_rect_y = document.getElementById("cnt-top-left-y").value;
 let bottomright_rect_x = document.getElementById("cnt-bottom-right-x").value;
@@ -32,7 +36,14 @@ let reset_button = document.getElementById("reset_button");
 let text = document.getElementById("text");
 let logic_text = document.getElementById("logic_text");
 let pointstat_text = document.getElementById("pointstat_text");
-const PointsX = [], PointsY = [], initialPointsX = [], initialPointsY = [], dupPointsX = [], dupPointsY = [];
+const PointsX = [], PointsY = [], initialPointsX = [], initialPointsY = [], dupPointsX = [], dupPointsY = [], lineCoordinatesX = [], lineCoordinatesY = [];
+const prevPointsX = [], prevPointsY = [], prevdupPointsX = [], prevdupPointsY = [];
+for (let i = 0; i < noofLines; i++) {
+    prevPointsX[i] = [];
+    prevPointsY[i] = [];
+    prevdupPointsX[i] = [];
+    prevdupPointsY[i] = [];
+}
 PointsX[0] = document.getElementById("firstPointX").value;
 PointsY[0] = document.getElementById("firstPointY").value;
 PointsX[1] = document.getElementById("secondPointX").value;
@@ -46,11 +57,14 @@ PointsY[4] = document.getElementById("FifthPointY").value;
 
 for (let i = 0; i < noofLines; i++) {
     initialPointsX[i] = PointsX[i];
+    lineCoordinatesX[i] = PointsX[i];
+    initialPointsY[i] = PointsY[i];
+    lineCoordinatesY[i] = PointsY[i];
     dupPointsX[i] = PointsX[i];
     initialPointsY[i] = PointsY[i];
     dupPointsY[i] = PointsY[i];
 };
-let intersection_x, intersection_y;
+let intersection_x, intersection_y, previousIntersection_x = [], previousIntersection_y = [];
 let first_point = 5; // 1001
 let second_point = 10; // 0110
 let current_point = first_point;
@@ -64,7 +78,9 @@ let if_completed = 0;
 let first_point_status = 0;
 let is_clipped = 0;
 let no_of_iterations = 0,
-    transition_iteration = 0;
+    previousno_of_iterations = [];
+transition_iteration = 0,
+    previoustransition_iteration = [];
 let no_of_linesclipped = 0;
 function convertToBinary(x) {
 
@@ -141,16 +157,38 @@ function main() {
     }
 }
 function check() {
+    console.log(no_of_iterations);
+    console.log(no_of_linesclipped);
+    if (is_clipped == 1) {
+        draw_line(topleft_rect_x, topleft_rect_y, topleft_rect_x, bottomright_rect_y, 2, "green");
+        draw_line(bottomright_rect_x, topleft_rect_y, bottomright_rect_x, bottomright_rect_y, 2, "green");
+        draw_line(topleft_rect_x, topleft_rect_y, bottomright_rect_x, topleft_rect_y, 2, "green");
+        draw_line(topleft_rect_x, bottomright_rect_y, bottomright_rect_x, bottomright_rect_y, 2, "green");
+        draw_line(topleft_rect_x, topleft_rect_y, bottomleft_rect_x, bottomright_rect_y);
+
+    }
+    if (no_of_iterations == 1) {
+        statusPrev[currentLine] = status;
+        console.log(statusPrev[1]);
+
+    }
+    console.log(status);
     if (
-        (current_point == 0 && first_point_status == 1) || findintersection() == 0) {
+        (current_point == 0 && first_point_status == 1) || findintersection(PointsX[currentLine], PointsX[(currentLine + 1) % noofLines], PointsY[currentLine], PointsY[(currentLine + 1) % noofLines], "#606060") == 0) {
+        no_of_linesclipped++;
+        if (no_of_linesclipped == noofLines) {
+            is_clipped = 1;
+            return;
+        }
         text.innerHTML = "<br><br>Line is Clipped";
         logic_text.innerHTML = "";
         pointstat_text.innerHTML = "";
         move_to_next_line();
     }
-    if (current_point == 0) {
+    if (current_point == 0 && first_point_status == 0) {
         current_point = second_point;
         first_point_status = 1;
+        console.log("Hello I am herjiwiw", no_of_iterations);
         transition_iteration = no_of_iterations;
     }
     if (status == 0) {
@@ -186,6 +224,7 @@ function check() {
         }
     }
     else if (status == 1) {
+        console.log(current_point);
         let eqornq = "==";
         if ((right_side & current_point) != 0) {
             eqornq = "!=";
@@ -269,14 +308,14 @@ function check() {
         }
     }
 }
-function findintersection() {
-    if (((PointsX[currentLine] - topleft_rect_x <= 0) && (PointsX[(currentLine + 1) % noofLines] - topleft_rect_x <= 0)) || ((PointsX[currentLine] - bottomright_rect_x >= 0) && (PointsX[(currentLine + 1) % noofLines] - bottomright_rect_x >= 0)) || ((PointsY[currentLine] - topleft_rect_y <= 0) && (PointsY[(currentLine + 1) % noofLines] - topleft_rect_y <= 0)) || ((PointsY[currentLine] - bottomright_rect_y >= 0) && (PointsY[(currentLine + 1) % noofLines] - bottomright_rect_y >= 0))) {
-        draw_line(PointsX[currentLine], PointsY[currentLine], PointsX[(currentLine + 1) % noofLines], PointsY[(currentLine + 1) % noofLines], 2, "#606060");
+function findintersection(x1, x2, y1, y2, colour) {
+    if (((x1 - topleft_rect_x <= 0) && (x2 - topleft_rect_x <= 0)) || ((x1 - bottomright_rect_x >= 0) && (x2 - bottomright_rect_x >= 0)) || ((y1 - topleft_rect_y <= 0) && (y2 - topleft_rect_y <= 0)) || ((y1 - bottomright_rect_y >= 0) && (y2 - bottomright_rect_y >= 0))) {
+        draw_line(x1, y1, x2, y2, 2, colour);
         return 0;
     }
     let slope =
-        (PointsY[(currentLine + 1) % noofLines] - PointsY[currentLine]) / (PointsX[(currentLine + 1) % noofLines] - PointsX[currentLine]);
-    let y_intercept = PointsY[currentLine] - slope * PointsX[currentLine];
+        (y2 - y1) / (x2 - x1);
+    let y_intercept = y1 - slope * x1;
     let variable = 0;
     if (slope * topleft_rect_x + y_intercept < topleft_rect_y || slope * topleft_rect_x + y_intercept > bottomright_rect_y) {
         variable = variable + 1;
@@ -291,7 +330,7 @@ function findintersection() {
         variable = variable + 1;
     }
     if (variable == 4) {
-        draw_line(PointsX[currentLine], PointsY[currentLine], PointsX[(currentLine + 1) % noofLines], PointsY[(currentLine + 1) % noofLines], 2, "#606060");
+        draw_line(x1, y1, x2, y2, 2, colour);
         return 0;
     }
     else {
@@ -421,11 +460,19 @@ function intersection() {
 main();
 
 next_button.addEventListener("click", () => {
+    console.log("In next_button function", intersection_x, intersection_y);
     no_of_iterations++;
+    console.log(no_of_iterations);
     check();
 });
 previous_button.addEventListener("click", () => {
-    if (no_of_iterations == 0 || is_clipped == 1) {
+    console.log("Hello");
+    if ((no_of_linesclipped == 0 && no_of_iterations == 0) || (is_clipped == 1)) {
+        return;
+    }
+    if (previousLine == currentLine - 1 && no_of_iterations == 0) {
+        no_of_linesclipped--;
+        previous_linechange();
         return;
     }
     if (no_of_iterations == transition_iteration) {
@@ -621,6 +668,8 @@ submit_button.addEventListener("click", () => {
         PointsY[2] = document.getElementById("thirdPointY").value;
         PointsX[3] = document.getElementById("FourthPointX").value;
         PointsY[3] = document.getElementById("FourthPointY").value;
+        PointsX[4] = document.getElementById("FifthPointX").value;
+        PointsY[4] = document.getElementById("FifthPointY").value;
         for (let i = 0; i < noofLines; i++) {
             initialPointsX[i] = PointsX[i];
             dupPointsX[i] = PointsX[i];
@@ -710,17 +759,112 @@ function resize(canvas) {
         canvas.height = displayHeight;
     }
 }
+function previous_linechange() {
+    if (is_dark == 1) {
+        if (status == 0) {
+            draw_line(topleft_rect_x, topleft_rect_y, topleft_rect_x, bottomright_rect_y, 2, "yellow");
+            is_dark = 0;
+        } else if (status == 1) {
+            draw_line(bottomright_rect_x, bottomright_rect_y, bottomright_rect_x, topleft_rect_y, 2, "yellow");
+            is_dark = 0;
+        } else if (status == 2) {
+            draw_line(topleft_rect_x, bottomright_rect_y, bottomright_rect_x, bottomright_rect_y, 2, "yellow");
+            is_dark = 0;
+        } else if (status == 3) {
+            draw_line(topleft_rect_x, topleft_rect_y, bottomright_rect_x, topleft_rect_y, 2, "yellow");
+            is_dark = 0;
+        }
+    }
+    findintersection(initialPointsX[currentLine], initialPointsX[(currentLine + 1) % noofLines], initialPointsY[currentLine], initialPointsY[(currentLine + 1) % noofLines], "white");
+    console.log("WHoooo");
+    console.log(intersection_x, intersection_y, previousIntersection_x, previousIntersection_y);
+    first_point_status = 1;
+    if (currentLine == 0) {
+        currentLine = noofLines - 1;
+        previousLine = noofLines - 1;
+    }
+    else {
+        currentLine = currentLine - 1;
+        previousLine = previousLine - 1;
+    }
+    console.log("The current line is", currentLine);
+    for (let i = 0; i < noofLines; i++) {
+        PointsX[i] = prevPointsX[i][currentLine];
+        PointsY[i] = prevPointsY[i][currentLine];
+        dupPointsX[i] = prevdupPointsX[i][currentLine];
+        dupPointsY[i] = prevdupPointsY[i][currentLine];
+    }
+    console.log("Previous DUp points are", prevdupPointsX[0], prevdupPointsY[0], prevdupPointsX[1], prevdupPointsY[1], prevdupPointsX[2], prevdupPointsY[2], prevdupPointsX[3], prevdupPointsY[3]);
+    no_of_iterations = previousno_of_iterations[currentLine];
+    transition_iteration = previoustransition_iteration[currentLine];
+    console.log("Previous no of iterations", no_of_iterations, transition_iteration);
+    current_point = 0;
+    first_point = 0;
+    second_point = 0;
+    console.log(initialPointsX[currentLine], initialPointsY[currentLine], initialPointsX[(currentLine + 1) % noofLines], initialPointsY[(currentLine + 1) % noofLines], intersection_x, intersection_y);
+    if (initialPointsX[currentLine] - topleft_rect_x < 0) {
+        first_point = first_point + Math.pow(2, 0);
+    }
+    if (initialPointsX[currentLine] - bottomright_rect_x > 0) {
+        first_point = first_point + Math.pow(2, 1);
+    }
+    if (initialPointsY[currentLine] - bottomright_rect_y > 0) {
+        first_point = first_point + Math.pow(2, 2);
+    }
+    if (initialPointsY[currentLine] - topleft_rect_y < 0) {
+        first_point = first_point + Math.pow(2, 3);
+    }
+
+    if (initialPointsX[(currentLine + 1) % noofLines] - topleft_rect_x < 0) {
+        second_point = second_point + Math.pow(2, 0);
+    }
+    if (initialPointsX[(currentLine + 1) % noofLines] - bottomright_rect_x > 0) {
+        second_point = second_point + Math.pow(2, 1);
+    }
+    if (initialPointsY[(currentLine + 1) % noofLines] - bottomright_rect_y > 0) {
+        second_point = second_point + Math.pow(2, 2);
+    }
+    if (initialPointsY[(currentLine + 1) % noofLines] - topleft_rect_y < 0) {
+        second_point = second_point + Math.pow(2, 3);
+    }
+    is_dark = 0;
+    current_point = 0;
+    intersection_x = previousIntersection_x[currentLine];
+    intersection_y = previousIntersection_y[currentLine];
+    console.log(PointsX[currentLine], PointsY[currentLine], PointsX[(currentLine + 1) % noofLines], PointsY[(currentLine + 1) % noofLines], dupPointsX[currentLine], dupPointsY[currentLine], dupPointsX[(currentLine + 1) % noofLines], dupPointsY[(currentLine + 1) % noofLines], initialPointsX[currentLine], initialPointsY[currentLine], initialPointsX[(currentLine + 1) % noofLines], initialPointsY[(currentLine + 1) % noofLines], no_of_iterations, status, is_dark, is_clipped, first_point, second_point, current_point);
+    // status = 0;*/
+}
 function move_to_next_line() {
+    console.log("I am here");
+    previousIntersection_x[currentLine] = intersection_x;
+    previousIntersection_y[currentLine] = intersection_y;
+    console.log(PointsX[currentLine], PointsY[currentLine], PointsX[(currentLine + 1) % noofLines], PointsY[(currentLine + 1) % noofLines], dupPointsX[currentLine], dupPointsY[currentLine], dupPointsX[(currentLine + 1) % noofLines], dupPointsY[(currentLine + 1) % noofLines], initialPointsX[currentLine], initialPointsY[currentLine], initialPointsX[(currentLine + 1) % noofLines], initialPointsY[(currentLine + 1) % noofLines], no_of_iterations, status, is_dark, is_clipped, first_point, second_point, current_point, intersection_x, intersection_y);
+    for (let i = 0; i < noofLines; i++) {
+        prevPointsX[i][currentLine] = PointsX[i];
+        prevPointsY[i][currentLine] = PointsY[i];
+        prevdupPointsX[i][currentLine] = dupPointsX[i];
+        prevdupPointsY[i][currentLine] = dupPointsY[i];
+    }
+    previousno_of_iterations[currentLine] = no_of_iterations - 1;
+    previoustransition_iteration[currentLine] = transition_iteration;
+    console.log("move");
+    console.log(first_point, second_point, current_point, currentLine, PointsX[currentLine], PointsY[currentLine], PointsX[(currentLine + 1) % noofLines], PointsY[(currentLine + 1) % noofLines], initialPointsX[currentLine], initialPointsY[currentLine], initialPointsX[(currentLine + 1) % noofLines], initialPointsY[(currentLine + 1) % noofLines], dupPointsX[currentLine], dupPointsY[currentLine], dupPointsX[(currentLine + 1) % noofLines], dupPointsY[(currentLine + 1) % noofLines]);
     for (let i = 0; i < noofLines; i++) {
         PointsX[i] = initialPointsX[i];
         PointsY[i] = initialPointsY[i];
         dupPointsX[i] = PointsX[i];
         dupPointsY[i] = PointsY[i];
     }
+    previousLine = currentLine;
     currentLine = (currentLine + 1) % noofLines;
     first_point = 0;
     second_point = 0;
     first_point_status = 0;
+    no_of_iterations = 0;
+    transition_iteration = 0;
+    // is_clipped = 0;
+    is_dark = 0;
+
     if (PointsX[currentLine] - topleft_rect_x < 0) {
         first_point = first_point + Math.pow(2, 0);
     }
@@ -752,5 +896,6 @@ function move_to_next_line() {
     } else {
         current_point = second_point;
     }
-    console.log(first_point, second_point);
+    console.log(no_of_iterations);
+    console.log(first_point, second_point, current_point, currentLine, PointsX[currentLine], PointsY[currentLine], PointsX[(currentLine + 1) % noofLines], PointsY[(currentLine + 1) % noofLines], initialPointsX[currentLine], initialPointsY[currentLine], initialPointsX[(currentLine + 1) % noofLines], initialPointsY[(currentLine + 1) % noofLines], dupPointsX[currentLine], dupPointsY[currentLine], dupPointsX[(currentLine + 1) % noofLines], dupPointsY[(currentLine + 1) % noofLines]);
 }
