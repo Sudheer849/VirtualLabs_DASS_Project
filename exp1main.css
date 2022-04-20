@@ -167,6 +167,15 @@
     font-size: small;
 }
 
+.instr-font {
+    font-size: 0.9rem;
+}
+
+.coord-dim {
+    width: 100px; 
+    margin: 0.25rem;
+}
+
 #add-shape-btn {
     background-color: #3298dc;
     border-radius: 0.5rem;

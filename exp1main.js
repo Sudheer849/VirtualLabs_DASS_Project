@@ -29,8 +29,6 @@ let scene,
   renderer,
   orbit,
   shapes = [],
-  rot = 0.01,
-  variable = 0,
   xygrid = [],
   yzgrid = [],
   xzgrid = [],
@@ -39,14 +37,7 @@ let scene,
   dragz = [],
   initial_pos = [3, 3, 3],
   lock = 0,
-  dir = [],
   scale = 1,
-  two_plane,
-  two_geometry,
-  no_of_shapes = 0,
-  first_time = 1,
-  is_2D = 0,
-  is_shapeexist = 0,
   arrowHelper = [];
 
 lock_vertices.addEventListener("click", () => {
@@ -127,14 +118,14 @@ document.querySelector(".buttonissecondary").addEventListener("click", () => {
   let ycoord = document.getElementById("y1").value;
   let zcoord = document.getElementById("z1").value;
   no_of_shapes++;
-  console.log(no_of_shapes);
+  // console.log(no_of_shapes);
   is_shapeexist = 1;
-  console.log(document.getElementById("shape-add-dropdown").value);
+  // console.log(document.getElementById("shape-add-dropdown").value);
   if (document.getElementById("shape-add-dropdown").value == "Cube") {
     createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
   }
   if (document.getElementById("shape-add-dropdown").value == "Tetrahedron") {
-    createTetrahedron(xcoord, ycoord, zcoord, shapes, scenepoint, shapevertex, dragx, dragy, dragz);
+    createTetrahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
   }
   if (document.getElementById("shape-add-dropdown").value == "Octahedron") {
     createOctahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
@@ -170,13 +161,13 @@ function ondblclick(event) {
 
   raycaster.setFromCamera(mouse, camera);
   let intersects = raycaster.intersectObjects(shapes);
-  console.log(intersects);
+  // console.log(intersects);
   if (intersects.length > 0) {
-    console.log(
-      intersects[0].object.position.x,
-      intersects[0].object.position.y,
-      intersects[0].object.position.z
-    );
+    // console.log(
+      // intersects[0].object.position.x,
+      // intersects[0].object.position.y,
+      // intersects[0].object.position.z
+    // );
     const geometry = new THREE.SphereGeometry(1, 32, 16);
     const edges = new THREE.EdgesGeometry(geometry);
     const line = new THREE.LineSegments(
@@ -194,7 +185,7 @@ function ondblclick(event) {
       for (let i = 0; i < intersects.length; i++) {
         scene.remove(intersects[i].object);
         no_of_shapes--;
-        console.log(no_of_shapes);
+        // console.log(no_of_shapes);
       }
     };
 
@@ -257,7 +248,7 @@ document.addEventListener("pointermove", (event) => {
     if (isDragging && lock === 0) {
       for (let i = 0; i < shapes.length; i++) {
         raycaster.ray.intersectPlane(plane, planeIntersect);
-        console.log(shift.x);
+        // console.log(shift.x);
         shapes[i].geometry.vertices[0].set(
           planeIntersect.x + shift.x,
           planeIntersect.y + shift.y,
@@ -331,7 +322,7 @@ move_button.addEventListener("click", () => {
   let x = document.getElementById("quantityx").value;
   let y = document.getElementById("quantityy").value;
   let z = document.getElementById("quantityz").value;
-  console.log(x, y, z);
+  // console.log(x, y, z);
   dot_list[0].position.set(
     x - initial_pos[0],
     y - initial_pos[1],
@@ -380,7 +371,7 @@ let init = function () {
   renderer = new THREE.WebGLRenderer();
   let w = container.offsetWidth;
   let h = container.offsetHeight;
-  console.log(w, h);
+  // console.log(w, h);
   renderer.setSize(w, h);
   container.appendChild(renderer.domElement);
   orbit = new OrbitControls(camera, renderer.domElement);
