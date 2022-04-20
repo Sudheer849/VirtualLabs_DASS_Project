@@ -8,7 +8,7 @@ import {
   createOctahedron,
   createTetrahedron
 } from "./js/shapes.js";
-import { dot } from "./js/point.js";
+import { Dot } from "./js/point.js";
 
 const move_button = document.getElementById("move-button");
 let threeD = document.getElementById("3d-toggle-cb");
@@ -29,6 +29,8 @@ let scene,
   renderer,
   orbit,
   shapes = [],
+  rot = 0.01,
+  variable = 0,
   xygrid = [],
   yzgrid = [],
   xzgrid = [],
@@ -38,7 +40,14 @@ let scene,
   initialPos = [3, 3, 3],
   lock = 0,
   scale = 1,
-  arrowHelper = [];
+  arrowHelper = [],
+  dir = [],
+  two_plane,
+  two_geometry,
+  no_of_shapes = 0,
+  first_time = 1,
+  is_2D = 0,
+  is_shapeexist = 0;
 let dbl = 0;
 
 lock_vertices.addEventListener("click", () => {
@@ -157,8 +166,6 @@ for (let i = 0; i < 1000; i++) {
 //document.addEventListener("dblclick", ondblclick, false);
 
 document.getElementById("canvas-main").ondblclick = function (event) {
-  console.log(no_of_shapes);
-  if (no_of_shapes != 0) {
     const rect = renderer.domElement.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
@@ -169,33 +176,13 @@ document.getElementById("canvas-main").ondblclick = function (event) {
 
     raycaster.setFromCamera(mouse, camera);
     let intersects = raycaster.intersectObjects(shapes);
-    // console.log(intersects);
-    if (intersects.length > 0) {
-      // console.log(
-      // intersects[0].object.position.x,
-      // intersects[0].object.position.y,
-      // intersects[0].object.position.z
-      // );
-      const geometry = new THREE.SphereGeometry(1, 32, 16);
-      const edges = new THREE.EdgesGeometry(geometry);
-      const line = new THREE.LineSegments(
-        edges,
-        new THREE.LineBasicMaterial({ color: 0xffffff })
-      );
-      line.position.set(
-        intersects[0].object.position.x,
-        intersects[0].object.position.y,
-        intersects[0].object.position.z
-      );
-      scene.add(line);
-      document.getElementById("delete-shape-btn").onclick = function () {
-        scene.remove(line);
-        for (let i = 0; i < intersects.length; i++) {
-          scene.remove(intersects[i].object);
-          no_of_shapes--;
-          // console.log(no_of_shapes);
-        }
+    let shapeIntersects = 0;
+    for (let i = 0; i < intersects.length; i++) {
+      if ((intersects[i].object.name == "cube" || intersects[i].object.name == "tetrahedron" || intersects[i].object.name == "octahedron" || intersects[i].object.name == "dodecahedron")) {
+        shapeIntersects++;
       }
+    }
+    // console.log(intersects);
       if (shapeIntersects != 0) {
         console.log(
           intersects[0].object.position.x,
@@ -215,13 +202,17 @@ document.getElementById("canvas-main").ondblclick = function (event) {
         );
         scene.add(line);
         document.getElementById("delete-shape-btn").onclick = function () {
+          console.log("Delete It");
           scene.remove(line);
+          console.log(intersects.length);
+          for(let i=0;i<intersects.length;i++){
+            console.log(isDeleted[i]);
+          }
           for (let i = 0; i < intersects.length; i++) {
-            if ((isDeleted === 0) && (intersects[i].object.name == "cube" || intersects[i].object.name == "tetrahedron" || intersects[i].object.name == "octahedron" || intersects[i].object.name == "dodecahedron")) {
+            if ((intersects[i].object.name == "cube" || intersects[i].object.name == "tetrahedron" || intersects[i].object.name == "octahedron" || intersects[i].object.name == "dodecahedron")) {
               no_of_shapes--;
-              isDeleted[i] = 1;
+              scene.remove(intersects[i].object);
             }
-            scene.remove(intersects[i].object);
           }
         };
 
@@ -233,7 +224,7 @@ document.getElementById("canvas-main").ondblclick = function (event) {
         document.querySelector(".buttonisprimary").onclick = function () {
           let intersecting_shapes = 0;
           for (let i = 0; i < intersects.length; i++) {
-            if ((isDeleted[i] === 0) && (intersects[i].object.name == "cube" || intersects[i].object.name == "tetrahedron" || intersects[i].object.name == "octahedron" || intersects[i].object.name == "dodecahedron")) {
+            if ((intersects[i].object.name == "cube" || intersects[i].object.name == "tetrahedron" || intersects[i].object.name == "octahedron" || intersects[i].object.name == "dodecahedron")) {
               intersecting_shapes++;
             }
             scene.remove(intersects[i].object);
@@ -264,9 +255,6 @@ document.getElementById("canvas-main").ondblclick = function (event) {
           document.getElementById("edit-modal").style.display = "none";
         };
       }
-
-    }
-  }
 };
 
 document.getElementById("h-s").onchange = function () {
@@ -413,7 +401,7 @@ let init = function () {
   arrowHelper[5] = new THREE.ArrowHelper(negdir_z, origin, length, "blue");
   const numbers = [0, 1, 2, 3, 4, 5];
   arrowHelper.forEach(axis => scene.add(axis))
-  let PointGeometry = dot(scene, dotList, initialPos);
+  let PointGeometry = Dot(scene, dotList, initialPos);
   renderer = new THREE.WebGLRenderer();
   let w = container.offsetWidth;
   let h = container.offsetHeight;
