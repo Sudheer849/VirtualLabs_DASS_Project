@@ -128,9 +128,7 @@ document.getElementById("add-shape-btn").onclick = function () {
     let ycoord = document.getElementById("y1").value;
     let zcoord = document.getElementById("z1").value;
     no_of_shapes++;
-    console.log(no_of_shapes);
     is_shapeexist = 1;
-    console.log(document.getElementById("shape-add-dropdown").value);
     if (document.getElementById("shape-add-dropdown").value == "Cube") {
       createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
     }
@@ -173,24 +171,16 @@ document.getElementById("canvas-main").ondblclick = function (event) {
 
     mouse.x = (x / container.clientWidth) * 2 - 1;
     mouse.y = (y / container.clientHeight) * -2 + 1;
-    console.log(mouse.x, mouse.y);
 
     raycaster.setFromCamera(mouse, camera);
     let intersects = raycaster.intersectObjects(shapes);
-    console.log(intersects);
     let shapeIntersects = 0;
     for (let i = 0; i < intersects.length; i++) {
       if ((intersects[i].object.name == "cube" || intersects[i].object.name == "tetrahedron" || intersects[i].object.name == "octahedron" || intersects[i].object.name == "dodecahedron")) {
         shapeIntersects++;
       }
     }
-    // console.log(intersects);
       if (shapeIntersects != 0) {
-        console.log(
-          intersects[0].object.position.x,
-          intersects[0].object.position.y,
-          intersects[0].object.position.z
-        );
         const geometry = new THREE.SphereGeometry(1, 32, 16);
         const edges = new THREE.EdgesGeometry(geometry);
         const line = new THREE.LineSegments(
@@ -204,11 +194,8 @@ document.getElementById("canvas-main").ondblclick = function (event) {
         );
         scene.add(line);
         document.getElementById("delete-shape-btn").onclick = function () {
-        //   console.log("Delete It");
           scene.remove(line);
-        //   console.log(intersects.length);
         //   for(let i=0;i<intersects.length;i++){
-            // console.log(isDeleted[i]);
         //   }
           for (let i = 0; i < intersects.length; i++) {
             if ((intersects[i].object.name == "cube" || intersects[i].object.name == "tetrahedron" || intersects[i].object.name == "octahedron" || intersects[i].object.name == "dodecahedron")) {
@@ -230,9 +217,7 @@ document.getElementById("canvas-main").ondblclick = function (event) {
               intersecting_shapes++;
             }
             scene.remove(intersects[i].object);
-            // console.log(intersects.length);
             scene.remove(line);
-            // console.log("editing shape");
           }
           let xcoord = document.getElementById("x").value;
           let ycoord = document.getElementById("y").value;
@@ -263,11 +248,11 @@ document.getElementById("h-s").onchange = function () {
   scale = document.getElementById("h-s").value;
 
   document.getElementById("h-x").value =
-    document.getElementById("quantityx").value * scale;
+    document.getElementById("x-value").value * scale;
   document.getElementById("h-y").value =
-    document.getElementById("quantityy").value * scale;
+    document.getElementById("y-value").value * scale;
   document.getElementById("h-z").value =
-    document.getElementById("quantityz").value * scale;
+    document.getElementById("z-value").value * scale;
 };
 
 span_edit_modal.onclick = function () {
@@ -286,7 +271,6 @@ document.addEventListener("pointermove", (event) => {
     if (isDragging && lock === 0) {
       for (let i = 0; i < shapes.length; i++) {
         raycaster.ray.intersectPlane(plane, planeIntersect);
-        // console.log(shift.x);
         shapes[i].geometry.vertices[0].set(
           planeIntersect.x + shift.x,
           planeIntersect.y + shift.y,
@@ -305,22 +289,22 @@ document.addEventListener("pointermove", (event) => {
         planeIntersect.y + shift.y,
         planeIntersect.z + shift.z
       );
-      document.getElementById("quantityx").value = (
+      document.getElementById("x-value").value = (
         (dotList[0].position.x + initialPos[0]) *
         scale
       ).toFixed(2);
-      document.getElementById("quantityy").value = (
+      document.getElementById("y-value").value = (
         (dotList[0].position.y + initialPos[1]) *
         scale
       ).toFixed(2);
-      document.getElementById("quantityz").value = (
+      document.getElementById("z-value").value = (
         (dotList[0].position.z + initialPos[2]) *
         scale
       ).toFixed(2);
 
-      let c_x = document.getElementById("quantityx").value * scale;
-      let c_y = document.getElementById("quantityy").value * scale;
-      let c_z = document.getElementById("quantityz").value * scale;
+      let c_x = document.getElementById("x-value").value * scale;
+      let c_y = document.getElementById("y-value").value * scale;
+      let c_z = document.getElementById("z-value").value * scale;
 
       document.getElementById("h-x").value = c_x.toFixed(2);
       document.getElementById("h-y").value = c_y.toFixed(2);
@@ -357,10 +341,9 @@ document.addEventListener("pointerup", () => {
 });
 
 move_button.addEventListener("click", () => {
-  let x = document.getElementById("quantityx").value;
-  let y = document.getElementById("quantityy").value;
-  let z = document.getElementById("quantityz").value;
-  // console.log(x, y, z);
+  let x = document.getElementById("x-value").value;
+  let y = document.getElementById("y-value").value;
+  let z = document.getElementById("z-value").value;
   dotList[0].position.set(
     x - initialPos[0],
     y - initialPos[1],
@@ -407,7 +390,6 @@ let init = function () {
   renderer = new THREE.WebGLRenderer();
   let w = container.offsetWidth;
   let h = container.offsetHeight;
-  // console.log(w, h);
   renderer.setSize(w, h);
   container.appendChild(renderer.domElement);
   orbit = new OrbitControls(camera, renderer.domElement);

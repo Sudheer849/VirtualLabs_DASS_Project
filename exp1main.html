@@ -126,12 +126,14 @@
                 <div class="v-datalist-title" id="top-border">Initial Position</div>
 
                 <div style="display: flexbox; margin: 0.5rem">
-                    X:
-                    <input class="input is-responsive is-small smol-wid" type="number" id="quantityx" value="3"
-                        placeholder="X"> Y:
-                    <input class="input is-responsive is-small smol-wid" type="number" id="quantityy" value="3"
-                        placeholder="Y"> Z:
-                    <input class="input is-responsive is-small smol-wid" type="number" id="quantityz" value="3"
+                    <label for="x-value">X:</label>
+                    <input class="input is-responsive is-small smol-wid" type="number" id="x-value" value="3"
+                        placeholder="X"> 
+                    <label for="y-value">Y:</label>
+                    <input class="input is-responsive is-small smol-wid" type="number" id="y-value" value="3"
+                        placeholder="Y">
+                    <label for="z-value">Z:</label>
+                    <input class="input is-responsive is-small smol-wid" type="number" id="z-value" value="3"
                         placeholder="Z">
                 </div>
                 <input class="button is-responsive is-small is-link" style="margin: 0.5rem;" id="move-button" type="submit"
@@ -141,33 +143,23 @@
 
                 <section>
                     <div style="margin: 0.5rem;">
-                        <label for="quantity">X:</label>
+                        <label for="h-x">X:</label>
                         <input class="input is-responsive is-small smol-wid" type="number" id="h-x" value="3"
                             placeholder="X">
-                        <label for="quantity">Y:</label>
+                        <label for="h-y">Y:</label>
                         <input class="input is-responsive is-small smol-wid" type="number" id="h-y" value="3"
                             placeholder="Y">
-                        <label for="quantity">Z:</label>
+                        <label for="h-z">Z:</label>
                         <input class="input is-responsive is-small smol-wid" type="number" id="h-z" value="3"
                             placeholder="Z">
                     </div>
 
                     <div style="margin: 1rem;">
-                        <label for="quantity" style="padding: 0.5rem;">Scaling Factor</label>
+                        <label style="padding: 0.5rem;">Scaling Factor</label>
                         <input class="input is-responsive is-small smol-wid" type="number"
                             id="h-s" value="1" step="0.01" placeholder="Scale">
                     </div>
                 </section>
-
-
-                <!-- <div class="v-datalist-row v-bold" id="output1"></div>
-                <div class="v-datalist-row v-bold" id="output2"></div>
-                <div class="v-datalist-row">
-                    <div class="v-table-wrap">
-                        <table id="table" class="table is-bordered is-fullwidth">
-                        </table>
-                    </div>
-                </div> -->
             </div>
         </aside>
 
