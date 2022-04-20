@@ -1,7 +1,7 @@
 import * as THREE from "https://threejsfundamentals.org/threejs/resources/threejs/r115/build/three.module.js";
 
-let origin = {x:0, y:0, z:0};
-export let createArm = function(scene, hand_comp, arm_dim, arm_pos, fore_dim, fore_pos, palm_dim, palm_pos )
+const origin = {x:0, y:0, z:0};
+export const createArm = function(scene, hand_comp, arm_dim, arm_pos, fore_dim, fore_pos, palm_dim, palm_pos )
 {
     // Creating groups, which hold the arm, forearm and palm
     const shoulder = new THREE.Group();
