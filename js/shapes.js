@@ -29,22 +29,7 @@ export let createCube = function(x, y, z, shapes, scene, point, shapevertex, dra
             }
             i++;
         });
-    /*for (let i = 0; i < shapeVertex.length; i++) {
-        let dotGeometry = new THREE.Geometry();
-        dotGeometry.vertices.push(shapeVertex[i]);
-        let dotMaterial = new THREE.PointsMaterial({
-            color: "white",
-            size: 6,
-            sizeAttenuation: false,
-        });
-        const geometry = new THREE.SphereGeometry(15, 32, 16);
-        let dot = new THREE.Points(dotGeometry, dotMaterial);
-        point.push(dot);
-        shapes[shapes.length - 1].add(point[point.length - 1]);
-        if (i === 0) {
-            shapevertex.push(dot);
-        }
-    }*/
+
     dragx.push(shapes[shapes.length - 1].geometry.vertices[0].x);
     dragy.push(shapes[shapes.length - 1].geometry.vertices[0].y);
     dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
