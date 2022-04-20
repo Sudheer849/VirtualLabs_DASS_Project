@@ -1,3 +1,4 @@
+"use strict";
 import * as THREE from "https://threejsfundamentals.org/threejs/resources/threejs/r115/build/three.module.js";
 import { OrbitControls } from "https://threejsfundamentals.org/threejs/resources/threejs/r115/examples/jsm/controls/OrbitControls.js";
 import { MOUSE } from "https://unpkg.com/three@0.128.0/build/three.module.js";
@@ -122,7 +123,7 @@ span_add_modal.onclick = function () {
 
 document.getElementById("add-shape-btn").onclick = function () {
   modal_add.style.display = "block";
-  document.querySelector(".buttonissecondary").onclick = function () {
+  document.querySelector(".add-button").onclick = function () {
     let xcoord = document.getElementById("x1").value;
     let ycoord = document.getElementById("y1").value;
     let zcoord = document.getElementById("z1").value;
@@ -203,12 +204,12 @@ document.getElementById("canvas-main").ondblclick = function (event) {
         );
         scene.add(line);
         document.getElementById("delete-shape-btn").onclick = function () {
-          console.log("Delete It");
+        //   console.log("Delete It");
           scene.remove(line);
-          console.log(intersects.length);
-          for(let i=0;i<intersects.length;i++){
-            console.log(isDeleted[i]);
-          }
+        //   console.log(intersects.length);
+        //   for(let i=0;i<intersects.length;i++){
+            // console.log(isDeleted[i]);
+        //   }
           for (let i = 0; i < intersects.length; i++) {
             if ((intersects[i].object.name == "cube" || intersects[i].object.name == "tetrahedron" || intersects[i].object.name == "octahedron" || intersects[i].object.name == "dodecahedron")) {
               no_of_shapes--;
@@ -222,16 +223,16 @@ document.getElementById("canvas-main").ondblclick = function (event) {
             document.getElementById("edit-modal").style.display = "block";
           }
         };
-        document.querySelector(".buttonisprimary").onclick = function () {
+        document.querySelector(".edit-button").onclick = function () {
           let intersecting_shapes = 0;
           for (let i = 0; i < intersects.length; i++) {
             if ((intersects[i].object.name == "cube" || intersects[i].object.name == "tetrahedron" || intersects[i].object.name == "octahedron" || intersects[i].object.name == "dodecahedron")) {
               intersecting_shapes++;
             }
             scene.remove(intersects[i].object);
-            console.log(intersects.length);
+            // console.log(intersects.length);
             scene.remove(line);
-            console.log("editing shape");
+            // console.log("editing shape");
           }
           let xcoord = document.getElementById("x").value;
           let ycoord = document.getElementById("y").value;

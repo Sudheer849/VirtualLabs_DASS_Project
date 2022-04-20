@@ -1,3 +1,4 @@
+"use strict";
 import * as THREE from "https://threejsfundamentals.org/threejs/resources/threejs/r115/build/three.module.js";
 
 const origin = { x: 0, y: 0, z: 0 };

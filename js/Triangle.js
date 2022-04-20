@@ -1,3 +1,4 @@
+"use strict";
 import * as THREE from "https://threejsfundamentals.org/threejs/resources/threejs/r115/build/three.module.js";
 export const Triangle = function (A, B, C, scene, dot_list) {
   const tri_mater = new THREE.MeshNormalMaterial();

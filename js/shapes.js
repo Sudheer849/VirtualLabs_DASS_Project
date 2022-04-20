@@ -1,3 +1,4 @@
+"use strict";
 import * as THREE from "https://threejsfundamentals.org/threejs/resources/threejs/r115/build/three.module.js";
 import { createMaterials } from "./materials.js";
 export const createCube = function (x, y, z, shapes, scene, point, shapevertex, dragx, dragy, dragz) {

@@ -1,6 +1,7 @@
 /**
  * @author mrdoob / http://mrdoob.com/
  */
+ "use strict";
 import * as THREE from "https://threejsfundamentals.org/threejs/resources/threejs/r115/build/three.module.js";
 
 export let VRMLLoader = function () {};

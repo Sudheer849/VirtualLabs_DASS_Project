@@ -1,3 +1,4 @@
+"use strict";
 let canvas = document.getElementById("canvas");
 var heightRatio = 1;
 canvas.height = canvas.width * heightRatio;
