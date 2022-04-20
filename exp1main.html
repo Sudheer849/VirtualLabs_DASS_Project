@@ -10,9 +10,7 @@
     <link rel="stylesheet" href="exp1main.css">
 </head>
 
-<body class="page">
-    </br>
-
+<body class="page" style="margin: 1rem">
     <div class="columns is-centered is-flex">
         <div class="column has-text-centered">
             <div class="v-collapsible-instruction-container">
@@ -37,25 +35,23 @@
         <div id="left" class="column is-2-desktop is-5-tablet is-5-mobile apparatus">
             <div class="v-datalist-container">
                 <div class="v-datalist-title">Display Settings</div>
-                <div style="display: flex; flex-wrap: wrap; flex-direction: row; justify-content: space-around;">
-
-                    <label class="v-checkbox" style="align-items:flex-start; flex: 50%; display: flex;">
+                <div id="checkboxes"> 
+                    <label id="lock-v" class="v-checkbox" >
                         <input type="checkbox" id="lock-vertices-cb">
                         <span style="font-size: x-small;">Lock Vertices </span>
                     </label>
-                    <br>
 
-                    <label class="v-checkbox" style="align-items:flex-start; flex: 50%; display: flex;">
+                    <label id="xy-grid" class="v-checkbox" >
                         <input type="checkbox" id="xy-grid-cb" >
                         <span style="font-size:x-small;">XY-Grid </span>
-              
                     </label>
-                    <br>
-                    <label class="v-checkbox" style=" align-items:flex-start; flex: 50%; display: flex;">
+
+                    <label id="yz-grid" class="v-checkbox">
                         <input type="checkbox" id="yz-grid-cb">
                         <span style="font-size:x-small;">YZ-Grid </span>
                     </label>
-                    <label class="v-checkbox" style="align-items:flex-start; flex: 50%; display: flex;">
+                    
+                    <label id="xz-grid" class="v-checkbox" >
                         <input type="checkbox" id="xz-grid-cb">
                         <span style="font-size:x-small;">XZ-Grid </span>
                     </label>
@@ -84,8 +80,6 @@
                                 </select>
                                     </div>
                                 </div>
-                                </br>
-                                </br>
 
                                 <input class="input " style="width: 200px; float:left" id="x" type="number" placeholder="X" step=".01" value="0">
                                 <input class="input " style="width: 200px; float:left" id="y" type="number" placeholder="Y" step=".01" value="0">
@@ -114,14 +108,14 @@
                                 </select>
                                     </div>
                                 </div>
-                                </br>
-                                </br>
+                                <!-- </br> -->
+                                <!-- </br> -->
 
                                 <input class="input " style="width: 100px; float:left; margin: 0.25rem;" id="x1" type="number" placeholder="X" step=".01" value="0">
                                 <input class="input " style="width: 100px; float:left;margin: 0.25rem;" id="y1" type="number" placeholder="Y" step=".01" value="0">
                                 <input class="input " style="width: 100px; float:left;margin: 0.25rem;" id="z1" type="number" placeholder="Z" step=".01" value="0">
                                 <div class="control">
-                                    <button class="buttonissecondary" id="modalBox_addsubmit" style="width: 10rem; float:left; margin: 1rem;">Add!</button>
+                                    <button class="v-button buttonissecondary" id="modalBox_addsubmit" style="width: 10rem; float:left; margin: 1rem;">Add!</button>
                                 </div>
                             </p>
                         </div>
