@@ -32,29 +32,31 @@
     </section>
 
     <div class="columns is-centered is-variable is-1-mobile is-flex is-flex-wrap-wrap workspace">
-        <div id="left" class="column has-text-centered is-2-desktop is-5-tablet is-5-mobile apparatus">
+        <div id="left" class="column has-text-centered is-2-desktop is-5-tablet is-10-mobile apparatus">
             <div class="v-datalist-container">
                 <div class="v-datalist-title" id="disp-heading">Display Settings</div>
-                <div id="checkboxes">
-                    <label id="lock-v" class="v-checkbox">
-                        <input type="checkbox" id="lock-vertices-cb">
-                        <span style="font-size: x-small;">Lock Vertices </span>
-                    </label>
+                <div style="align-content: center;">
+                    <div id="checkboxes" style="margin-top:1rem">
+                        <label id="lock-v" class="v-checkbox">
+                            <input type="checkbox" id="lock-vertices-cb">
+                            <span style="font-size: x-small;">Lock Vertices </span>
+                        </label>
 
-                    <label id="xy-grid" class="v-checkbox">
-                        <input type="checkbox" id="xy-grid-cb">
-                        <span style="font-size:x-small;">XY-Grid </span>
-                    </label>
+                        <label id="xy-grid" class="v-checkbox">
+                            <input type="checkbox" id="xy-grid-cb">
+                            <span style="font-size:x-small;">XY-Grid </span>
+                        </label>
 
-                    <label id="yz-grid" class="v-checkbox">
-                        <input type="checkbox" id="yz-grid-cb">
-                        <span style="font-size:x-small;">YZ-Grid </span>
-                    </label>
+                        <label id="yz-grid" class="v-checkbox">
+                            <input type="checkbox" id="yz-grid-cb">
+                            <span style="font-size:x-small;">YZ-Grid </span>
+                        </label>
 
-                    <label id="xz-grid" class="v-checkbox">
-                        <input type="checkbox" id="xz-grid-cb">
-                        <span style="font-size:x-small;">XZ-Grid </span>
-                    </label>
+                        <label id="xz-grid" class="v-checkbox">
+                            <input type="checkbox" id="xz-grid-cb">
+                            <span style="font-size:x-small;">XZ-Grid </span>
+                        </label>
+                    </div>
                 </div>
 
                 <div class="v-datalist-row" id="top-border">
@@ -67,59 +69,58 @@
                         <button id="delete-shape-btn" style="margin:0.25rem;"
                             class="v-button is-small is-responsive  is-danger">Delete</button>
 
-                        <div id="edit-modal" class="modal is-responsive">
-                            <div class="modal-content">
-                                <span class="close">&times;</span>
-                                <div>
-                                    <div id="Addshape" class="control" value="hi">
-                                        <div class="select" style="float:left;">
-                                            <select name="" id="shape-edit-dropdown" value="dropdown">
-                                                <option value="Tetrahedron">Tetrahedron</option>
-                                                <option value="Octahedron">Octahedron</option>
-                                                <option value="Dodecahedron">Dodecahedron</option>
-                                                <option value="Cube">Cube</option>
-                                                <option value="Sphere">Sphere</option>
-                                            </select>
-                                        </div>
+                            <section id="edit-modal" class="modal is-responsive">
+                                <div class="modal-content">
+                                    <span class="close">&times;</span>
+                                    <p class="v-datalist-title"> Edit Shape Menu</p>
+                                    <div class="select" style="display: inline-block; margin: 0.5rem">
+                                        <select name="" id="shape-edit-dropdown" value="dropdown">
+                                            <option value="Tetrahedron">Tetrahedron</option>
+                                            <option value="Octahedron">Octahedron</option>
+                                            <option value="Dodecahedron">Dodecahedron</option>
+                                            <option value="Cube">Cube</option>
+                                        </select>
                                     </div>
-
-                                    <input class="input " style="width: 200px; float:left" id="x" type="number" placeholder="X" step=".01" value="0">
-                                    <input class="input " style="width: 200px; float:left" id="y" type="number" placeholder="Y" step=".01" value="0">
-                                    <input class="input " style="width: 200px; float:left" id="z" type="number" placeholder="Z" step=".01" value="0">
-
+            
+                                    <div style="display: block; margin: auto">
+                                        <input class="input coord-dim" id="x" type="number" placeholder="X" step=".01" value="0">
+                                        <input class="input coord-dim" id="y" type="number" placeholder="Y" step=".01" value="0">
+                                        <input class="input coord-dim" id="z" type="number" placeholder="Z" step=".01" value="0">
+                                    </div>
                                     <div class="control">
-                                        <button class="buttonisprimary" style="width: 200px; float:left">Edit</button>
+                                        <button class="v-button edit-button" id="modalBox_addsubmit"
+                                            style="width: 10rem; margin: 1rem;">Edit</button>
                                     </div>
                                 </div>
-                            </div>
+            
+                            </section>
+            
 
-                        </div>
-
-                        <section id="add-modal" class="modal is-responsive">
-                            <div class="modal-content">
-                                <span class="close">&times;</span>
-                                <p class="v-datalist-title"> Add Shape Menu</p>
-                                <div class="select" style="display: inline-block; margin: 0.5rem">
-                                    <select name="" id="shape-add-dropdown" value="dropdown">
-                                        <option value="Tetrahedron">Tetrahedron</option>
-                                        <option value="Octahedron">Octahedron</option>
-                                        <option value="Dodecahedron">Dodecahedron</option>
-                                        <option value="Cube">Cube</option>
-                                    </select>
+                            <section id="add-modal" class="modal is-responsive is-centered">
+                                <div class="modal-content">
+                                    <span class="close">&times;</span>
+                                    <p class="v-datalist-title"> Add Shape Menu</p>
+                                    <div class="select" style="display: inline-block; margin: 0.5rem">
+                                        <select name="" id="shape-add-dropdown" value="dropdown">
+                                            <option value="Tetrahedron">Tetrahedron</option>
+                                            <option value="Octahedron">Octahedron</option>
+                                            <option value="Dodecahedron">Dodecahedron</option>
+                                            <option value="Cube">Cube</option>
+                                        </select>
+                                    </div>
+            
+                                    <div style="display: block; margin: auto">
+                                        <input class="input coord-dim" id="x1" type="number" placeholder="X" step=".01" value="0">
+                                        <input class="input coord-dim" id="y1" type="number" placeholder="Y" step=".01" value="0">
+                                        <input class="input coord-dim" id="z1" type="number" placeholder="Z" step=".01" value="0">
+                                    </div>
+                                    <div class="control">
+                                        <button class="v-button add-button" id="modalBox_addsubmit"
+                                            style="margin: 1rem;">Add!</button>
+                                    </div>
                                 </div>
-        
-                                <div style="display: block; margin: auto">
-                                    <input class="input coord-dim" id="x1" type="number" placeholder="X" step=".01" value="0">
-                                    <input class="input coord-dim" id="y1" type="number" placeholder="Y" step=".01" value="0">
-                                    <input class="input coord-dim" id="z1" type="number" placeholder="Z" step=".01" value="0">
-                                </div>
-                                <div class="control">
-                                    <button class="v-button add-button" id="modalBox_addsubmit"
-                                        style="width: 10rem; margin: 1rem;">Add!</button>
-                                </div>
-                            </div>
-        
-                        </section>
+            
+                            </section>
                     </p>
                 </div>
                 <div class="v-datalist-row" id="top-border">
@@ -139,9 +140,9 @@
                 <div class="v-datalist-row" id="top-border">
                     <div class="v-datalist-title">World and Instances</div>
 
-                    <div>
-                        <label style="margin: 1rem" for="quantity">Frames</label>
-                        <input style="width:30%" type="number" id="frames" name="noofframes" min="1" step="1" value="1000">
+                    <div style="margin: 1rem" >
+                        <label for="quantity" style="margin: 1rem" >Frames</label>
+                        <input class="input is-responsive is-small" style="width:40%" type="number" id="frames" name="noofframes" min="1" step="1" value="1000">
                     </div>
 
                     <div class="v-datalist-row">
