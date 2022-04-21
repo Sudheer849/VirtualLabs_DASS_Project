@@ -98,7 +98,6 @@ window.onclick = function (event) {
 
 // Section of Checkboxes
 // --------------------------------------------------------------------------------------------------
-// 2D
 // lock vertices
 lockVertices.addEventListener("click", () => {
   if (lockVertices.checked) {
