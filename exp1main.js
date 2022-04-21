@@ -4,10 +4,10 @@ import { OrbitControls } from "https://threejsfundamentals.org/threejs/resources
 import { MOUSE } from "https://unpkg.com/three@0.128.0/build/three.module.js";
 
 import {
-  createCube,
-  createDodecahedron,
-  createOctahedron,
-  createTetrahedron
+    createCube,
+    createDodecahedron,
+    createOctahedron,
+    createTetrahedron
 } from "./js/shapes.js";
 import { dot } from "./js/point.js";
 
@@ -119,11 +119,13 @@ document.getElementById("add-shape-btn").onclick = function () {
     let xcoord = document.getElementById("x1").value;
     let ycoord = document.getElementById("y1").value;
     let zcoord = document.getElementById("z1").value;
+
     noOfShapes++;
     isShapeExist = 1;
     if (document.getElementById("shape-add-dropdown").value === "Cube") {
       createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
         , dragX, dragY, dragZ);
+      createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
     }
     if (document.getElementById("shape-add-dropdown").value === "Tetrahedron") {
       createTetrahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
@@ -140,6 +142,7 @@ document.getElementById("add-shape-btn").onclick = function () {
     modalAdd.style.display = "none";
   };
 };
+
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2();
 let plane = new THREE.Plane();
@@ -161,13 +164,14 @@ for (let i = 0; i < 1000; i++) {
 
 //document.addEventListener("dblclick", ondblclick, false);
 
+function ondblclick(event) {
 document.getElementById("canvas-main").ondblclick = function (event) {
-  const rect = renderer.domElement.getBoundingClientRect();
-  const x = event.clientX - rect.left;
-  const y = event.clientY - rect.top;
+    const rect = renderer.domElement.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
 
-  mouse.x = (x / container.clientWidth) * 2 - 1;
-  mouse.y = (y / container.clientHeight) * -2 + 1;
+    mouse.x = (x / container.clientWidth) * 2 - 1;
+    mouse.y = (y / container.clientHeight) * -2 + 1;
 
   raycaster.setFromCamera(mouse, camera);
   let intersects = raycaster.intersectObjects(shapes);
@@ -243,10 +247,11 @@ document.getElementById("canvas-main").ondblclick = function (event) {
       document.getElementById("edit-modal").style.display = "none";
     };
   }
+}
 };
 
-document.getElementById("h-s").onchange = function () {
-  scale = document.getElementById("h-s").value;
+document.getElementById("h-s").onchange = function() {
+    scale = document.getElementById("h-s").value;
 
   document.getElementById("h-x").value =
     document.getElementById("x-value").value * scale;
@@ -291,18 +296,9 @@ document.addEventListener("pointermove", (event) => {
         planeIntersect.y + shift.y,
         planeIntersect.z + shift.z
       );
-      document.getElementById("x-value").value = (
-        (dotList[0].position.x + initialPos[0]) *
-        scale
-      ).toFixed(2);
-      document.getElementById("y-value").value = (
-        (dotList[0].position.y + initialPos[1]) *
-        scale
-      ).toFixed(2);
-      document.getElementById("z-value").value = (
-        (dotList[0].position.z + initialPos[2]) *
-        scale
-      ).toFixed(2);
+      document.getElementById("x-value").value = ( (dotList[0].position.x + initialPos[0]) * scale).toFixed(2);
+      document.getElementById("y-value").value = ( (dotList[0].position.y + initialPos[1]) * scale).toFixed(2);
+      document.getElementById("z-value").value = ( (dotList[0].position.z + initialPos[2]) * scale).toFixed(2);
 
       let c_x = document.getElementById("x-value").value * scale;
       let c_y = document.getElementById("y-value").value * scale;
@@ -312,7 +308,7 @@ document.addEventListener("pointermove", (event) => {
       document.getElementById("h-y").value = c_y.toFixed(2);
       document.getElementById("h-z").value = c_z.toFixed(2);
     }
-  }
+}
 });
 
 document.addEventListener("pointerdown", () => {
@@ -338,8 +334,8 @@ document.addEventListener("pointerdown", () => {
 });
 
 document.addEventListener("pointerup", () => {
-  isDragging = false;
-  dragObject = null;
+    isDragging = false;
+    dragObject = null;
 });
 
 moveButton.addEventListener("click", () => {
@@ -360,10 +356,10 @@ moveButton.addEventListener("click", () => {
 scene = new THREE.Scene();
 scene.background = new THREE.Color(0x121212);
 camera = new THREE.PerspectiveCamera(
-  30,
-  window.innerWidth / window.innerHeight,
-  1,
-  1000
+    30,
+    window.innerWidth / window.innerHeight,
+    1,
+    1000
 );
 
 let init = function () {
@@ -402,9 +398,9 @@ let init = function () {
   orbit.target.set(0, 0, 0);
   orbit.enableDamping = true;
 };
-let mainLoop = function () {
-  renderer.render(scene, camera);
-  requestAnimationFrame(mainLoop);
+let mainLoop = function() {
+    renderer.render(scene, camera);
+    requestAnimationFrame(mainLoop);
 };
 init();
 mainLoop();
