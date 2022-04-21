@@ -120,113 +120,32 @@
                     <div id="add-modal" class="modal is-responsive">
                         <div class="modal-content">
                             <span class="close">&times;</span>
-                            <p>
+                            <div>
                                 <input class="input" style="width:auto; float: left;" id="nam" type="text" placeholder="Instance Name">
                                 <div id="ShapeAdd" class="control">
                                     <div class="select" style="float:left;">
                                         <select name="" id="shape-add-dropdown" value="dropdown">
-                                    <option value="Tetrahedron">Tetrahedron</option>
-                                    <option value="Octahedron">Octahedron</option>
-                                    <option value="Dodecahedron">Dodecahedron</option>
-                                    <option value="Cube">Cube</option>
-                                    <option value="Sphere">Sphere</option>
-                                </select>
+                                            <option value="Tetrahedron">Tetrahedron</option>
+                                            <option value="Octahedron">Octahedron</option>
+                                            <option value="Dodecahedron">Dodecahedron</option>
+                                            <option value="Cube">Cube</option>
+                                            <option value="Sphere">Sphere</option>
+                                        </select>
                                     </div>
                                 </div>
-                                </br>
-                                </br>
 
                                 <input class="input " style="width: 100px; float:left" id="x1" type="number" placeholder="X" step=".01" value="0">
                                 <input class="input " style="width: 100px; float:left" id="y1" type="number" placeholder="Y" step=".01" value="0">
                                 <input class="input " style="width: 100px; float:left" id="z1" type="number" placeholder="Z" step=".01" value="0">
 
-                                </br>
-                                </br>
-                                <p style="text-align: left;">Co-ordinate System (Global by default):
-                                    <button class="button is-small  is-outlined is-success" style="float:inline-end; width: 20px; height: 20px;" onclick="CS_popup()">Add</button>
-
-                                    <p style="text-align: left;">Transformation (Global by default):
-                                        <button class="button is-small  is-outlined is-success" style="float:inline-end; width: 20px; height: 20px;" onclick="Transformation_popup()">Add</button>
-
-                                        <div class="control">
-                                            <button class="buttonissecondary" style="width: 200px; float:left">ADD</button>
-                                        </div>
-                                    </p>
-                        </div>
-
-                    </div>
-
-                    <div id="EditModal" class="modal">
-                        <div class="modal-content">
-                            <span class="close">&times;</span>
-                            <p>Edit shapes</p>
-                        </div>
-
-                    </div>
-
-                    <div id="DeleteModal" class="modal">
-                        <div class="modal-content">
-                            <span class="close">&times;</span>
-                            <p>Delete shapes</p>
-                        </div>
-
-                    </div>
-
-                    <div id="cam-modal" class="modal">
-                        <div class="modal-content">
-                            <span class="close">&times;</span>
-                            <p>
                                 <div class="control">
-                                    <p>Clipping</p>
-                                    <div style="display: flexbox;">
-                                        <input class="input is-small" style="width:20%" type="text" id="near-coord" placeholder="Near">
-                                        <input class="input is-small" style="width:20%" type="text" id="far-coord" placeholder="Far">
-                                    </div>
-                                    <div style="display: flexbox;">
-                                        <input class="input is-small" style="width:20%" type="text" id="left-coord" placeholder="Left">
-                                        <input class="input is-small" style="width:20%" type="text" id="right-coord" placeholder="Right">
-                                    </div>
-                                    <div style="display: flexbox;">
-                                        <input class="input is-small" style="width:20%" type="text" id="top-coord" placeholder="Top">
-                                        <input class="input is-small" style="width:20%" type="text" id="bottom-coord" placeholder="Bottom">
-                                    </div>
-                                    <p>Camera Position</p>
-                                    <div style="display: flexbox;">
-                                        <input class="input is-small" style="width:20%" type="text" id="cam-x" placeholder="Cam-X">
-                                        <input class="input is-small" style="width:20%" type="text" id="cam-y" placeholder="Cam-Y">
-                                        <input class="input is-small" style="width:20%" type="text" id="cam-z" placeholder="Cam-Z">
-                                    </div>
-                                    <p>Target Position</p>
-                                    <div style="display: flexbox;">
-                                        <input class="input is-small" style="width:20%" type="text" id="target-x" placeholder="Target-X">
-                                        <input class="input is-small" style="width:20%" type="text" id="target-y" placeholder="Target-Y">
-                                        <input class="input is-small" style="width:20%" type="text" id="target-z" placeholder="Target-Z">
-                                    </div>
-                                    <p>Up Vector</p>
-                                    <div style="display: flexbox;">
-                                        <input class="input is-small" style="width:20%" type="text" id="up-x" placeholder="Up-X">
-                                        <input class="input is-small" style="width:20%" type="text" id="up-y" placeholder="Up-Y">
-                                        <input class="input is-small" style="width:20%" type="text" id="up-z" placeholder="Up-Z">
-                                    </div>
-                                    <p>Type</p>
-                                    <!-- <div id ="camera-type" class="control" value="1"> -->
-                                    <div id="ortho-id" class="select" style="float:left;">
-                                        <select id="cam-type" name="" value="1">
-                                          <option value="1">Orthographic</option>
-                                          <option value="0">Perspective</option>
-                                        </select>
-                                    </div>
-                                    <!-- </div> -->
-                                    <div class="control">
-                                        <button class="button is-link" id="new-cam">Submit</button>
-                                    </div>
+                                            <button class="buttonissecondary" style="width: 200px; float:left">ADD</button>
                                 </div>
-                            </p>
+                            </div>
                         </div>
 
                     </div>
-
-                    </p>
+                </p>
 
                     <div class="v-datalist-title" id="top-border">Point Co-ordinates</div>
 
@@ -242,16 +161,18 @@
 
                     <div>
                         <label style="margin: 1rem" for="quantity">Frames</label>
-                        <input style="width:30%" type="number" id="frames" name="noofframes" min="1" step="1" value="1000"></br>
+                        <input style="width:30%" type="number" id="frames" name="noofframes" min="1" step="1" value="1000">
                     </div>
 
                     <div class="v-datalist-row v-bold" id="output1"></div>
                     <div class="v-datalist-row v-bold" id="output2"></div>
                     <div class="v-datalist-row">
-                        <div class="v-table-wrap">
-                            <table id="table" class="table is-bordered is-fullwidth">
-                            </table>
-                        </div>
+                        Shoulder
+                        <input class="v-slider-full is-centered column exptwoslider is-fullwidth" id="shoulder" step="1" min="0" max="100" value="0" type="range">
+                        Elbow
+                        <input class="v-slider-full is-centered column exptwoslider is-fullwidth" id="elbow" step="1" min="0" max="100" value="0" type="range">
+                        Wrist
+                        <input class="v-slider-full is-centered column exptwoslider is-fullwidth" id="wrist" step="1" min="0" max="100" value="0" type="range">
                     </div>
             </div>
         </div>
@@ -263,10 +184,6 @@
             </div>
         </div>
     </div>
-
-    <input class="slider exptwoslider is-fullwidth" id="shoulder" step="1" min="0" max="100" value="0" type="range">
-    <input class="slider exptwoslider is-fullwidth" id="elbow" step="1" min="0" max="100" value="0" type="range">
-    <input class="slider exptwoslider is-fullwidth" id="wrist" step="1" min="0" max="100" value="0" type="range">
 
     <script src="https://unpkg.com/mathjs@9.2.0/lib/browser/math.js"></script>
     <script type="module" src="exp6main.js"></script>
