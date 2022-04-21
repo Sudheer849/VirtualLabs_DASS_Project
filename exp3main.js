@@ -142,8 +142,7 @@ document.getElementById("add-shape-btn").onclick = function () {
         let xcoord = document.getElementById("x1").value;
         let ycoord = document.getElementById("y1").value;
         let zcoord = document.getElementById("z1").value;
-        noOfShapes
-++;
+        noOfShapes++;
         console.log(document.getElementById("shape-add-dropdown").value);
         if (document.getElementById("shape-add-dropdown").value === "Cube") {
             createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
@@ -207,8 +206,7 @@ function ondblclick(event) {
         var ycoord = document.getElementById("y").value;
         var zcoord = document.getElementById("z").value;
         // alert(document.querySelector("select").value);
-        noOfShapes
-++;
+        noOfShapes++;
         if (document.querySelector("select").value === "Cube") {
             createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
 , dragX, dragY, dragZ);
@@ -241,8 +239,7 @@ function ondblclick(event) {
                 let ycoord = document.getElementById("y").value;
                 let zcoord = document.getElementById("z").value;
                 // alert(document.querySelector("select").value);
-                noOfShapes
-++;
+                noOfShapes++;
                 if (document.querySelector("select").value === "Cube") {
                     createCube(
                         xcoord,
@@ -329,8 +326,7 @@ document.addEventListener("pointermove", (event) => {
                     planeIntersect.z + shift.z
                 );
                 shapes[i].geometry.verticesNeedUpdate = true;
-                shapeVertex
-[i].position.set(
+                shapeVertex[i].position.set(
                     planeIntersect.x + shift.x - dragX[i],
                     planeIntersect.y + shift.y - dragY[i],
                     planeIntersect.z + shift.z - dragZ[i]
