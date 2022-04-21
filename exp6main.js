@@ -338,36 +338,50 @@ function Level3(e) {
 
 document.getElementById("frames").onchange = function() {
     let NewFrames = document.getElementById("frames").value;
+    // console.log("Oldsliders sh elb wrst ", document.getElementById("shoulder").value, document.getElementById("elbow").value, document.getElementById("wrist").value);   
+
+    let rot_axis = new THREE.Vector3(0, 1, 0);
+    let OldAngle = ( document.getElementById("shoulder").value / (frames / 1) ) * ShldAngl;
+    let NewAngle = ((frames/1) / (NewFrames/1) ) * OldAngle;
+    ShldPrev = document.getElementById("shoulder").value;
+    if ( NewAngle > ShldAngl ) {
+        NewAngle = ShldAngl/1;
+        ShldPrev = NewFrames;
+    }
+    hand_comp[0].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * PI) / 180);
+
+    // console.log( "sh Newangle and oldangle ", NewAngle, OldAngle);
+
+    rot_axis = new THREE.Vector3(0, 0, 1);
+    OldAngle = ( document.getElementById("elbow").value / (frames / 1) ) * ElbwAngl;
+    NewAngle = ((frames/1) / (NewFrames/1) ) * OldAngle;
+    ElbwPrev = document.getElementById("elbow").value;
+    if ( NewAngle > ElbwAngl ) {
+        NewAngle = ElbwAngl/1;
+        ElbwPrev = NewFrames;
+    }
+    hand_comp[1].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * PI) / 180);
+    // console.log( "elbow Newangle and oldangle ", NewAngle, OldAngle);
+
+    rot_axis = new THREE.Vector3(0, 0, 1);
+    OldAngle = ( document.getElementById("wrist").value / (frames / 1) ) * WrstAngl;
+    NewAngle = ((frames/1) / (NewFrames/1) ) * OldAngle;
+    WrstPrev = document.getElementById("wrist").value;
+    if ( NewAngle > WrstAngl ) {
+        NewAngle = WrstAngl/1;
+        WrstPrev = NewFrames;
+    }
+    hand_comp[2].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * PI) / 180);
+    // console.log( "wrist Newangle and oldangle ", NewAngle, OldAngle);
 
     document.getElementById("shoulder").max = NewFrames;
     document.getElementById("elbow").max = NewFrames;
     document.getElementById("wrist").max = NewFrames;
 
-    let rot_axis = new THREE.Vector3(0, 1, 0);
-    let NewAngle = (frames / NewFrames) * ShldAngl;
-    if (NewAngle > ShldAngl) {
-        NewAngle = ShldAngl;
-    }
-    let OldAngle = document.getElementById("shoulder").value / (frames / 1) * ShldAngl;
-    hand_comp[0].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * PI) / 180);
-
-    rot_axis = new THREE.Vector3(0, 0, 1);
-    NewAngle = (frames / NewFrames) * ElbwAngl;
-    if (NewAngle > ElbwAngl) {
-        NewAngle = ElbwAngl;
-    }
-    OldAngle = document.getElementById("elbow").value / (frames / 1) * ElbwAngl;
-    hand_comp[1].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * PI) / 180);
-
-    rot_axis = new THREE.Vector3(0, 0, 1);
-    NewAngle = (frames / NewFrames) * WrstAngl;
-    if (NewAngle > WrstAngl) {
-        NewAngle = WrstAngl;
-    }
-    OldAngle = document.getElementById("wrist").value / (frames / 1) * WrstAngl;
-    hand_comp[2].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * PI) / 180);
-
     frames = NewFrames;
+    // console.log("Now: ", frames);
+    // console.log("Newsliders sh elb wrst ", document.getElementById("shoulder").value, document.getElementById("elbow").value, document.getElementById("wrist").value );   
+
 };
 // --------------------------------------------------------------------------------------------------
 

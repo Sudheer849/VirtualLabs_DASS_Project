@@ -162,9 +162,6 @@ for (let i = 0; i < 1000; i++) {
   isDeleted.push(0);
 }
 
-//document.addEventListener("dblclick", ondblclick, false);
-
-//function ondblclick(event) {
 document.getElementById("canvas-main").ondblclick = function (event) {
     const rect = renderer.domElement.getBoundingClientRect();
     const x = event.clientX - rect.left;
