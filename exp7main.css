@@ -1,10 +1,9 @@
 .page {
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 .v-datalist-container {
     height: 100%;
-    padding: 0;
 }
 
 .v-instruction-container {
@@ -16,7 +15,6 @@
     width: 100%;
     height: 100%;
     min-height: 900px;
-    border: none;
 }
 
 .v-slider-full {
@@ -47,52 +45,55 @@
 @media screen and (max-width: 1023px) {
     .left {
         order: 1;
-        
     }
-
     .right {
         order: 2;
     }
-
     .exp {
         order: 3;
     }
 }
 
 #top-border {
-    border-top: 1px solid black;
-    margin: 0.5rem;
-}
-
-.smol-wid {
-    width: 20%;
-    /* margin: 0.1rem; */
+    border-top: 0.1px dashed black;
 }
 
 .modal {
     display: none;
+    /* Hidden by default */
     position: fixed;
+    /* Stay in place */
     z-index: 1;
+    /* Sit on top */
     left: 0;
     top: 0;
     width: 100%;
+    /* Full width */
     height: 100%;
+    /* Full height */
     overflow: hidden;
-    /* background-color: rgb(0, 0, 0); */
-    /* background-color: rgba(0, 0, 0, 0.4); */
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
 }
 
-#disp-heading { 
-    margin: 0.5rem;
-}
+
+/* Modal Content/Box */
 
 .modal-content {
     background-color: #fefefe;
     margin: 15% auto;
+    /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
+    /* Could be more or less, depending on screen size */
 }
+
+
+/* The Close Button */
 
 .close {
     color: #aaa;
@@ -108,14 +109,19 @@
     cursor: pointer;
 }
 
+#cs-modal {
+    position: static;
+    margin: 0px;
+}
+
 #add-modal {
+    /* width: auto; */
     width: 50%;
-    margin: auto;
 }
 
 #edit-modal {
+    /* width: auto; */
     width: 50%;
-    margin: auto;
 }
 
 .slidecontainer {
@@ -156,80 +162,8 @@
 }
 
 .v-datalist-title {
+    /* background-color: #2C9AD1; */
+    /* background-blend-mode: overlay; */
+    /* border-radius: 1rem; */
     border-bottom: 0;
-}
-
-.v-collapsible-instruction-container {
-    width: 60%;
-    margin: auto;
-    border-radius: 0.25rem;
-}
-
-.v-collapsible {
-    width: 98%;
-    margin: auto;
-}
-
-.v-collapsible::after {
-    size: 1rem;
-}
-
-.v-button {
-    background-color: #04AA6D;
-    border-radius: 0.5rem;
-    font-size: small;
-}
-
-.instr-font {
-    font-size: 0.9rem;
-}
-
-.coord-dim {
-    width: 100px;
-    margin: 0.25rem;
-}
-
-#add-shape-btn {
-    background-color: #3298dc;
-    border-radius: 0.5rem;
-}
-
-#edit-shape-btn {
-    background-color: #48c774;
-    border-radius: 0.5rem;
-}
-
-#delete-shape-btn {
-    background-color: #f14668;
-    border-radius: 0.5rem;
-}
-
-#move-button {
-    background-color: #48c774;
-    border-radius: 0.5rem;
-}
-
-#set-rotation-axis {
-    background-color: #3298dc;
-    border-radius: 0.5rem;
-}
-
-#checkboxes {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: space-around;
-}
-
-#checkboxes label {
-    margin: 0.3rem auto;
-
-    display: flex;
-    align-items: flex-start;
-    flex: 40%;
-}
-
-#lock-v #xy-grid #xz-grid #yz-grid {
-    margin: auto 0.1rem;
-    padding: auto 0.1rem;
 }

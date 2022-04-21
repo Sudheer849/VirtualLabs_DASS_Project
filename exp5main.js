@@ -1,8 +1,8 @@
+"use strict";
 import * as THREE from "https://threejsfundamentals.org/threejs/resources/threejs/r115/build/three.module.js";
 import { OrbitControls } from "https://threejsfundamentals.org/threejs/resources/threejs/r115/examples/jsm/controls/OrbitControls.js";
 import { MOUSE } from "https://unpkg.com/three@0.128.0/build/three.module.js";
 import { createCube, createDodecahedron, createOctahedron, createTetrahedron } from "./js/shapes.js";
-import { ProjectTo2D } from "./js/2dprojection.js";
 import { Triangle } from "./js/Triangle.js";
 
 const move_button = document.getElementById("move-button");
@@ -464,176 +464,7 @@ document.getElementById("scale-z").onchange = function () {
   max_z_scale = new_scale;
 }
 
-// --------------------------------------------------------------------------------------------------
-
-// Cube Function
-// --------------------------------------------------------------------------------------------------
-
-let createCube = function (x, y, z) {
-  const geometry = new THREE.BoxGeometry(1, 1, 1);
-  const material = createMaterials().cubeShader;
-  const cube = new THREE.Mesh(geometry, material);
-  cube.geometry.verticesNeedUpdate = true;
-  shapes.push(cube);
-  shapes[shapes.length - 1].position.set(x, y, z);
-  scene.add(shapes[shapes.length - 1]);
-  // console.log(cube[cube.length - 1]);
-  var vertex = new THREE.Vector3();
-  // console.log(cube[cube.length - 1].geometry.vertices[0]);
-  for (let i = 0; i < shapes[shapes.length - 1].geometry.vertices.length; i++) {
-    var dotGeometry = new THREE.Geometry();
-    dotGeometry.vertices.push(shapes[shapes.length - 1].geometry.vertices[i]);
-    var dotMaterial = new THREE.PointsMaterial({
-      color: "white",
-      size: 6,
-      sizeAttenuation: false,
-    });
-    const geometry = new THREE.SphereGeometry(15, 32, 16);
-    var dot = new THREE.Points(dotGeometry, dotMaterial);
-    point.push(dot);
-    shapes[shapes.length - 1].add(point[point.length - 1]);
-    if (i === 0) {
-      shapevertex.push(dot);
-    }
-  }
-  // console.log(cube[cube.length-1].geometry.vertices[0].x,cube[cube.length-1].geometry.vertices[0].y,cube[cube.length-1].geometry.vertices[0].z);
-  dragx.push(shapes[shapes.length - 1].geometry.vertices[0].x);
-  dragy.push(shapes[shapes.length - 1].geometry.vertices[0].y);
-  dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
-};
-move_button.addEventListener("click", () => {
-  vertex_a = new THREE.Vector3( document.getElementById("vertex-00").value, document.getElementById("vertex-01").value, document.getElementById("vertex-02").value ),
-  vertex_b = new THREE.Vector3( document.getElementById("vertex-10").value, document.getElementById("vertex-11").value, document.getElementById("vertex-12").value ),
-  vertex_c = new THREE.Vector3( document.getElementById("vertex-20").value, document.getElementById("vertex-21").value, document.getElementById("vertex-22").value );
-
-  scene.remove(dot_list[0]);
-  dot_list.pop();
-  Triangle(vertex_a, vertex_b, vertex_c);
-});
-// Dodecahedron Function
-// --------------------------------------------------------------------------------------------------
-let createDodecahedron = function (x, y, z) {
-  const geometry = new THREE.DodecahedronGeometry(1);
-  const material = createMaterials().cubeShader;
-  const dodecahedron = new THREE.Mesh(geometry, material);
-  dodecahedron.geometry.verticesNeedUpdate = true;
-  shapes.push(dodecahedron);
-  shapes[shapes.length - 1].position.set(x, y, z);
-  scene.add(shapes[shapes.length - 1]);
-  // console.log(cube[cube.length - 1]);
-  var vertex = new THREE.Vector3();
-  // console.log(cube[cube.length - 1].geometry.vertices[0]);
-  for (let i = 0; i < shapes[shapes.length - 1].geometry.vertices.length; i++) {
-    var dotGeometry = new THREE.Geometry();
-    dotGeometry.vertices.push(shapes[shapes.length - 1].geometry.vertices[i]);
-    var dotMaterial = new THREE.PointsMaterial({
-      color: "white",
-      size: 6,
-      sizeAttenuation: false,
-    });
-    var dot = new THREE.Points(dotGeometry, dotMaterial);
-    point.push(dot);
-    shapes[shapes.length - 1].add(point[point.length - 1]);
-    if (i === 0) {
-      shapevertex.push(dot);
-    }
-  }
-  // console.log(cube[cube.length-1].geometry.vertices[0].x,cube[cube.length-1].geometry.vertices[0].y,cube[cube.length-1].geometry.vertices[0].z);
-  dragx.push(shapes[shapes.length - 1].geometry.vertices[0].x);
-  dragy.push(shapes[shapes.length - 1].geometry.vertices[0].y);
-  dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
-};
-
-// Octahedron Function
-// --------------------------------------------------------------------------------------------------
-let createOctahedron = function (x, y, z) {
-  const geometry = new THREE.OctahedronGeometry(1);
-  const material = createMaterials().cubeShader;
-  const octahedron = new THREE.Mesh(geometry, material);
-  octahedron.geometry.verticesNeedUpdate = true;
-  shapes.push(octahedron);
-  shapes[shapes.length - 1].position.set(x, y, z);
-  scene.add(shapes[shapes.length - 1]);
-  // console.log(cube[cube.length - 1]);
-  var vertex = new THREE.Vector3();
-  // console.log(cube[cube.length - 1].geometry.vertices[0]);
-  for (let i = 0; i < shapes[shapes.length - 1].geometry.vertices.length; i++) {
-    var dotGeometry = new THREE.Geometry();
-    dotGeometry.vertices.push(shapes[shapes.length - 1].geometry.vertices[i]);
-    var dotMaterial = new THREE.PointsMaterial({
-      color: "white",
-      size: 6,
-      sizeAttenuation: false,
-    });
-    var dot = new THREE.Points(dotGeometry, dotMaterial);
-    point.push(dot);
-    shapes[shapes.length - 1].add(point[point.length - 1]);
-    if (i === 0) {
-      shapevertex.push(dot);
-    }
-  }
-  // console.log(cube[cube.length-1].geometry.vertices[0].x,cube[cube.length-1].geometry.vertices[0].y,cube[cube.length-1].geometry.vertices[0].z);
-  dragx.push(shapes[shapes.length - 1].geometry.vertices[0].x);
-  dragy.push(shapes[shapes.length - 1].geometry.vertices[0].y);
-  dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
-};
-// Tetrahedron Function
-// --------------------------------------------------------------------------------------------------
-let createTetrahedron = function (x, y, z) {
-  const geometry = new THREE.TetrahedronGeometry(1);
-  const material = createMaterials().cubeShader;
-  const tetrahedron = new THREE.Mesh(geometry, material);
-  tetrahedron.geometry.verticesNeedUpdate = true;
-  shapes.push(tetrahedron);
-  shapes[shapes.length - 1].position.set(x, y, z);
-  scene.add(shapes[shapes.length - 1]);
-
-  // console.log(cube[cube.length - 1]);
-  var vertex = new THREE.Vector3();
-  // console.log(cube[cube.length - 1].geometry.vertices[0]);
-  for (let i = 0; i < shapes[shapes.length - 1].geometry.vertices.length; i++) {
-    var dotGeometry = new THREE.Geometry();
-    dotGeometry.vertices.push(shapes[shapes.length - 1].geometry.vertices[i]);
-    var dotMaterial = new THREE.PointsMaterial({
-      color: "white",
-      size: 6,
-      sizeAttenuation: false,
-    });
-    var dot = new THREE.Points(dotGeometry, dotMaterial);
-    point.push(dot);
-    shapes[shapes.length - 1].add(point[point.length - 1]);
-    if (i === 0) {
-      shapevertex.push(dot);
-    }
-  }
-  // console.log(cube[cube.length-1].geometry.vertices[0].x,cube[cube.length-1].geometry.vertices[0].y,cube[cube.length-1].geometry.vertices[0].z);
-  dragx.push(shapes[shapes.length - 1].geometry.vertices[0].x);
-  dragy.push(shapes[shapes.length - 1].geometry.vertices[0].y);
-  dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
-};
-
-// Creates the triangle
-// --------------------------------------------------------------------------------------------------
-
-let Triangle = function ( A, B, C ) {
-
-  const tri_mater = new THREE.MeshNormalMaterial();
-  let tri_geom = new THREE.BufferGeometry();
-  
-  let vertices = [ A, B, C ];
-  tri_geom.setFromPoints(vertices);
-  tri_geom.computeVertexNormals();
-  
-  const mesh = new THREE.Mesh(tri_geom, tri_mater);
-  dot_list.push(mesh);
-  scene.add(mesh);
-  
-  return tri_geom;
-  
-  };
-
 // Function for Lights
-
 function createLights() {
   // Create a directional light
   const ambientLight = new THREE.HemisphereLight(0xddeeff, 0x202020, 9);
@@ -706,7 +537,7 @@ let init = function () {
   for (let i = 0; i < 6; i++) {
     scene.add(arrowHelper[i]);
   }
-  let tri_geo = Triangle(vertex_a, vertex_b, vertex_c);
+  let tri_geo = Triangle(vertex_a, vertex_b, vertex_c,scene, dot_list);
   renderer = new THREE.WebGLRenderer();
   let container = document.getElementById("canvas-main");
   let w = container.offsetWidth;

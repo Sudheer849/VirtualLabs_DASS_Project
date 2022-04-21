@@ -4,10 +4,10 @@ import { OrbitControls } from "https://threejsfundamentals.org/threejs/resources
 import { MOUSE } from "https://unpkg.com/three@0.128.0/build/three.module.js";
 
 // importing internal files
-// import { createMaterials } from "./exp1/materials.js";
 import { createCube, createDodecahedron, createOctahedron, createTetrahedron } from "./js/shapes.js";
 import { createArm } from "./js/mech_arm.js";
-// import { scene, camera, orbit, renderer, shapes, grid1, grid2, grid3, dragx, dragy, dragz, two_geometry, two_plane, first_time, is_2D, arrowHelper } from "./js/global_lets.js";
+import { VRMLLoader } from "./js/VRMLloader.js";
+
 
 const move_button = document.getElementById("move-button");
 const modalbutton1 = document.querySelector(".buttonisprimary");
@@ -22,7 +22,24 @@ let cam_pos = new THREE.Vector3(17, 15, 15);
 let cam_target = new THREE.Vector3(0, 0, 0);
 let modal_add = document.getElementById("add-modal");
 let modal_edit = document.getElementById("edit-modal");
-let initial_pos = [3, 3, 3];
+let initial_pos = [3,3,3];
+
+let loader = THREE.VRMLLoader();
+loader.load("./bunny.wrl", function (model) {
+
+    console.log(model);
+
+    model.traverse(function (child) {
+        if (child instanceof THREE.Mesh) {
+            console.log(child.geometry);
+        }
+    });
+
+    model.scale.set(10, 10, 10);
+
+    scene.add(model);
+
+});
 
 let frames = document.getElementById("frames").value;
 
@@ -47,7 +64,7 @@ document.getElementById("wrist").max = frames;
 document.getElementById("wrist").min = 0;
 wrist.step = 1;
 
-let ShldPrev = 0,
+let ShldPrev = 0, 
     ElbwPrev = 0,
     WrstPrev = 0;
 
@@ -71,12 +88,12 @@ let scene,
     dir = [],
     arrowHelper = [];
 
-let arm_dim = new THREE.Vector3(1, 2, 1);
-let arm_pos = new THREE.Vector3((arm_dim.x / 2), -(arm_dim.y / 2), 0);
-let fore_dim = new THREE.Vector3(5, 0.5, 1);
-let fore_pos = new THREE.Vector3((fore_dim.x / 2 + arm_dim.x / 2), (fore_dim.y / 2 - arm_dim.y / 2), 0);
-let palm_dim = new THREE.Vector3(5, 1, 5);
-let palm_pos = new THREE.Vector3((fore_dim.x / 2 + palm_dim.x / 2), 0, 0);
+    let arm_dim = new THREE.Vector3(1, 2, 1);
+    let arm_pos = new THREE.Vector3( (arm_dim.x/2), -(arm_dim.y/2), 0 );
+    let fore_dim = new THREE.Vector3( 5, 0.5, 1 );
+    let fore_pos = new THREE.Vector3( (fore_dim.x/2 + arm_dim.x/2), (fore_dim.y/2 - arm_dim.y/2), 0 ); 
+    let palm_dim = new THREE.Vector3( 5, 1, 5 );
+    let palm_pos = new THREE.Vector3( (fore_dim.x/2 + palm_dim.x/2), 0, 0 );
 
 // Modal controls for Add Shape Button
 let addModal = document.getElementById("add-modal");
@@ -323,13 +340,13 @@ function Level1(e) {
     // console.log( frames + " nani1 " + target.value );
     let rot_axis = new THREE.Vector3(0, 1, 0);
 
-    let rot_angle = ((target.value - PrevVal) / (frames / 1)) * ShldAngl;
-    hand_comp[0].rotateOnAxis(rot_axis, (rot_angle * Math.PI) / 180);
+    let rot_angle = ( (target.value - PrevVal)/(frames/1) ) * ShldAngl;
+    hand_comp[0].rotateOnAxis(rot_axis, (rot_angle * Math.PI) /180 );
 
     // console.log(frames, target.value);
-    ShldPrev = target.value;
+    ShldPrev = target.value;    
 }
-
+  
 // Elbow
 // ---------------------------------------------------------------------------------------
 function Level2(e) {
@@ -338,14 +355,14 @@ function Level2(e) {
 
     // console.log("frames " + frames);
     // console.log( frames + " nani2 " + target.value );
-
+    
     let rot_axis = new THREE.Vector3(0, 0, 1);
-    let rot_angle = ((target.value - PrevVal) / (frames / 1)) * ElbwAngl;
-    hand_comp[1].rotateOnAxis(rot_axis, (rot_angle * Math.PI) / 180);
+    let rot_angle = ( (target.value - PrevVal)/(frames/1) ) * ElbwAngl;
+    hand_comp[1].rotateOnAxis(rot_axis, (rot_angle * Math.PI) /180 );
 
     // console.log(frames, target.value);
     ElbwPrev = target.value;
-}
+  }
 
 // Wrist
 // ---------------------------------------------------------------------------------------
@@ -356,44 +373,47 @@ function Level3(e) {
     // console.log("frames " + frames);
     // console.log( frames + " nani3 " + target.value );
     let rot_axis = new THREE.Vector3(0, 0, 1);
-    let rot_angle = ((target.value - PrevVal) / (frames / 1)) * WrstAngl;
+    let rot_angle = ( (target.value - PrevVal)/(frames/1) ) * WrstAngl; 
     // console.log(rot_angle)
-    hand_comp[2].rotateOnAxis(rot_axis, (rot_angle * Math.PI) / 180);
+    hand_comp[2].rotateOnAxis(rot_axis, (rot_angle * Math.PI) /180 );
 
     // console.log(frames, target.value);
     WrstPrev = target.value;
 }
 
-document.getElementById("frames").onchange = function() {
-    let NewFrames = document.getElementById("frames").value;
-
+document.getElementById("frames").onchange = function () {
+    let NewFrames = document.getElementById("frames").value; 
+    
     document.getElementById("shoulder").max = NewFrames;
-    document.getElementById("elbow").max = NewFrames;
-    document.getElementById("wrist").max = NewFrames;
-
+    document.getElementById("elbow").max    = NewFrames;
+    document.getElementById("wrist").max    = NewFrames;
+    
     let rot_axis = new THREE.Vector3(0, 1, 0);
-    let NewAngle = (frames / NewFrames) * ShldAngl;
-    if (NewAngle > ShldAngl) {
+    let NewAngle = ( frames/NewFrames ) * ShldAngl;
+    if ( NewAngle > ShldAngl )
+    {
         NewAngle = ShldAngl;
     }
-    let OldAngle = document.getElementById("shoulder").value / (frames / 1) * ShldAngl;
-    hand_comp[0].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * Math.PI) / 180);
+    let OldAngle = document.getElementById("shoulder").value/(frames/1) * ShldAngl;
+    hand_comp[0].rotateOnAxis(rot_axis, ( (NewAngle - OldAngle) * Math.PI) /180 );
 
     rot_axis = new THREE.Vector3(0, 0, 1);
-    NewAngle = (frames / NewFrames) * ElbwAngl;
-    if (NewAngle > ElbwAngl) {
+    NewAngle = ( frames/NewFrames ) * ElbwAngl;
+    if ( NewAngle > ElbwAngl )
+    {
         NewAngle = ElbwAngl;
     }
-    OldAngle = document.getElementById("elbow").value / (frames / 1) * ElbwAngl;
-    hand_comp[1].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * Math.PI) / 180);
+    OldAngle = document.getElementById("elbow").value/(frames/1) * ElbwAngl;
+    hand_comp[1].rotateOnAxis(rot_axis, ( (NewAngle - OldAngle) * Math.PI) /180 );
 
     rot_axis = new THREE.Vector3(0, 0, 1);
-    NewAngle = (frames / NewFrames) * WrstAngl;
-    if (NewAngle > WrstAngl) {
+    NewAngle = ( frames/NewFrames ) * WrstAngl;
+    if ( NewAngle > WrstAngl )
+    {
         NewAngle = WrstAngl;
     }
-    OldAngle = document.getElementById("wrist").value / (frames / 1) * WrstAngl;
-    hand_comp[2].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * Math.PI) / 180);
+    OldAngle = document.getElementById("wrist").value/(frames/1) * WrstAngl;
+    hand_comp[2].rotateOnAxis(rot_axis, ( (NewAngle - OldAngle) * Math.PI) /180 );
 
     frames = NewFrames;
 };
@@ -431,6 +451,7 @@ let init = function() {
     for (let i = 0; i < 6; i++) {
         scene.add(arrowHelper[i]);
     }
+
     let PointGeometry = createArm(scene, hand_comp, arm_dim, arm_pos, fore_dim, fore_pos, palm_dim, palm_pos);
     renderer = new THREE.WebGLRenderer();
     let container = document.getElementById("canvas-main");

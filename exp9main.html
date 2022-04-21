@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.8-b/css/style.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.5-b/css/style.min.css">
-    <link rel="stylesheet" href="exp9main.css">
+    <link rel="stylesheet" href="exp8main.css">
 </head>
 <br>
 
@@ -56,18 +56,27 @@
                     </div>
                 </d
                 <div class="v-datalist-row" id="top-border">
-                    <p style="float: left;">Line Co-ordinates:</p>
-                    <br> Top Left:
+                    <p style="float: left;">Polygon Co-ordinates:</p>
+                    <br>
                     <div style="display: flexbox;">
-                        <input class="input is-small" style="width:30%" type="number" id="ln-top-left-x" value="50" placeholder="X">
-                        <input class="input is-small" style="width:30%" type="number" id="ln-top-left-y" value="450" placeholder="Y">
+                        <input class="input is-small" style="width:30%" type="number" id="firstPointX" value="50" placeholder="X">
+                        <input class="input is-small" style="width:30%" type="number" id="firstPointY" value="450" placeholder="Y">
                     </div>
-                    Bottom Right:
                     <div style="display: flexbox;">
-                        <input class="input is-small" style="width:30%" type="number" id="ln-bottom-right-x" value="1020" placeholder="X">
-                        <input class="input is-small" style="width:30%" type="number" id="ln-bottom-right-y" value="50" placeholder="Y">
-
-
+                        <input class="input is-small" style="width:30%" type="number" id="secondPointX" value="1020" placeholder="X">
+                        <input class="input is-small" style="width:30%" type="number" id="secondPointY" value="50" placeholder="Y">
+                    </div>
+                    <div style="display: flexbox;">
+                        <input class="input is-small" style="width:30%" type="number" id="thirdPointX" value="350" placeholder="X">
+                        <input class="input is-small" style="width:30%" type="number" id="thirdPointY" value="50" placeholder="Y">
+                    </div>
+                    <div style="display: flexbox;">
+                        <input class="input is-small" style="width:30%" type="number" id="FourthPointX" value="250" placeholder="X">
+                        <input class="input is-small" style="width:30%" type="number" id="FourthPointY" value="80" placeholder="Y">
+                    </div>
+                    <div style="display: flexbox;">
+                        <input class="input is-small" style="width:30%" type="number" id="FifthPointX" value="50" placeholder="X">
+                        <input class="input is-small" style="width:30%" type="number" id="FifthPointY" value="400" placeholder="Y">
                     </div>
 
                 </div>
@@ -82,6 +91,6 @@
         <div class="column is-centered is-variable column is-8-desktop is-10-tablet is-two-thirds-mobile is-flex-wrap-wrap workspace">
             <canvas class="v-canvas-container" id="canvas" style="border:2px solid #c3c3c3;"></canvas>
         </div>
-        <script src="exp8main.js"></script>
+        <script src="exp9main.js"></script>
         <script src="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.8-b/js/script.js"></script>
     </div>
