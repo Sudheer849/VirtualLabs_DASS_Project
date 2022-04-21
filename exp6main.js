@@ -7,7 +7,6 @@ import { MOUSE } from "https://unpkg.com/three@0.128.0/build/three.module.js";
 // import { createMaterials } from "./exp1/materials.js";
 import { createCube, createDodecahedron, createOctahedron, createTetrahedron } from "./js/shapes.js";
 import { createArm, moveArm } from "./js/mech_arm.js";
-// import { scene, camera, orbit, renderer, shapes, grid1, grid2, grid3, dragX, dragY, dragZ, , , first_time, is_2D, arrowHelper } from "./js/global_lets.js";
 
 const moveButton = document.getElementById("move-button");
 const modalbutton1 = document.querySelector(".edit-button");
@@ -55,6 +54,7 @@ let ShldAngl = 90,
 
 let spanEditModal = document.getElementsByClassName("close")[0];
 let scene,
+    PI = 3.141592653589793,
     camera,
     renderer,
     orbit,
@@ -94,7 +94,7 @@ window.onclick = function(event) {
 lockVertices.addEventListener("click", () => {
     if (lockVertices.checked) {
         lock = 1;
-        //console.log("hello");
+        //console.debug("hello");
         orbit.mouseButtons = {
             LEFT: MOUSE.PAN,
             MIDDLE: MOUSE.DOLLY,
@@ -133,7 +133,7 @@ xyGrid.addEventListener("click", () => {
 xzGrid.addEventListener("click", () => {
     if (xzGrid.checked) {
         let grid = new THREE.GridHelper(size, divisions);
-        grid.geometry.rotateZ(Math.PI / 2);
+        grid.geometry.rotateZ(PI / 2);
         grid3.push(grid);
         scene.add(grid3[0]);
     } else {
@@ -172,7 +172,7 @@ document.getElementById("add-shape-btn").onclick = function() {
         let zcoord = document.getElementById("z1").value;
         // alert(document.getElementById("hi").value);
         noOfShapes++;
-        console.log(document.getElementById("shape-add-dropdown").value);
+        console.debug(document.getElementById("shape-add-dropdown").value);
         if (document.querySelector("select").value == "Cube") {
             createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
 , dragX, dragY, dragZ);
@@ -221,7 +221,7 @@ function ondblclick(event) {
     raycaster1.setFromCamera(mouse, camera);
     let intersects = raycaster1.intersectObjects(shapes);
     if (intersects.length > 0) {
-        console.log(
+        console.debug(
             intersects[0].object.position.x,
             intersects[0].object.position.y,
             intersects[0].object.position.z
@@ -286,19 +286,19 @@ spanEditModal.onclick = function() {
 // Shoulder
 // ---------------------------------------------------------------------------------------
 function Level1(e) {
-    // console.log(e);
+    // console.debug(e);
     let target = e.target ? e.target : e.srcElement;
-    // console.log(target.value);
+    // console.debug(target.value);
     let PrevVal = ShldPrev;
 
-    // console.log("frames " + frames);
-    // console.log( frames + " nani1 " + target.value );
+    // console.debug("frames " + frames);
+    // console.debug( frames + " nani1 " + target.value );
     let rot_axis = new THREE.Vector3(0, 1, 0);
 
     let rot_angle = ((target.value - PrevVal) / (frames / 1)) * ShldAngl;
-    hand_comp[0].rotateOnAxis(rot_axis, (rot_angle * Math.PI) / 180);
+    hand_comp[0].rotateOnAxis(rot_axis, (rot_angle * PI) / 180);
 
-    // console.log(frames, target.value);
+    // console.debug(frames, target.value);
     ShldPrev = target.value;
 }
 
@@ -308,14 +308,14 @@ function Level2(e) {
     let target = e.target ? e.target : e.srcElement;
     let PrevVal = ElbwPrev;
 
-    // console.log("frames " + frames);
-    // console.log( frames + " nani2 " + target.value );
+    // console.debug("frames " + frames);
+    // console.debug( frames + " nani2 " + target.value );
 
     let rot_axis = new THREE.Vector3(0, 0, 1);
     let rot_angle = ((target.value - PrevVal) / (frames / 1)) * ElbwAngl;
-    hand_comp[1].rotateOnAxis(rot_axis, (rot_angle * Math.PI) / 180);
+    hand_comp[1].rotateOnAxis(rot_axis, (rot_angle * PI) / 180);
 
-    // console.log(frames, target.value);
+    // console.debug(frames, target.value);
     ElbwPrev = target.value;
 }
 
@@ -325,14 +325,14 @@ function Level3(e) {
     let target = e.target ? e.target : e.srcElement;
     let PrevVal = WrstPrev;
 
-    // console.log("frames " + frames);
-    // console.log( frames + " nani3 " + target.value );
+    // console.debug("frames " + frames);
+    // console.debug( frames + " nani3 " + target.value );
     let rot_axis = new THREE.Vector3(0, 0, 1);
     let rot_angle = ((target.value - PrevVal) / (frames / 1)) * WrstAngl;
-    // console.log(rot_angle)
-    hand_comp[2].rotateOnAxis(rot_axis, (rot_angle * Math.PI) / 180);
+    // console.debug(rot_angle)
+    hand_comp[2].rotateOnAxis(rot_axis, (rot_angle * PI) / 180);
 
-    // console.log(frames, target.value);
+    // console.debug(frames, target.value);
     WrstPrev = target.value;
 }
 
@@ -349,7 +349,7 @@ document.getElementById("frames").onchange = function() {
         NewAngle = ShldAngl;
     }
     let OldAngle = document.getElementById("shoulder").value / (frames / 1) * ShldAngl;
-    hand_comp[0].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * Math.PI) / 180);
+    hand_comp[0].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * PI) / 180);
 
     rot_axis = new THREE.Vector3(0, 0, 1);
     NewAngle = (frames / NewFrames) * ElbwAngl;
@@ -357,7 +357,7 @@ document.getElementById("frames").onchange = function() {
         NewAngle = ElbwAngl;
     }
     OldAngle = document.getElementById("elbow").value / (frames / 1) * ElbwAngl;
-    hand_comp[1].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * Math.PI) / 180);
+    hand_comp[1].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * PI) / 180);
 
     rot_axis = new THREE.Vector3(0, 0, 1);
     NewAngle = (frames / NewFrames) * WrstAngl;
@@ -365,7 +365,7 @@ document.getElementById("frames").onchange = function() {
         NewAngle = WrstAngl;
     }
     OldAngle = document.getElementById("wrist").value / (frames / 1) * WrstAngl;
-    hand_comp[2].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * Math.PI) / 180);
+    hand_comp[2].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * PI) / 180);
 
     frames = NewFrames;
 };
@@ -418,7 +418,7 @@ let init = function() {
     let container = document.getElementById("canvas-main");
     let w = container.offsetWidth;
     let h = container.offsetHeight;
-    // console.log(w, h);
+    // console.debug(w, h);
     renderer.setSize(w, h);
     container.appendChild(renderer.domElement);
     orbit = new OrbitControls(camera, renderer.domElement);

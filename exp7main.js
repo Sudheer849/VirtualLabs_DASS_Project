@@ -72,6 +72,7 @@ let ShldAngl = 90,
 
 let spanEditModal = document.getElementsByClassName("close")[0];
 let scene,
+    PI = 3.141592653589793,
     camera,
     renderer,
     orbit,
@@ -171,7 +172,7 @@ xyGrid.addEventListener("click", () => {
 xzGrid.addEventListener("click", () => {
     if (xzGrid.checked) {
         let grid = new THREE.GridHelper(size, divisions);
-        grid.geometry.rotateZ(Math.PI / 2);
+        grid.geometry.rotateZ(PI / 2);
         grid3.push(grid);
         scene.add(grid3[0]);
     } else {
@@ -331,7 +332,7 @@ function Level1(e) {
     let rot_axis = new THREE.Vector3(0, 1, 0);
 
     let rot_angle = ((target.value - PrevVal) / (frames / 1)) * ShldAngl;
-    hand_comp[0].rotateOnAxis(rot_axis, (rot_angle * Math.PI) / 180);
+    hand_comp[0].rotateOnAxis(rot_axis, (rot_angle * PI) / 180);
 
     // console.log(frames, target.value);
     ShldPrev = target.value;
@@ -348,7 +349,7 @@ function Level2(e) {
 
     let rot_axis = new THREE.Vector3(0, 0, 1);
     let rot_angle = ((target.value - PrevVal) / (frames / 1)) * ElbwAngl;
-    hand_comp[1].rotateOnAxis(rot_axis, (rot_angle * Math.PI) / 180);
+    hand_comp[1].rotateOnAxis(rot_axis, (rot_angle * PI) / 180);
 
     // console.log(frames, target.value);
     ElbwPrev = target.value;
@@ -365,7 +366,7 @@ function Level3(e) {
     let rot_axis = new THREE.Vector3(0, 0, 1);
     let rot_angle = ((target.value - PrevVal) / (frames / 1)) * WrstAngl;
     // console.log(rot_angle)
-    hand_comp[2].rotateOnAxis(rot_axis, (rot_angle * Math.PI) / 180);
+    hand_comp[2].rotateOnAxis(rot_axis, (rot_angle * PI) / 180);
 
     // console.log(frames, target.value);
     WrstPrev = target.value;
@@ -384,7 +385,7 @@ document.getElementById("frames").onchange = function () {
         NewAngle = ShldAngl;
     }
     let OldAngle = document.getElementById("shoulder").value / (frames / 1) * ShldAngl;
-    hand_comp[0].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * Math.PI) / 180);
+    hand_comp[0].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * PI) / 180);
 
     rot_axis = new THREE.Vector3(0, 0, 1);
     NewAngle = (frames / NewFrames) * ElbwAngl;
@@ -392,7 +393,7 @@ document.getElementById("frames").onchange = function () {
         NewAngle = ElbwAngl;
     }
     OldAngle = document.getElementById("elbow").value / (frames / 1) * ElbwAngl;
-    hand_comp[1].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * Math.PI) / 180);
+    hand_comp[1].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * PI) / 180);
 
     rot_axis = new THREE.Vector3(0, 0, 1);
     NewAngle = (frames / NewFrames) * WrstAngl;
@@ -400,7 +401,7 @@ document.getElementById("frames").onchange = function () {
         NewAngle = WrstAngl;
     }
     OldAngle = document.getElementById("wrist").value / (frames / 1) * WrstAngl;
-    hand_comp[2].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * Math.PI) / 180);
+    hand_comp[2].rotateOnAxis(rot_axis, ((NewAngle - OldAngle) * PI) / 180);
 
     frames = NewFrames;
 };

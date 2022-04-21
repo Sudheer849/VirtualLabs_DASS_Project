@@ -46,6 +46,7 @@ let total_angle = document.getElementById("theta").value;
 let frames = document.getElementById("frames").value;
 let present_theta = 0;
 let scene,
+    PI = 3.141592653589793,
     camera,
     renderer,
     orbit,
@@ -110,7 +111,7 @@ xyGrid.addEventListener("click", () => {
 xzGrid.addEventListener("click", () => {
     if (xzGrid.checked) {
         let grid = new THREE.GridHelper(size, divisions);
-        grid.geometry.rotateZ(Math.PI / 2);
+        grid.geometry.rotateZ(PI / 2);
         xzgrid.push(grid);
         scene.add(xzgrid[0]);
     } else {
@@ -388,7 +389,7 @@ function movePoint(e) {
 
     let quat = new THREE.Quaternion();
     let rot_matrix = new THREE.Matrix4();
-    quat.setFromAxisAngle(rot_axis, (rot_angle * Math.PI) / 180);
+    quat.setFromAxisAngle(rot_axis, (rot_angle * PI) / 180);
     rot_matrix.makeRotationFromQuaternion(quat);
 
     dotList[0].geometry.applyMatrix4(rot_matrix);
@@ -440,7 +441,7 @@ document.getElementById("frames").onchange = function () {
 
     let quat = new THREE.Quaternion();
     let rot_matrix = new THREE.Matrix4();
-    quat.setFromAxisAngle(rot_axis, (rot_angle * Math.PI) / 180);
+    quat.setFromAxisAngle(rot_axis, (rot_angle * PI) / 180);
     rot_matrix.makeRotationFromQuaternion(quat);
 
     dotList[0].geometry.applyMatrix4(rot_matrix);
@@ -491,7 +492,7 @@ document.getElementById("theta").onchange = function () {
     let rot_matrix = new THREE.Matrix4();
     quat.setFromAxisAngle(
         rot_axis,
-        ((new_theta - present_theta) * Math.PI) / 180
+        ((new_theta - present_theta) * PI) / 180
     );
     rot_matrix.makeRotationFromQuaternion(quat);
 

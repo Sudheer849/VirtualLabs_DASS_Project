@@ -43,6 +43,7 @@ trans_matrix.set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 
 let frames = document.getElementById("frames").value;
 let scene,
+    PI = 3.141592653589793,
     camera,
     renderer,
     orbit,
@@ -104,7 +105,7 @@ xyGrid.addEventListener("click", () => {
 xzGrid.addEventListener("click", () => {
     if (xzGrid.checked) {
         let grid = new THREE.GridHelper(size, divisions);
-        grid.geometry.rotateZ(Math.PI / 2);
+        grid.geometry.rotateZ(PI / 2);
         xzgrid.push(grid);
         scene.add(xzgrid[0]);
     } else {

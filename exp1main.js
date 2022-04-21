@@ -23,6 +23,7 @@ let modalEdit = document.getElementById("edit-modal");
 let spanEditModal = document.getElementsByClassName("close")[0];
 let container = document.getElementById("canvas-main");
 let scene,
+  PI = 3.141592653589793,
   camera,
   renderer,
   orbit,
@@ -82,7 +83,7 @@ xyGrid.addEventListener("click", () => {
 xzGrid.addEventListener("click", () => {
   if (xzGrid.checked) {
     let grid = new THREE.GridHelper(size, divisions);
-    grid.geometry.rotateZ(Math.PI / 2);
+    grid.geometry.rotateZ(PI / 2);
     xzgrid.push(grid);
     scene.add(xzgrid[0]);
   } else {

@@ -23,6 +23,7 @@ let theta_change = document.getElementById("theta").value;
 let frames = document.getElementById("frames").value;
 let present_theta = 0;
 let scene,
+  PI = 3.141592653589793,
   camera,
   renderer,
   orbit,
@@ -55,11 +56,11 @@ function movePoint(e) {
   theta = theta / target.max;
   present_theta = theta;
   let radius = 3 * Math.sqrt(2);
-  let x = radius * Math.cos((theta * Math.PI) / 180 + Math.PI / 4);
-  let y = radius * Math.sin((theta * Math.PI) / 180 + Math.PI / 4);
+  let x = radius * Math.cos((theta * PI) / 180 + PI / 4);
+  let y = radius * Math.sin((theta * PI) / 180 + PI / 4);
   let z = 3;
   dotList[0].position.set(x - 3, y - 3, z - 3);
-  console.log(Math.cos((theta * Math.PI) / 180));
+  console.log(Math.cos((theta * PI) / 180));
   document.getElementById("quantityx").value =
     parseFloat(dotList[0].position.x) + 3;
   document.getElementById("quantityy").value =
@@ -73,8 +74,8 @@ document.getElementById("theta").onchange = function () {
   let new_value = document.getElementById("theta").value; // new value
   let new_theta = present_theta * (new_value / theta_change);
   let radius = 3 * Math.sqrt(2);
-  let x = radius * Math.cos((new_theta * Math.PI) / 180 + Math.PI / 4);
-  let y = radius * Math.sin((new_theta * Math.PI) / 180 + Math.PI / 4);
+  let x = radius * Math.cos((new_theta * PI) / 180 + PI / 4);
+  let y = radius * Math.sin((new_theta * PI) / 180 + PI / 4);
   let z = 3;
   dotList[0].position.set(x - 3, y - 3, z - 3);
   document.getElementById("quantityx").value =
@@ -93,8 +94,8 @@ document.getElementById("frames").onchange = function () {
   let new_value = document.getElementById("frames").value;
   let new_theta = present_theta * (frames / new_value);
   let radius = 3 * Math.sqrt(2);
-  let x = radius * Math.cos((new_theta * Math.PI) / 180 + Math.PI / 4);
-  let y = radius * Math.sin((new_theta * Math.PI) / 180 + Math.PI / 4);
+  let x = radius * Math.cos((new_theta * PI) / 180 + PI / 4);
+  let y = radius * Math.sin((new_theta * PI) / 180 + PI / 4);
   let z = 3;
   dotList[0].position.set(x - 3, y - 3, z - 3);
   document.getElementById("quantityx").value =
