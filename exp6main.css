@@ -6,6 +6,10 @@
     height: 100%;
 }
 
+.v-datalist-row{
+    margin-top: 2rem;
+}
+
 .v-instruction-container {
     width: 80%;
     margin: 0 auto;
@@ -56,6 +60,9 @@
     .exp {
         order: 3;
     }
+    .v-datalist-row {
+        margin: 1rem;
+    }
 }
 
 #top-border {
@@ -64,39 +71,23 @@
 
 .modal {
     display: none;
-    /* Hidden by default */
     position: fixed;
-    /* Stay in place */
     z-index: 1;
-    /* Sit on top */
     left: 0;
     top: 0;
     width: 100%;
-    /* Full width */
     height: 100%;
-    /* Full height */
     overflow: hidden;
-    /* Enable scroll if needed */
-
     background-color: rgba(0, 0, 0, 0.4);
-    /* Black w/ opacity */
 }
-
-
-/* Modal Content/Box */
 
 .modal-content {
     background-color: #fefefe;
     margin: 15% auto;
-    /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
-    /* Could be more or less, depending on screen size */
 }
-
-
-/* The Close Button */
 
 .close {
     color: #aaa;
@@ -197,6 +188,7 @@
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: space-around;
+    margin: 1rem;
 }
 
 #checkboxes label {
@@ -207,3 +199,33 @@
     flex: 40%;
 }
 
+.v-button {
+    background-color: #04AA6D;
+    border-radius: 0.5rem;
+    font-size: small;
+}
+
+#add-shape-btn {
+    background-color: #3298dc;
+    border-radius: 0.5rem;
+}
+
+#edit-shape-btn {
+    background-color: #48c774;
+    border-radius: 0.5rem;
+}
+
+#delete-shape-btn {
+    background-color: #f14668;
+    border-radius: 0.5rem;
+}
+
+#move-button {
+    background-color: #48c774;
+    border-radius: 0.5rem;
+}
+
+#set-rotation-axis {
+    background-color: #3298dc;
+    border-radius: 0.5rem;
+}
