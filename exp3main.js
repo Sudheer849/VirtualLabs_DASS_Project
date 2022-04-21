@@ -9,23 +9,23 @@ import {
     createOctahedron,
     createTetrahedron,
 } from "./js/shapes.js";
-import { Dot } from "./js/point.js";
+import { dot } from "./js/point.js";
 
-const move_button = document.getElementById("move-button");
+const moveButton = document.getElementById("move-button");
 const set_rotation_axis = document.getElementById("set-rotation-axis");
-const modalbutton1 = document.querySelector(".buttonisprimary");
-const modalbutton2 = document.querySelector(".buttonissecondary");
+const modalbutton1 = document.querySelector(".edit-button");
+const modalbutton2 = document.querySelector(".add-button");
 
-let lock_vertices = document.getElementById("lock-vertices-cb");
-let xy_grid = document.getElementById("xy-grid-cb");
-let yz_grid = document.getElementById("yz-grid-cb");
-let xz_grid = document.getElementById("xz-grid-cb");
-let modal_add = document.getElementById("add-modal");
-let modal_edit = document.getElementById("edit-modal");
+let lockVertices = document.getElementById("lock-vertices-cb");
+let xyGrid = document.getElementById("xy-grid-cb");
+let yzGrid = document.getElementById("yz-grid-cb");
+let xzGrid = document.getElementById("xz-grid-cb");
+let modalAdd = document.getElementById("add-modal");
+let modalEdit = document.getElementById("edit-modal");
 let container = document.getElementById("canvas-main");
 let initial_pos = [3, 3, 3];
 let xcomp = 1, ycomp = 0, zcomp = 0;
-let span_edit_modal = document.getElementsByClassName("close")[0];
+let spanEditModal = document.getElementsByClassName("close")[0];
 let slider = document.getElementById("slider");
 slider.addEventListener("input", movePoint);
 document.getElementById("slider").max = document.getElementById("theta").value;
@@ -44,7 +44,6 @@ let rot_axis = new THREE.Vector3(
 rot_axis.normalize();
 let total_angle = document.getElementById("theta").value;
 let frames = document.getElementById("frames").value;
-let deletebutton = document.getElementById("deletebutton");
 let present_theta = 0;
 let scene,
     camera,
@@ -54,15 +53,13 @@ let scene,
     xygrid = [],
     yzgrid = [],
     xzgrid = [],
-    dragx = [],
-    dragy = [],
-    dragz = [],
+    dragX = [],
+    dragY = [],
+    dragZ = [],
     lock = 0,
     dir = [],
-    two_plane,
-    two_geometry,
-    first_time = 1,
-    is_2D = 0,
+    
+    
     arrowHelper = [];
 
 let trans_matrix = new THREE.Matrix4();
@@ -70,13 +67,13 @@ trans_matrix.set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 
 // Modal controls for Add Shape Button
 let addModal = document.getElementById("add-modal");
-let span_add_modal = document.getElementsByClassName("close")[1];
+let spanAddModal = document.getElementsByClassName("close")[1];
 
-span_add_modal.onclick = function () {
+spanAddModal.onclick = function () {
     addModal.style.display = "none";
 };
-lock_vertices.addEventListener("click", () => {
-    if (lock_vertices.checked) {
+lockVertices.addEventListener("click", () => {
+    if (lockVertices.checked) {
         lock = 1;
         orbit.mouseButtons = {
             LEFT: MOUSE.PAN,
@@ -97,8 +94,8 @@ lock_vertices.addEventListener("click", () => {
         orbit.enableDamping = true;
     }
 });
-xy_grid.addEventListener("click", () => {
-    if (xy_grid.checked) {
+xyGrid.addEventListener("click", () => {
+    if (xyGrid.checked) {
         let grid = new THREE.GridHelper(size, divisions);
         let vector3 = new THREE.Vector3(0, 0, 1);
         grid.lookAt(vector3);
@@ -110,8 +107,8 @@ xy_grid.addEventListener("click", () => {
         xygrid.pop();
     }
 });
-xz_grid.addEventListener("click", () => {
-    if (xz_grid.checked) {
+xzGrid.addEventListener("click", () => {
+    if (xzGrid.checked) {
         let grid = new THREE.GridHelper(size, divisions);
         grid.geometry.rotateZ(Math.PI / 2);
         xzgrid.push(grid);
@@ -122,8 +119,8 @@ xz_grid.addEventListener("click", () => {
 
     }
 });
-yz_grid.addEventListener("click", () => {
-    if (yz_grid.checked) {
+yzGrid.addEventListener("click", () => {
+    if (yzGrid.checked) {
         let grid = new THREE.GridHelper(size, divisions);
         let vector3 = new THREE.Vector3(0, 1, 0);
         grid.lookAt(vector3);
@@ -140,26 +137,31 @@ const divisions = 25;
 
 
 document.getElementById("add-shape-btn").onclick = function () {
-    modal_add.style.display = "block";
+    modalAdd.style.display = "block";
     modalbutton2.addEventListener("click", () => {
         let xcoord = document.getElementById("x1").value;
         let ycoord = document.getElementById("y1").value;
         let zcoord = document.getElementById("z1").value;
-        no_of_shapes++;
+        noOfShapes
+++;
         console.log(document.getElementById("shape-add-dropdown").value);
         if (document.getElementById("shape-add-dropdown").value === "Cube") {
-            createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
+            createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
+, dragX, dragY, dragZ);
         }
         if (document.getElementById("shape-add-dropdown").value === "Tetrahedron") {
-            createTetrahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
+            createTetrahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
+, dragX, dragY, dragZ);
         }
         if (document.getElementById("shape-add-dropdown").value === "Octahedron") {
-            createOctahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
+            createOctahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
+, dragX, dragY, dragZ);
         }
         if (document.getElementById("shape-add-dropdown").value === "Dodecahedron") {
-            createDodecahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
+            createDodecahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
+, dragX, dragY, dragZ);
         }
-        modal_add.style.display = "none";
+        modalAdd.style.display = "none";
     });
 };
 let raycaster = new THREE.Raycaster();
@@ -172,9 +174,11 @@ let shift = new THREE.Vector3();
 let isDragging = false;
 let dragObject;
 let point = [];
-let shapevertex = [];
-let dot_list = [];
-let no_of_shapes = 0;
+let shapeVertex
+ = [];
+let dotList = [];
+let noOfShapes
+ = 0;
 
 document.addEventListener("dblclick", ondblclick, false);
 // double click
@@ -203,18 +207,23 @@ function ondblclick(event) {
         var ycoord = document.getElementById("y").value;
         var zcoord = document.getElementById("z").value;
         // alert(document.querySelector("select").value);
-        no_of_shapes++;
+        noOfShapes
+++;
         if (document.querySelector("select").value === "Cube") {
-            createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
+            createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
+, dragX, dragY, dragZ);
         }
         if (document.querySelector("select").value === "Tetrahedron") {
-            createTetrahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
+            createTetrahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
+, dragX, dragY, dragZ);
         }
         if (document.querySelector("select").value === "Octahedron") {
-            createOctahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
+            createOctahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
+, dragX, dragY, dragZ);
         }
         if (document.querySelector("select").value === "Dodecahedron") {
-            createDodecahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
+            createDodecahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
+, dragX, dragY, dragZ);
         }
         document.getElementById("edit-modal").style.display = "none";
     };
@@ -222,7 +231,7 @@ function ondblclick(event) {
     document.getElementById("edit-shape-btn").onclick = function () {
         document.getElementById("edit-modal").style.display = "block";
         document
-            .querySelector(".buttonisprimary")
+            .querySelector(".edit-button")
             .addEventListener("click", () => {
                 for (let i = 0; i < intersects.length; i++) {
                     scene.remove(intersects[i].object);
@@ -232,7 +241,8 @@ function ondblclick(event) {
                 let ycoord = document.getElementById("y").value;
                 let zcoord = document.getElementById("z").value;
                 // alert(document.querySelector("select").value);
-                no_of_shapes++;
+                noOfShapes
+++;
                 if (document.querySelector("select").value === "Cube") {
                     createCube(
                         xcoord,
@@ -241,10 +251,11 @@ function ondblclick(event) {
                         shapes,
                         scene,
                         point,
-                        shapevertex,
-                        dragx,
-                        dragy,
-                        dragz
+                        shapeVertex
+,
+                        dragX,
+                        dragY,
+                        dragZ
                     );
                 }
                 if (document.querySelector("select").value === "Tetrahedron") {
@@ -255,10 +266,11 @@ function ondblclick(event) {
                         shapes,
                         scene,
                         point,
-                        shapevertex,
-                        dragx,
-                        dragy,
-                        dragz
+                        shapeVertex
+,
+                        dragX,
+                        dragY,
+                        dragZ
                     );
                 }
                 if (document.querySelector("select").value === "Octahedron") {
@@ -269,10 +281,11 @@ function ondblclick(event) {
                         shapes,
                         scene,
                         point,
-                        shapevertex,
-                        dragx,
-                        dragy,
-                        dragz
+                        shapeVertex
+,
+                        dragX,
+                        dragY,
+                        dragZ
                     );
                 }
                 if (document.querySelector("select").value === "Dodecahedron") {
@@ -283,10 +296,11 @@ function ondblclick(event) {
                         shapes,
                         scene,
                         point,
-                        shapevertex,
-                        dragx,
-                        dragy,
-                        dragz
+                        shapeVertex
+,
+                        dragX,
+                        dragY,
+                        dragZ
                     );
                 }
                 document.getElementById("edit-modal").style.display = "none";
@@ -294,8 +308,8 @@ function ondblclick(event) {
     };
 }
 
-span_edit_modal.onclick = function () {
-    modal_edit.style.display = "none";
+spanEditModal.onclick = function () {
+    modalEdit.style.display = "none";
 };
 document.addEventListener("pointermove", (event) => {
     const rect = renderer.domElement.getBoundingClientRect();
@@ -315,10 +329,11 @@ document.addEventListener("pointermove", (event) => {
                     planeIntersect.z + shift.z
                 );
                 shapes[i].geometry.verticesNeedUpdate = true;
-                shapevertex[i].position.set(
-                    planeIntersect.x + shift.x - dragx[i],
-                    planeIntersect.y + shift.y - dragy[i],
-                    planeIntersect.z + shift.z - dragz[i]
+                shapeVertex
+[i].position.set(
+                    planeIntersect.x + shift.x - dragX[i],
+                    planeIntersect.y + shift.y - dragY[i],
+                    planeIntersect.z + shift.z - dragZ[i]
                 );
             }
             raycaster.ray.intersectPlane(plane, planeIntersect);
@@ -341,9 +356,12 @@ document.addEventListener("pointerdown", () => {
             raycaster.setFromCamera(mouse, camera);
             raycaster.ray.intersectPlane(plane, planeIntersect);
             let position = new THREE.Vector3(
-                shapevertex[0].position.x,
-                shapevertex[0].position.y,
-                shapevertex[0].position.z
+                shapeVertex
+[0].position.x,
+                shapeVertex
+[0].position.y,
+                shapeVertex
+[0].position.z
             );
             shift.subVectors(position, planeIntersect);
             isDragging = true;
@@ -355,14 +373,14 @@ document.addEventListener("pointerup", () => {
     isDragging = false;
     dragObject = null;
 });
-move_button.addEventListener("click", () => {
+moveButton.addEventListener("click", () => {
     let x = document.getElementById("quantityx").value;
     let y = document.getElementById("quantityy").value;
     let z = document.getElementById("quantityz").value;
     let translate_M = new THREE.Matrix4();
-    translate_M.makeTranslation(x - dot_list[0].geometry.getAttribute('position').array[0], y - dot_list[0].geometry.getAttribute('position').array[1], z - dot_list[0].geometry.getAttribute('position').array[2]);
-    dot_list[0].geometry.applyMatrix4(translate_M);
-    dot_list[0].geometry.verticesNeedUpdate = true;
+    translate_M.makeTranslation(x - dotList[0].geometry.getAttribute('position').array[0], y - dotList[0].geometry.getAttribute('position').array[1], z - dotList[0].geometry.getAttribute('position').array[2]);
+    dotList[0].geometry.applyMatrix4(translate_M);
+    dotList[0].geometry.verticesNeedUpdate = true;
     trans_matrix.multiply(translate_M);
     initial_pos[0] = x
     initial_pos[1] = y
@@ -377,17 +395,17 @@ function movePoint(e) {
     quat.setFromAxisAngle(rot_axis, (rot_angle * Math.PI) / 180);
     rot_matrix.makeRotationFromQuaternion(quat);
 
-    dot_list[0].geometry.applyMatrix4(rot_matrix);
-    dot_list[0].geometry.verticesNeedUpdate = true;
+    dotList[0].geometry.applyMatrix4(rot_matrix);
+    dotList[0].geometry.verticesNeedUpdate = true;
 
     trans_matrix.multiply(rot_matrix);
 
     document.getElementById("quantityx").value =
-        dot_list[0].geometry.getAttribute("position").array[0];
+        dotList[0].geometry.getAttribute("position").array[0];
     document.getElementById("quantityy").value =
-        dot_list[0].geometry.getAttribute("position").array[1];
+        dotList[0].geometry.getAttribute("position").array[1];
     document.getElementById("quantityz").value =
-        dot_list[0].geometry.getAttribute("position").array[2];
+        dotList[0].geometry.getAttribute("position").array[2];
 
     if (target.value <= 0) {
         trans_matrix.set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
@@ -429,17 +447,17 @@ document.getElementById("frames").onchange = function () {
     quat.setFromAxisAngle(rot_axis, (rot_angle * Math.PI) / 180);
     rot_matrix.makeRotationFromQuaternion(quat);
 
-    dot_list[0].geometry.applyMatrix4(rot_matrix);
-    dot_list[0].geometry.verticesNeedUpdate = true;
+    dotList[0].geometry.applyMatrix4(rot_matrix);
+    dotList[0].geometry.verticesNeedUpdate = true;
 
     trans_matrix.multiply(rot_matrix);
 
     document.getElementById("quantityx").value =
-        dot_list[0].geometry.getAttribute("position").array[0];
+        dotList[0].geometry.getAttribute("position").array[0];
     document.getElementById("quantityy").value =
-        dot_list[0].geometry.getAttribute("position").array[1];
+        dotList[0].geometry.getAttribute("position").array[1];
     document.getElementById("quantityz").value =
-        dot_list[0].geometry.getAttribute("position").array[2];
+        dotList[0].geometry.getAttribute("position").array[2];
 
     if (target.value <= 0) {
         trans_matrix.set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
@@ -479,15 +497,15 @@ document.getElementById("frames").onchange = function () {
 // 
 // quat.setFromAxisAngle(rot_axis, (rot_angle * Math.PI) / 180);
 // rot_matrix.makeRotationFromQuaternion(quat);
-// dot_list[0].geometry.applyMatrix4(rot_matrix);
-// dot_list[0].geometry.verticesNeedUpdate = true;
+// dotList[0].geometry.applyMatrix4(rot_matrix);
+// dotList[0].geometry.verticesNeedUpdate = true;
 // 
 // document.getElementById("quantityx").value =
-// dot_list[0].geometry.getAttribute("position").array[0];
+// dotList[0].geometry.getAttribute("position").array[0];
 // document.getElementById("quantityy").value =
-// dot_list[0].geometry.getAttribute("position").array[1];
+// dotList[0].geometry.getAttribute("position").array[1];
 // document.getElementById("quantityz").value =
-// dot_list[0].geometry.getAttribute("position").array[2];
+// dotList[0].geometry.getAttribute("position").array[2];
 // 
 // present_theta += slider.value * (frames / new_value - 1);
 // 
@@ -514,15 +532,15 @@ document.getElementById("theta").onchange = function () {
     );
     rot_matrix.makeRotationFromQuaternion(quat);
 
-    dot_list[0].geometry.applyMatrix4(rot_matrix);
-    dot_list[0].geometry.verticesNeedUpdate = true;
+    dotList[0].geometry.applyMatrix4(rot_matrix);
+    dotList[0].geometry.verticesNeedUpdate = true;
 
     document.getElementById("quantityx").value =
-        dot_list[0].geometry.getAttribute("position").array[0];
+        dotList[0].geometry.getAttribute("position").array[0];
     document.getElementById("quantityy").value =
-        dot_list[0].geometry.getAttribute("position").array[1];
+        dotList[0].geometry.getAttribute("position").array[1];
     document.getElementById("quantityz").value =
-        dot_list[0].geometry.getAttribute("position").array[2];
+        dotList[0].geometry.getAttribute("position").array[2];
 
     document.getElementById("slider").value =
         old_sli_val * (new_tot_angle / total_angle);
@@ -591,7 +609,7 @@ let init = function () {
     for (let i = 0; i < 6; i++) {
         scene.add(arrowHelper[i]);
     }
-    let PointGeometry = Dot(scene, dot_list, initial_pos);
+    let PointGeometry = dot(scene, dotList, initial_pos);
     renderer = new THREE.WebGLRenderer();
     let w = container.offsetWidth;
     let h = container.offsetHeight;
