@@ -45,3 +45,14 @@ export const createArm = function (scene, hand_comp, arm_dim, arm_pos, fore_dim,
     hand_comp.push(elbow);
     hand_comp.push(wrist);
 }
+
+export const moveArm = function (hand_comp, moveBy) {
+    // hand_comp.forEach(Object => {
+        // let curPos = new Vector3( Object.position.x, Object.position.y, Object.position.z );
+        // let newPos = new THREE.Vector3( Object.position.x + moveBy.x, Object.position.y + moveBy.y, Object.position.z + moveBy.z); 
+
+        hand_comp[0].translateOnAxis( new THREE.Vector3(1,0,0), moveBy.x );
+        hand_comp[0].translateOnAxis( new THREE.Vector3(0,1,0), moveBy.y );
+        hand_comp[0].translateOnAxis( new THREE.Vector3(0,0,1), moveBy.z );
+    // });
+}
