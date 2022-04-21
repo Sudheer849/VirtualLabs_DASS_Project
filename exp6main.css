@@ -77,8 +77,7 @@
     /* Full height */
     overflow: hidden;
     /* Enable scroll if needed */
-    background-color: rgb(0, 0, 0);
-    /* Fallback color */
+
     background-color: rgba(0, 0, 0, 0.4);
     /* Black w/ opacity */
 }
@@ -171,3 +170,40 @@
     /* border-radius: 1rem; */
     border-bottom: 0;
 }
+
+
+.v-collapsible-instruction-container {
+    width: 60%;
+    margin: auto;
+    border-radius: 0.25rem;
+}
+
+.v-collapsible {
+    width: 98%;
+    margin: auto;
+}
+
+.v-collapsible::after {
+    size: 1rem;
+}
+
+#lock-v #xy-grid #xz-grid #yz-grid {
+    margin: auto 0.1rem;
+    padding: auto 0.1rem;
+}
+
+#checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#checkboxes label {
+    margin: 0.3rem auto;
+
+    display: flex;
+    align-items: flex-start;
+    flex: 40%;
+}
+

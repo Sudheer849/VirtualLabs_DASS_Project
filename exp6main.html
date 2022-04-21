@@ -4,71 +4,58 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.8-b/css/style.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.5-b/css/style.min.css">
     <link rel="stylesheet" href="exp6main.css">
 </head>
 
-<body class="page">
-    </br>
-
-    <div class="columns is-centered is-flex">
-        <div class="column has-text-centered">
-            <div class="v-instruction-container">
-                <div class="v-instruction-title">Instructions</div>
-                <div id="procedure-message" class="v-instruction-text">
-                    <li style="font-size: 0.9rem;">
-                        This experiment explains how points and co-ordinate systems are used together to represent two and three dimensional shapes.
-                    </li>
-                    <li style="font-size: 0.9rem;">
-                        This experiment is designed to teach how points and co-ordinate systems are represented in computer graphics. Start by editing the co-ordinates of the point and comparing how the point gets displayed. The co-ordinates can be edited by changing the text
-                        boxes above Also notice how the absolute co-ordinates are displayed.
-                    </li>
-                    <li style="font-size: 0.9rem;">
-                        Drag with the right mouse button to rotate the view and use the mouse wheel to zoom in and out.
-                    </li>
-                </div>
+<body class="page" style="margin: 1rem;">
+    <section class="columns is-centered is-flex column">
+        <div class="v-collapsible-instruction-container">
+            <div class="v-collapsible">Instructions</div>
+            <div id="procedure-message" class="v-content">
+                <li class="instr-font">
+                    This experiment explains how points and co-ordinate systems are used together to represent two and
+                    three dimensional shapes.
+                </li>
+                <li class="instr-font">
+                    This experiment is designed to teach how points and co-ordinate systems are represented in computer
+                    graphics. Start by editing the co-ordinates of the point and comparing how the point gets displayed.
+                    The co-ordinates can be edited by changing the text
+                    boxes above Also notice how the absolute co-ordinates are displayed.
+                </li>
+                <li class="instr-font">
+                    Drag with the right mouse button to rotate the view and use the mouse wheel to zoom in and out.
+                </li>
             </div>
         </div>
-    </div>
+    </section>
 
     <div class="columns is-centered is-variable is-1-mobile is-flex is-flex-wrap-wrap workspace">
         <div id="left" class="column has-text-centered is-2-desktop is-5-tablet is-5-mobile apparatus">
             <div class="v-datalist-container">
-                <div class="v-datalist-title">Display Settings</div>
-
-                <p style="align-self:flex-start;">
-                    <label class="checkbox">
-                        <input type="checkbox" id="3d-toggle-cb">
-                        <span style="font-size: x-small;">2D </span>
-                    </label>
-                    <label class="checkbox">
+                <div class="v-datalist-title" id="disp-heading">Display Settings</div>
+                <div id="checkboxes">
+                    <label id="lock-v" class="v-checkbox">
                         <input type="checkbox" id="lock-vertices-cb">
                         <span style="font-size: x-small;">Lock Vertices </span>
                     </label>
-                </p>
 
-                <p style="align-self: flex-start ">
-                    <label class="checkbox">
-                        <input type="checkbox" id="transform-axes-cb">
-                        <span style="font-size:x-small;">Transform Axes </span>
+                    <label id="xy-grid" class="v-checkbox">
+                        <input type="checkbox" id="xy-grid-cb">
+                        <span style="font-size:x-small;">XY-Grid </span>
                     </label>
 
-                    <label class="checkbox">
-                        <input type="checkbox" id="xy-grid-cb" >
-                        <span style="font-size:x-small;">XY-Grid </span>
-                </p>
-
-                <p style="align-self: flex-start ">
-                    <label class="checkbox">
+                    <label id="yz-grid" class="v-checkbox">
                         <input type="checkbox" id="yz-grid-cb">
                         <span style="font-size:x-small;">YZ-Grid </span>
                     </label>
-                    <label class="checkbox">
+
+                    <label id="xz-grid" class="v-checkbox">
                         <input type="checkbox" id="xz-grid-cb">
                         <span style="font-size:x-small;">XZ-Grid </span>
                     </label>
-                </p>
+                </div>
 
                 <div class="v-datalist-title" id="top-border">Camera Options</div>
                 <p>
@@ -81,50 +68,10 @@
                     <div id="edit-modal" class="modal is-responsive">
                         <div class="modal-content">
                             <span class="close">&times;</span>
-                            <p>
-                                <input class="input" style="width:auto; float: left;" id="name" type="text" placeholder="Instance Name">
+                            <div>
                                 <div id="Addshape" class="control" value="hi">
                                     <div class="select" style="float:left;">
                                         <select name="" id="shape-edit-dropdown" value="dropdown">
-                                    <option value="Tetrahedron">Tetrahedron</option>
-                                    <option value="Octahedron">Octahedron</option>
-                                    <option value="Dodecahedron">Dodecahedron</option>
-                                    <option value="Cube">Cube</option>
-                                    <option value="Sphere">Sphere</option>
-                                </select>
-                                    </div>
-                                </div>
-                                </br>
-                                </br>
-
-                                <input class="input " style="width: 200px; float:left" id="x" type="number" placeholder="X" step=".01" value="0">
-                                <input class="input " style="width: 200px; float:left" id="y" type="number" placeholder="Y" step=".01" value="0">
-                                <input class="input " style="width: 200px; float:left" id="z" type="number" placeholder="Z" step=".01" value="0">
-
-                                </br>
-                                </br>
-                                <p style="text-align: left;">Co-ordinate System (Global by default):
-                                    <button class="button is-small  is-outlined is-success" style="float:inline-end; width: 20px; height: 20px;" onclick="CS_popup()">Add</button>
-
-                                    <p style="text-align: left;">Transformation (Global by default):
-                                        <button class="button is-small  is-outlined is-success" style="float:inline-end; width: 20px; height: 20px;" onclick="Transformation_popup()">Add</button>
-
-                                        <div class="control">
-                                            <button class="buttonisprimary" style="width: 200px; float:left">Edit</button>
-                                        </div>
-                                    </p>
-                        </div>
-
-                    </div>
-
-                    <div id="add-modal" class="modal is-responsive">
-                        <div class="modal-content">
-                            <span class="close">&times;</span>
-                            <div>
-                                <input class="input" style="width:auto; float: left;" id="nam" type="text" placeholder="Instance Name">
-                                <div id="ShapeAdd" class="control">
-                                    <div class="select" style="float:left;">
-                                        <select name="" id="shape-add-dropdown" value="dropdown">
                                             <option value="Tetrahedron">Tetrahedron</option>
                                             <option value="Octahedron">Octahedron</option>
                                             <option value="Dodecahedron">Dodecahedron</option>
@@ -134,17 +81,43 @@
                                     </div>
                                 </div>
 
-                                <input class="input " style="width: 100px; float:left" id="x1" type="number" placeholder="X" step=".01" value="0">
-                                <input class="input " style="width: 100px; float:left" id="y1" type="number" placeholder="Y" step=".01" value="0">
-                                <input class="input " style="width: 100px; float:left" id="z1" type="number" placeholder="Z" step=".01" value="0">
+                                <input class="input " style="width: 200px; float:left" id="x" type="number" placeholder="X" step=".01" value="0">
+                                <input class="input " style="width: 200px; float:left" id="y" type="number" placeholder="Y" step=".01" value="0">
+                                <input class="input " style="width: 200px; float:left" id="z" type="number" placeholder="Z" step=".01" value="0">
 
                                 <div class="control">
-                                            <button class="buttonissecondary" style="width: 200px; float:left">ADD</button>
+                                            <button class="buttonisprimary" style="width: 200px; float:left">Edit</button>
                                 </div>
                             </div>
                         </div>
 
                     </div>
+
+                    <section id="add-modal" class="modal is-responsive">
+                        <div class="modal-content">
+                            <span class="close">&times;</span>
+                            <p class="v-datalist-title"> Add Shape Menu</p>
+                            <div class="select" style="display: inline-block; margin: 0.5rem">
+                                <select name="" id="shape-add-dropdown" value="dropdown">
+                                    <option value="Tetrahedron">Tetrahedron</option>
+                                    <option value="Octahedron">Octahedron</option>
+                                    <option value="Dodecahedron">Dodecahedron</option>
+                                    <option value="Cube">Cube</option>
+                                </select>
+                            </div>
+    
+                            <div style="display: block; margin: auto">
+                                <input class="input coord-dim" id="x1" type="number" placeholder="X" step=".01" value="0">
+                                <input class="input coord-dim" id="y1" type="number" placeholder="Y" step=".01" value="0">
+                                <input class="input coord-dim" id="z1" type="number" placeholder="Z" step=".01" value="0">
+                            </div>
+                            <div class="control">
+                                <button class="v-button add-button" id="modalBox_addsubmit"
+                                    style="width: 10rem; margin: 1rem;">Add!</button>
+                            </div>
+                        </div>
+    
+                    </section>
                 </p>
 
                     <div class="v-datalist-title" id="top-border">Point Co-ordinates</div>
@@ -187,6 +160,7 @@
 
     <script src="https://unpkg.com/mathjs@9.2.0/lib/browser/math.js"></script>
     <script type="module" src="exp6main.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.8-b/js/script.js"></script>
 </body>
 
 </html>

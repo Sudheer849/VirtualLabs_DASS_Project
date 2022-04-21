@@ -87,7 +87,7 @@ span_add_modal.onclick = function() {
 }
 
 window.onclick = function(event) {
-    if (event.target === Addmodal) {
+    if (event.target === addModal) {
         addModal.style.display = "none";
     }
 }
@@ -118,14 +118,6 @@ lock_vertices.addEventListener("click", () => {
     }
 });
 
-// Transformation
-transform_axes.addEventListener("click", () => {
-    if (transform_axes.checked) {
-        //
-    } else {
-        //
-    }
-});
 
 // XY Grid
 xy_grid.addEventListener("click", () => {
