@@ -7,21 +7,19 @@ import { MOUSE } from "https://unpkg.com/three@0.128.0/build/three.module.js";
 // import { createMaterials } from "./exp1/materials.js";
 import { createCube, createDodecahedron, createOctahedron, createTetrahedron } from "./js/shapes.js";
 import { createArm } from "./js/mech_arm.js";
-// import { scene, camera, orbit, renderer, shapes, grid1, grid2, grid3, dragx, dragy, dragz, two_geometry, two_plane, first_time, is_2D, arrowHelper } from "./js/global_lets.js";
+// import { scene, camera, orbit, renderer, shapes, grid1, grid2, grid3, dragX, dragY, dragZ, , , first_time, is_2D, arrowHelper } from "./js/global_lets.js";
 
-const move_button = document.getElementById("move-button");
-const modalbutton1 = document.querySelector(".buttonisprimary");
-const modalbutton2 = document.querySelector(".buttonissecondary");
-let threeD = document.getElementById("3d-toggle-cb");
-let lock_vertices = document.getElementById("lock-vertices-cb");
-let transform_axes = document.getElementById("transform-axes-cb");
-let xy_grid = document.getElementById("xy-grid-cb");
-let yz_grid = document.getElementById("yz-grid-cb");
-let xz_grid = document.getElementById("xz-grid-cb");
+const moveButton = document.getElementById("move-button");
+const modalbutton1 = document.querySelector(".edit-button");
+const modalbutton2 = document.querySelector(".add-button");
+let lockVertices = document.getElementById("lock-vertices-cb");
+let xyGrid = document.getElementById("xy-grid-cb");
+let yzGrid = document.getElementById("yz-grid-cb");
+let xzGrid = document.getElementById("xz-grid-cb");
 let cam_pos = new THREE.Vector3(17, 15, 15);
 let cam_target = new THREE.Vector3(0, 0, 0);
-let modal_add = document.getElementById("add-modal");
-let modal_edit = document.getElementById("edit-modal");
+let modalAdd = document.getElementById("add-modal");
+let modalEdit = document.getElementById("edit-modal");
 let initial_pos = [3, 3, 3];
 
 let frames = document.getElementById("frames").value;
@@ -55,8 +53,7 @@ let ShldAngl = 90,
     ElbwAngl = 45,
     WrstAngl = 45;
 
-let span_edit_modal = document.getElementsByClassName("close")[0];
-let deletebutton = document.getElementById("deletebutton");
+let spanEditModal = document.getElementsByClassName("close")[0];
 let scene,
     camera,
     renderer,
@@ -65,9 +62,9 @@ let scene,
     grid1 = [],
     grid2 = [],
     grid3 = [],
-    dragx = [],
-    dragy = [],
-    dragz = [],
+    dragX = [],
+    dragY = [],
+    dragZ = [],
     dir = [],
     arrowHelper = [];
 
@@ -80,9 +77,9 @@ let palm_pos = new THREE.Vector3((fore_dim.x / 2 + palm_dim.x / 2), 0, 0);
 
 // Modal controls for Add Shape Button
 let addModal = document.getElementById("add-modal");
-let span_add_modal = document.getElementsByClassName("close")[1];
+let spanAddModal = document.getElementsByClassName("close")[1];
 
-span_add_modal.onclick = function() {
+spanAddModal.onclick = function() {
     addModal.style.display = "none";
 }
 
@@ -115,8 +112,8 @@ window.onclick = function(event) {
 // Section of Checkboxes
 // --------------------------------------------------------------------------------------------------
 // lock vertices
-lock_vertices.addEventListener("click", () => {
-    if (lock_vertices.checked) {
+lockVertices.addEventListener("click", () => {
+    if (lockVertices.checked) {
         lock = 1;
         //console.log("hello");
         orbit.mouseButtons = {
@@ -139,18 +136,9 @@ lock_vertices.addEventListener("click", () => {
     }
 });
 
-// Transformation
-transform_axes.addEventListener("click", () => {
-    if (transform_axes.checked) {
-        //
-    } else {
-        //
-    }
-});
-
 // XY Grid
-xy_grid.addEventListener("click", () => {
-    if (xy_grid.checked) {
+xyGrid.addEventListener("click", () => {
+    if (xyGrid.checked) {
         let grid = new THREE.GridHelper(size, divisions);
         let vector3 = new THREE.Vector3(0, 0, 1);
         grid.lookAt(vector3);
@@ -163,8 +151,8 @@ xy_grid.addEventListener("click", () => {
     }
 });
 // XZ Grid
-xz_grid.addEventListener("click", () => {
-    if (xz_grid.checked) {
+xzGrid.addEventListener("click", () => {
+    if (xzGrid.checked) {
         let grid = new THREE.GridHelper(size, divisions);
         grid.geometry.rotateZ(Math.PI / 2);
         grid3.push(grid);
@@ -176,8 +164,8 @@ xz_grid.addEventListener("click", () => {
     }
 });
 // YZ Grid
-yz_grid.addEventListener("click", () => {
-    if (yz_grid.checked) {
+yzGrid.addEventListener("click", () => {
+    if (yzGrid.checked) {
         let grid = new THREE.GridHelper(size, divisions);
         let vector3 = new THREE.Vector3(0, 1, 0);
         grid.lookAt(vector3);
@@ -198,27 +186,31 @@ const size = 50;
 const divisions = 25;
 
 document.getElementById("add-shape-btn").onclick = function() {
-    modal_add.style.display = "block";
+    modalAdd.style.display = "block";
     modalbutton2.addEventListener("click", () => {
         let xcoord = document.getElementById("x1").value;
         let ycoord = document.getElementById("y1").value;
         let zcoord = document.getElementById("z1").value;
         // alert(document.getElementById("hi").value);
-        no_of_shapes++;
+        noOfShapes++;
         console.log(document.getElementById("shape-add-dropdown").value);
         if (document.querySelector("select").value == "Cube") {
-            createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
+            createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
+, dragX, dragY, dragZ);
         }
         if (document.querySelector("select").value == "Tetrahedron") {
-            createTetrahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
+            createTetrahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
+, dragX, dragY, dragZ);
         }
         if (document.querySelector("select").value == "Octahedron") {
-            createOctahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
+            createOctahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
+, dragX, dragY, dragZ);
         }
         if (document.querySelector("select").value == "Dodecahedron") {
-            createDodecahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapevertex, dragx, dragy, dragz);
+            createDodecahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
+, dragX, dragY, dragZ);
         }
-        modal_add.style.display = "none";
+        modalAdd.style.display = "none";
     });
 };
 
@@ -236,9 +228,11 @@ let shift = new THREE.Vector3(); // distance between position of an object and p
 let isDragging = false;
 let dragObject;
 let point = [];
-let shapevertex = [];
+let shapeVertex
+ = [];
 let hand_comp = [];
-let no_of_shapes = 0;
+let noOfShapes
+ = 0;
 
 document.addEventListener("dblclick", ondblclick, false);
 // double click
@@ -269,15 +263,14 @@ function ondblclick(event) {
             scene.remove(line);
             for (let i = 0; i < intersects.length; i++) {
                 scene.remove(intersects[i].object);
-                no_of_shapes--;
-                console.log(no_of_shapes);
+                noOfShapes--;
             }
         };
         // geometry.translate(intersects[0].object.position.x,intersects[0].object.position.y,intersects[0].object.position.z);
         document.getElementById("edit-shape-btn").onclick = function() {
             document.getElementById("edit-modal").style.display = "block";
             document
-                .querySelector(".buttonisprimary")
+                .querySelector(".edit-button")
                 .addEventListener("click", () => {
                     for (let i = 0; i < intersects.length; i++) {
                         scene.remove(intersects[i].object);
@@ -287,7 +280,7 @@ function ondblclick(event) {
                     let ycoord = document.getElementById("y").value;
                     let zcoord = document.getElementById("z").value;
                     // alert(document.querySelector("select").value);
-                    no_of_shapes++;
+                    noOfShapes++;
                     if (document.querySelector("select").value === "Cube") {
                         createCube(xcoord, ycoord, zcoord);
                         // createCube(xcoord, ycoord, zcoord);
@@ -307,8 +300,8 @@ function ondblclick(event) {
     }
 }
 
-span_edit_modal.onclick = function() {
-    modal_edit.style.display = "none";
+spanEditModal.onclick = function() {
+    modalEdit.style.display = "none";
 };
 
 // Shoulder
