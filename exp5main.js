@@ -72,7 +72,7 @@ spanAddModal.onclick = function () {
 };
 
 window.onclick = function (event) {
-  if (event.target === Addmodal) {
+  if (event.target === addModal) {
     addModal.style.display = "none";
   }
 };
