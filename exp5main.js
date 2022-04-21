@@ -44,6 +44,7 @@ let old_scale = [1, 1, 1];
 let frames = document.getElementById("frames").value;
 let present_theta = 0;
 let scene,
+  PI = 3.141592653589793,
   camera,
   renderer,
   orbit,
@@ -124,7 +125,7 @@ xyGrid.addEventListener("click", () => {
 xzGrid.addEventListener("click", () => {
   if (xzGrid.checked) {
     var grid = new THREE.GridHelper(size, divisions);
-    grid.geometry.rotateZ(Math.PI / 2);
+    grid.geometry.rotateZ(PI / 2);
     grid3.push(grid);
     scene.add(grid3[0]);
   } else {
