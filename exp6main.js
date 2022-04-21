@@ -6,7 +6,7 @@ import { MOUSE } from "https://unpkg.com/three@0.128.0/build/three.module.js";
 // importing internal files
 // import { createMaterials } from "./exp1/materials.js";
 import { createCube, createDodecahedron, createOctahedron, createTetrahedron } from "./js/shapes.js";
-import { createArm } from "./js/mech_arm.js";
+import { createArm, moveArm } from "./js/mech_arm.js";
 // import { scene, camera, orbit, renderer, shapes, grid1, grid2, grid3, dragX, dragY, dragZ, , , first_time, is_2D, arrowHelper } from "./js/global_lets.js";
 
 const moveButton = document.getElementById("move-button");
@@ -20,7 +20,7 @@ let cam_pos = new THREE.Vector3(17, 15, 15);
 let cam_target = new THREE.Vector3(0, 0, 0);
 let modalAdd = document.getElementById("add-modal");
 let modalEdit = document.getElementById("edit-modal");
-let initial_pos = [3, 3, 3];
+let initialPos = [0, 0, 0];
 
 let frames = document.getElementById("frames").value;
 
@@ -370,6 +370,16 @@ document.getElementById("frames").onchange = function() {
     frames = NewFrames;
 };
 // --------------------------------------------------------------------------------------------------
+
+moveButton.addEventListener("click", () => {
+    let x = document.getElementById("x-value").value;
+    let y = document.getElementById("y-value").value;
+    let z = document.getElementById("z-value").value;
+
+    // move the arm by the amount specified
+    moveArm(hand_comp, new THREE.Vector3(x, y, z));
+});
+  
 
 scene = new THREE.Scene();
 scene.background = new THREE.Color(0x121212);
