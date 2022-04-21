@@ -88,27 +88,6 @@ window.onclick = function(event) {
         addModal.style.display = "none";
     }
 }
-
-// Modal controls for Add Camera Button
-let camModal = document.getElementById("cam-modal");
-let camBtn = document.getElementById("new-cam-btn");
-
-let span_new_cam = document.getElementsByClassName("close")[4];
-
-camBtn.onclick = function() {
-    camModal.style.display = "block";
-}
-
-span_new_cam.onclick = function() {
-    camModal.style.display = "none";
-}
-
-window.onclick = function(event) {
-    if (event.target === camModal) {
-        camModal.style.display = "none";
-    }
-}
-
 // Section of Checkboxes
 // --------------------------------------------------------------------------------------------------
 // lock vertices

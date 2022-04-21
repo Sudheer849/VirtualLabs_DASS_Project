@@ -142,7 +142,6 @@ document.getElementById("add-shape-btn").onclick = function () {
     modalAdd.style.display = "none";
   };
 };
-
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2();
 let plane = new THREE.Plane();
@@ -164,7 +163,7 @@ for (let i = 0; i < 1000; i++) {
 
 //document.addEventListener("dblclick", ondblclick, false);
 
-function ondblclick(event) {
+//function ondblclick(event) {
 document.getElementById("canvas-main").ondblclick = function (event) {
     const rect = renderer.domElement.getBoundingClientRect();
     const x = event.clientX - rect.left;
@@ -172,7 +171,6 @@ document.getElementById("canvas-main").ondblclick = function (event) {
 
     mouse.x = (x / container.clientWidth) * 2 - 1;
     mouse.y = (y / container.clientHeight) * -2 + 1;
-
   raycaster.setFromCamera(mouse, camera);
   let intersects = raycaster.intersectObjects(shapes);
   let shapeIntersects = 0;
@@ -247,7 +245,6 @@ document.getElementById("canvas-main").ondblclick = function (event) {
       document.getElementById("edit-modal").style.display = "none";
     };
   }
-}
 };
 
 document.getElementById("h-s").onchange = function() {
