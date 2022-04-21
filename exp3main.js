@@ -326,8 +326,7 @@ document.addEventListener("pointermove", (event) => {
                     planeIntersect.z + shift.z
                 );
                 shapes[i].geometry.verticesNeedUpdate = true;
-                shapeVertex
-[i].position.set(
+                shapeVertex[i].position.set(
                     planeIntersect.x + shift.x - dragX[i],
                     planeIntersect.y + shift.y - dragY[i],
                     planeIntersect.z + shift.z - dragZ[i]
