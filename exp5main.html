@@ -6,11 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.5-b/css/style.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.8-b/css/style.min.css">
     <link rel="stylesheet" href="exp3main.css">
 </head>
 
-<body class="page">
-    </br>
+<body class="page" style="margin:1rem">
+
+    <div class="columns is-centered is-flex">
+        <div class="column has-text-centered">
+            <div class="v-collapsible-instruction-container">
+                <div class="v-collapsible">Instructions</div>
+                <div id="procedure-message" class="v-content">
+                    <li style="font-size: 0.9rem;">
+                        This experiment explains how points and co-ordinate systems are used together to represent two and three dimensional shapes.
+                    </li>
+                    <li style="font-size: 0.9rem;">
+                        This experiment is designed to teach how points and co-ordinate systems are represented in computer graphics. Start by editing the co-ordinates of the point and comparing how the point gets displayed. The co-ordinates can be edited by changing the text
+                        boxes above Also notice how the absolute co-ordinates are displayed.
+                    </li>
+                    <li style="font-size: 0.9rem;">
+                        Drag with the right mouse button to rotate the view and use the mouse wheel to zoom in and out.
+                    </li>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="columns is-centered is-variable is-1-mobile is-flex is-flex-wrap-wrap workspace">
         <div id="left" class="column has-text-centered is-2-desktop is-5-tablet is-5-mobile apparatus">
@@ -19,21 +39,12 @@
 
                 <p style="align-self:flex-start;">
                     <label class="checkbox">
-                        <input type="checkbox" id="3d-toggle-cb">
-                        <span style="font-size: x-small;">2D </span>
-                    </label>
-                    <label class="checkbox">
                         <input type="checkbox" id="lock-vertices-cb">
                         <span style="font-size: x-small;">Lock Vertices </span>
                     </label>
                 </p>
 
                 <p style="align-self: flex-start ">
-                    <label class="checkbox">
-                        <input type="checkbox" id="transform-axes-cb">
-                        <span style="font-size:x-small;">Transform Axes </span>
-                    </label>
-
                     <label class="checkbox">
                         <input type="checkbox" id="xy-grid-cb">
                         <span style="font-size:x-small;">XY-Grid </span>
@@ -52,197 +63,67 @@
 
                 <div class="v-datalist-title" id="top-border">Camera Options</div>
                 <p>
-                    <button id="add-shape-btn" style="margin:2px;" class="button is-small is-responsive is-info"
-                        onclick="addShape()">Add</button>
-                    <button id="edit-shape-btn" style="margin:2px;" class="button is-small is-responsive  is-success"
-                        onclick="editShape()">Edit</button>
-                    <button id="delete-shape-btn" style="margin:2px;" class="button is-small is-responsive  is-danger"
-                        onclick="deleteShape()">Delete</button>
-                    <button id="new-cam-btn" style="margin:2px;" class="button is-small is-responsive is-info"
-                        onclick="new_cam()">New
-                        Cam</button>
+                    <button id="add-shape-btn" style="margin:2px;" class="v-button" onclick="addShape()">Add</button>
+                    <button id="edit-shape-btn" style="margin:2px;" class="v-button is-small is-responsive  is-success" onclick="editShape()">Edit</button>
+                    <button id="delete-shape-btn" style="margin:2px;" class="v-button is-small is-responsive  is-danger" onclick="deleteShape()">Delete</button>
 
-                <div id="edit-modal" class="modal is-responsive">
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <p>
-                            <input class="input" style="width:auto; float: left;" id="name" type="text"
-                                placeholder="Instance Name">
-                        <div id="Addshape" class="control" value="hi">
-                            <div class="select" style="float:left;">
-                                <select name="" id="shape-edit-dropdown" value="dropdown">
-                                    <option value="Tetrahedron">Tetrahedron</option>
-                                    <option value="Octahedron">Octahedron</option>
-                                    <option value="Dodecahedron">Dodecahedron</option>
-                                    <option value="Cube">Cube</option>
-                                    <option value="Sphere">Sphere</option>
-                                </select>
+                        <section id="edit-modal" class="modal is-responsive">
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <p class="v-datalist-title"> Edit Shape Menu</p>
+                                <div class="select" style="display: inline-block; margin: 0.5rem">
+                                    <select name="" id="shape-edit-dropdown" value="dropdown">
+                                        <option value="Tetrahedron">Tetrahedron</option>
+                                        <option value="Octahedron">Octahedron</option>
+                                        <option value="Dodecahedron">Dodecahedron</option>
+                                        <option value="Cube">Cube</option>
+                                    </select>
+                                </div>
+        
+                                <div style="display: block; margin: auto">
+                                    <input class="input coord-dim" id="x" type="number" placeholder="X" step=".01" value="0">
+                                    <input class="input coord-dim" id="y" type="number" placeholder="Y" step=".01" value="0">
+                                    <input class="input coord-dim" id="z" type="number" placeholder="Z" step=".01" value="0">
+                                </div>
+                                <div class="control">
+                                    <button class="v-button edit-button" id="modalBox_addsubmit"
+                                        style="width: 10rem; margin: 1rem;">Edit</button>
+                                </div>
                             </div>
-                        </div>
-                        </br>
-                        </br>
-
-                        <input class="input " style="width: 200px; float:left" id="x" type="number" placeholder="X"
-                            step=".01" value="0">
-                        <input class="input " style="width: 200px; float:left" id="y" type="number" placeholder="Y"
-                            step=".01" value="0">
-                        <input class="input " style="width: 200px; float:left" id="z" type="number" placeholder="Z"
-                            step=".01" value="0">
-
-                        </br>
-                        </br>
-                        <p style="text-align: left;">Co-ordinate System (Global by default):
-                            <button class="button is-small  is-outlined is-success"
-                                style="float:inline-end; width: 20px; height: 20px;" onclick="CS_popup()">Add</button>
-
-                        <p style="text-align: left;">Transformation (Global by default):
-                            <button class="button is-small  is-outlined is-success"
-                                style="float:inline-end; width: 20px; height: 20px;"
-                                onclick="Transformation_popup()">Add</button>
-
-                        <div class="control">
-                            <button class="buttonisprimary" style="width: 200px; float:left">Edit</button>
-                        </div>
-                        </p>
-                    </div>
-
-                </div>
-
-                <div id="add-modal" class="modal is-responsive">
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <p>
-                            <input class="input" style="width:auto; float: left;" id="nam" type="text"
-                                placeholder="Instance Name">
-                        <div id="ShapeAdd" class="control">
-                            <div class="select" style="float:left;">
-                                <select name="" id="shape-add-dropdown" value="dropdown">
-                                    <option value="Tetrahedron">Tetrahedron</option>
-                                    <option value="Octahedron">Octahedron</option>
-                                    <option value="Dodecahedron">Dodecahedron</option>
-                                    <option value="Cube">Cube</option>
-                                    <option value="Sphere">Sphere</option>
-                                </select>
+        
+                        </section>
+        
+                        <section id="add-modal" class="modal is-responsive is-centered">
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <p class="v-datalist-title"> Add Shape Menu</p>
+                                <div class="select" style="display: inline-block; margin: 0.5rem">
+                                    <select name="" id="shape-add-dropdown" value="dropdown">
+                                        <option value="Tetrahedron">Tetrahedron</option>
+                                        <option value="Octahedron">Octahedron</option>
+                                        <option value="Dodecahedron">Dodecahedron</option>
+                                        <option value="Cube">Cube</option>
+                                    </select>
+                                </div>
+        
+                                <div style="display: block; margin: auto">
+                                    <input class="input coord-dim" id="x1" type="number" placeholder="X" step=".01" value="0">
+                                    <input class="input coord-dim" id="y1" type="number" placeholder="Y" step=".01" value="0">
+                                    <input class="input coord-dim" id="z1" type="number" placeholder="Z" step=".01" value="0">
+                                </div>
+                                <div class="control">
+                                    <button class="v-button add-button" id="modalBox_addsubmit"
+                                        style="margin: 1rem;">Add!</button>
+                                </div>
                             </div>
-                        </div>
-                        </br>
-                        </br>
-
-                        <input class="input " style="width: 100px; float:left" id="x1" type="number" placeholder="X"
-                            step=".01" value="0">
-                        <input class="input " style="width: 100px; float:left" id="y1" type="number" placeholder="Y"
-                            step=".01" value="0">
-                        <input class="input " style="width: 100px; float:left" id="z1" type="number" placeholder="Z"
-                            step=".01" value="0">
-
-                        </br>
-                        </br>
-                        <p style="text-align: left;">Co-ordinate System (Global by default):
-                            <button class="button is-small  is-outlined is-success"
-                                style="float:inline-end; width: 20px; height: 20px;" onclick="CS_popup()">Add</button>
-
-                        <p style="text-align: left;">Transformation (Global by default):
-                            <button class="button is-small  is-outlined is-success"
-                                style="float:inline-end; width: 20px; height: 20px;"
-                                onclick="Transformation_popup()">Add</button>
-
-                        <div class="control">
-                            <button class="buttonissecondary" style="width: 200px; float:left">ADD</button>
-                        </div>
-                        </p>
-                    </div>
-
-                </div>
-
-                <div id="EditModal" class="modal">
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <p>Edit shapes</p>
-                    </div>
-
-                </div>
-
-                <div id="DeleteModal" class="modal">
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <p>Delete shapes</p>
-                    </div>
-
-                </div>
-
-                <div id="cam-modal" class="modal">
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <p>
-                        <div class="control">
-                            <p>Clipping</p>
-                            <div style="display: flexbox;">
-                                <input class="input is-small" style="width:20%" type="text" id="near-coord"
-                                    placeholder="Near">
-                                <input class="input is-small" style="width:20%" type="text" id="far-coord"
-                                    placeholder="Far">
-                            </div>
-                            <div style="display: flexbox;">
-                                <input class="input is-small" style="width:20%" type="text" id="left-coord"
-                                    placeholder="Left">
-                                <input class="input is-small" style="width:20%" type="text" id="right-coord"
-                                    placeholder="Right">
-                            </div>
-                            <div style="display: flexbox;">
-                                <input class="input is-small" style="width:20%" type="text" id="top-coord"
-                                    placeholder="Top">
-                                <input class="input is-small" style="width:20%" type="text" id="bottom-coord"
-                                    placeholder="Bottom">
-                            </div>
-                            <p>Camera Position</p>
-                            <div style="display: flexbox;">
-                                <input class="input is-small" style="width:20%" type="text" id="cam-x"
-                                    placeholder="Cam-X">
-                                <input class="input is-small" style="width:20%" type="text" id="cam-y"
-                                    placeholder="Cam-Y">
-                                <input class="input is-small" style="width:20%" type="text" id="cam-z"
-                                    placeholder="Cam-Z">
-                            </div>
-                            <p>Target Position</p>
-                            <div style="display: flexbox;">
-                                <input class="input is-small" style="width:20%" type="text" id="target-x"
-                                    placeholder="Target-X">
-                                <input class="input is-small" style="width:20%" type="text" id="target-y"
-                                    placeholder="Target-Y">
-                                <input class="input is-small" style="width:20%" type="text" id="target-z"
-                                    placeholder="Target-Z">
-                            </div>
-                            <p>Up Vector</p>
-                            <div style="display: flexbox;">
-                                <input class="input is-small" style="width:20%" type="text" id="up-x"
-                                    placeholder="Up-X">
-                                <input class="input is-small" style="width:20%" type="text" id="up-y"
-                                    placeholder="Up-Y">
-                                <input class="input is-small" style="width:20%" type="text" id="up-z"
-                                    placeholder="Up-Z">
-                            </div>
-                            <p>Type</p>
-                            <!-- <div id ="camera-type" class="control" value="1"> -->
-                            <div id="ortho-id" class="select" style="float:left;">
-                                <select id="cam-type" name="" value="1">
-                                    <option value="1">Orthographic</option>
-                                    <option value="0">Perspective</option>
-                                </select>
-                            </div>
-                            <!-- </div> -->
-                            <div class="control">
-                                <button class="button is-link" id="new-cam">Submit</button>
-                            </div>
-                        </div>
-                        </p>
-                    </div>
-
-                </div>
-
+        
+                        </section>
                 </p>
 
+                <div class="v-datalist-row">
+                    
+                </div>
                 <div class="v-datalist-title" id="top-border">Vertices</div>
-                <br>
                 <div style="display: flexbox;">
             A&nbsp;<input class="input is-responsive is-small" style="width:20%" type="number" id="vertex-00" value="-1"
                         placeholder="X">
@@ -270,25 +151,6 @@
                 </div>
                 <input class="button is-responsive is-small is-link" style="margin: 1rem;" id="move-button" type="submit"
                     value="Set position">
-
-                <div class="v-datalist-title" id="top-border">Description</div>
-                <div class="vlabs-page-content ">
-                    <li style="font-size: 0.9rem;">
-                        This experiment explains how points and co-ordinate systems are used together to represent two
-                        and three dimensional shapes.
-                    </li>
-                    <li style="font-size: 0.9rem;">
-                        This experiment is designed to teach how points and co-ordinate systems are represented in
-                        computer graphics.
-                        Start by editing the co-ordinates of the point and comparing how the point gets displayed. The
-                        co-ordinates can be edited by changing the text boxes above
-                        Also notice how the absolute co-ordinates are displayed.
-                    </li>
-                    <li style="font-size: 0.9rem;">
-                        Drag with the right mouse button to rotate the view and use the mouse wheel to zoom in and out.
-                    </li>
-                </div>
-
             </div>
         </div>
 
@@ -386,25 +248,12 @@
                 </div>
             </div>
 
-            <div class="v-datalist-row v-bold" id="output1"></div>
-            <div class="v-datalist-row v-bold" id="output2"></div>
-            <div class="v-datalist-row">
-                <div class="v-table-wrap">
-                    <table id="table" class="table is-bordered is-fullwidth">
-
-                    </table>
-                </div>
             </div>
         </div>
     </div>
 
-    <input class="slider exptwoslider is-fullwidth" id="slider" step="1" min="0" max="1000" value="0" type="range">
+    <input class="v-slider-full is-centered column exptwoslider is-fullwidth" id="slider" step="1" min="0" max="100" value="0" type="range">
 
-
-    <!-- <script>
-                                instance = THREE.getInstance();
-                                instance.setContainer("hello");
-                            </script> -->
 
     <script src="https://unpkg.com/mathjs@9.2.0/lib/browser/math.js"></script>
     <script type="module" src="exp5main.js"></script>

@@ -4,6 +4,12 @@
 
 .v-datalist-container {
     height: 100%;
+    padding: 0;
+}
+
+.v-instruction-container {
+    width: 80%;
+    margin: 0 auto;
 }
 
 .v-canvas-container {
@@ -13,16 +19,9 @@
     border: none;
 }
 
-#finalx,
-#finaly,
-#finalz {
-    display: inline;
-}
-
 .v-slider-full {
     width: 80%;
-    margin: auto;
-    padding: 1rem;
+	margin: auto;
 }
 
 .input-form {
@@ -49,10 +48,13 @@
 @media screen and (max-width: 1023px) {
     .left {
         order: 1;
+        
     }
+
     .right {
         order: 2;
     }
+
     .exp {
         order: 3;
     }
@@ -60,6 +62,12 @@
 
 #top-border {
     border-top: 1px solid black;
+    margin: 0.5rem;
+}
+
+.smol-wid {
+    width: 20%;
+    /* margin: 0.1rem; */
 }
 
 .modal {
@@ -71,8 +79,12 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-color: rgb(0, 0, 0);
-    background-color: rgba(0, 0, 0, 0.4);
+    /* background-color: rgb(0, 0, 0); */
+    /* background-color: rgba(0, 0, 0, 0.4); */
+}
+
+#disp-heading { 
+    margin: 0.5rem;
 }
 
 .modal-content {
@@ -97,11 +109,6 @@
     cursor: pointer;
 }
 
-#cs-modal {
-    position: static;
-    margin: 0px;
-}
-
 #add-modal {
     width: 50%;
     margin: auto;
@@ -112,42 +119,6 @@
     margin: auto;
 }
 
-.slidecontainer {
-    width: 80%;
-}
-
-.slider {
-    -webkit-appearance: none;
-    width: 60%;
-    margin-left: 20%;
-    margin-right: 20%;
-    height: 25px;
-    background: #d3d3d3;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
-}
-
-.slider:hover {
-    opacity: 1;
-}
-
-.slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 25px;
-    height: 25px;
-    background: #04AA6D;
-    cursor: pointer;
-}
-
-.slider::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
-    background: #04AA6D;
-    cursor: pointer;
-}
 
 .v-datalist-title {
     border-bottom: 0;
@@ -168,18 +139,20 @@
     size: 1rem;
 }
 
-.v-checkbox {
-    margin-bottom: 0.1rem;
-}
-
-.input {
-    margin-bottom: 0.5rem;
-}
-
 .v-button {
     background-color: #04AA6D;
     border-radius: 0.5rem;
     font-size: small;
+    margin: 1rem;
+}
+
+.instr-font {
+    font-size: 0.9rem;
+}
+
+.coord-dim {
+    width: 100px;
+    margin: 0.25rem;
 }
 
 #add-shape-btn {
@@ -205,4 +178,32 @@
 #set-rotation-axis {
     background-color: #3298dc;
     border-radius: 0.5rem;
+}
+
+#checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#checkboxes label {
+    margin: 0.3rem auto;
+
+    display: flex;
+    align-items: flex-start;
+    flex: 40%;
+}
+
+#lock-v #xy-grid #xz-grid #yz-grid {
+    margin: auto 0.1rem;
+    padding: auto 0.1rem;
+}
+
+.fields {
+	width: 50%;
+}
+
+.field-div {
+	margin: 1rem;
 }

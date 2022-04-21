@@ -1,6 +1,8 @@
+"use strict";
 import * as THREE from "https://threejsfundamentals.org/threejs/resources/threejs/r115/build/three.module.js";
 import { createMaterials } from "./materials.js";
-export const createCube = function (x, y, z, shapes, scene, point, shapevertex, dragx, dragy, dragz) {
+export const createCube = function (x, y, z, shapes, scene, point, shapeVertex
+    , dragX, dragY, dragZ) {
     const geometry = new THREE.BoxGeometry(1, 1, 1);
     const material = createMaterials().cubeShader;
     const cub = new THREE.Mesh(geometry, material);
@@ -9,9 +11,9 @@ export const createCube = function (x, y, z, shapes, scene, point, shapevertex, 
     shapes[shapes.length - 1].position.set(x, y, z);
     scene.add(shapes[shapes.length - 1]);
     shapes[shapes.length - 1].name = "cube";
-    let shapeVertex = shapes[shapes.length - 1].geometry.vertices;
+    let verticesList = shapes[shapes.length - 1].geometry.vertices;
     let i = 0;
-    shapeVertex.forEach(vertex => {
+    verticesList.forEach(vertex => {
         let dotGeometry = new THREE.Geometry();
         dotGeometry.vertices.push(vertex);
         let dotMaterial = new THREE.PointsMaterial({
@@ -24,16 +26,17 @@ export const createCube = function (x, y, z, shapes, scene, point, shapevertex, 
         point.push(dot);
         shapes[shapes.length - 1].add(point[point.length - 1]);
         if (i === 0) {
-            shapevertex.push(dot);
+            shapeVertex.push(dot);
         }
         i++;
     });
-    dragx.push(shapes[shapes.length - 1].geometry.vertices[0].x);
-    dragy.push(shapes[shapes.length - 1].geometry.vertices[0].y);
-    dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
+    dragX.push(shapes[shapes.length - 1].geometry.vertices[0].x);
+    dragY.push(shapes[shapes.length - 1].geometry.vertices[0].y);
+    dragZ.push(shapes[shapes.length - 1].geometry.vertices[0].z);
 };
 
-export const createDodecahedron = function (x, y, z, shapes, scene, point, shapevertex, dragx, dragy, dragz) {
+export const createDodecahedron = function (x, y, z, shapes, scene, point, shapeVertex
+    , dragX, dragY, dragZ) {
     const geometry = new THREE.DodecahedronGeometry(1);
     const material = createMaterials().cubeShader;
     const cub = new THREE.Mesh(geometry, material);
@@ -54,15 +57,17 @@ export const createDodecahedron = function (x, y, z, shapes, scene, point, shape
         point.push(dot);
         shapes[shapes.length - 1].add(point[point.length - 1]);
         if (i === 0) {
-            shapevertex.push(dot);
+            shapeVertex
+                .push(dot);
         }
     }
-    dragx.push(shapes[shapes.length - 1].geometry.vertices[0].x);
-    dragy.push(shapes[shapes.length - 1].geometry.vertices[0].y);
-    dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
+    dragX.push(shapes[shapes.length - 1].geometry.vertices[0].x);
+    dragY.push(shapes[shapes.length - 1].geometry.vertices[0].y);
+    dragZ.push(shapes[shapes.length - 1].geometry.vertices[0].z);
 };
 
-export const createOctahedron = function (x, y, z, shapes, scene, point, shapevertex, dragx, dragy, dragz) {
+export const createOctahedron = function (x, y, z, shapes, scene, point, shapeVertex
+    , dragX, dragY, dragZ) {
     const geometry = new THREE.OctahedronGeometry(1);
     const material = createMaterials().cubeShader;
     const cub = new THREE.Mesh(geometry, material);
@@ -83,14 +88,16 @@ export const createOctahedron = function (x, y, z, shapes, scene, point, shapeve
         point.push(dot);
         shapes[shapes.length - 1].add(point[point.length - 1]);
         if (i === 0) {
-            shapevertex.push(dot);
+            shapeVertex
+                .push(dot);
         }
     }
-    dragx.push(shapes[shapes.length - 1].geometry.vertices[0].x);
-    dragy.push(shapes[shapes.length - 1].geometry.vertices[0].y);
-    dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
+    dragX.push(shapes[shapes.length - 1].geometry.vertices[0].x);
+    dragY.push(shapes[shapes.length - 1].geometry.vertices[0].y);
+    dragZ.push(shapes[shapes.length - 1].geometry.vertices[0].z);
 };
-export const createTetrahedron = function (x, y, z, shapes, scene, point, shapevertex, dragx, dragy, dragz) {
+export const createTetrahedron = function (x, y, z, shapes, scene, point, shapeVertex
+    , dragX, dragY, dragZ) {
     const geometry = new THREE.TetrahedronGeometry(1);
     const material = createMaterials().cubeShader;
     const cub = new THREE.Mesh(geometry, material);
@@ -111,10 +118,11 @@ export const createTetrahedron = function (x, y, z, shapes, scene, point, shapev
         point.push(dot);
         shapes[shapes.length - 1].add(point[point.length - 1]);
         if (i === 0) {
-            shapevertex.push(dot);
+            shapeVertex
+                .push(dot);
         }
     }
-    dragx.push(shapes[shapes.length - 1].geometry.vertices[0].x);
-    dragy.push(shapes[shapes.length - 1].geometry.vertices[0].y);
-    dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
+    dragX.push(shapes[shapes.length - 1].geometry.vertices[0].x);
+    dragY.push(shapes[shapes.length - 1].geometry.vertices[0].y);
+    dragZ.push(shapes[shapes.length - 1].geometry.vertices[0].z);
 };

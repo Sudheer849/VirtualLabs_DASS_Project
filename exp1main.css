@@ -47,6 +47,7 @@
 @media screen and (max-width: 1023px) {
     .left {
         order: 1;
+        
     }
 
     .right {
@@ -60,6 +61,12 @@
 
 #top-border {
     border-top: 1px solid black;
+    margin: 0.5rem;
+}
+
+.smol-wid {
+    width: 20%;
+    /* margin: 0.1rem; */
 }
 
 .modal {
@@ -71,8 +78,12 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-color: rgb(0, 0, 0);
-    background-color: rgba(0, 0, 0, 0.4);
+    /* background-color: rgb(0, 0, 0); */
+    /* background-color: rgba(0, 0, 0, 0.4); */
+}
+
+#disp-heading { 
+    margin: 0.5rem;
 }
 
 .modal-content {
@@ -124,25 +135,6 @@
     transition: opacity .2s;
 }
 
-.slider:hover {
-    opacity: 1;
-}
-
-.slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 25px;
-    height: 25px;
-    background: #04AA6D;
-    cursor: pointer;
-}
-
-.slider::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
-    background: #04AA6D;
-    cursor: pointer;
-}
 
 .v-datalist-title {
     border-bottom: 0;
