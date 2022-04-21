@@ -1,117 +1,128 @@
 .page {
-	overflow-x: hidden;
+    overflow: hidden;
 }
 
 .v-datalist-container {
-	height: 100%;
+    height: 100%;
+    padding: 0;
 }
+
+.v-instruction-container {
+    width: 80%;
+    margin: 0 auto;
+}
+
 .v-canvas-container {
-	width: 100%;
-	height: 100%;
-	min-height: 900px;
-	border : 0 auto;
+    width: 100%;
+    height: 100%;
+    min-height: 900px;
+    border: none;
 }
 
 .v-slider-full {
-	width: 80%;
+    width: 80%;
 }
 
 .input-form {
-	display: none;
-	color: black;
+    display: none;
+    color: black;
 }
 
 .add {
-	font-size: 0.90rem; 
+    font-size: 0.90rem;
 }
 
 .left {
-	order: 1;
+    order: 1;
 }
 
 .exp {
-	order: 2;
+    order: 2;
 }
 
-.right{
-	order: 3;
+.right {
+    order: 3;
 }
 
 @media screen and (max-width: 1023px) {
-	.left {
-		order: 1;
-	}
+    .left {
+        order: 1;
+        
+    }
 
-	.right {
-		order: 2;
-	}
+    .right {
+        order: 2;
+    }
 
-	.exp {
-		order: 3;
-	}
+    .exp {
+        order: 3;
+    }
 }
 
 #top-border {
     border-top: 1px solid black;
+    margin: 0.5rem;
+}
+
+.smol-wid {
+    width: 20%;
+    /* margin: 0.1rem; */
 }
 
 .modal {
-	display: none; /* Hidden by default */
-	position: fixed; /* Stay in place */
-	z-index: 1; /* Sit on top */
-	left: 0;
-	top: 0;
-	width: 100%; /* Full width */
-	height: 100%; /* Full height */
-	overflow: hidden; /* Enable scroll if needed */
-	background-color: rgb(0,0,0); /* Fallback color */
-	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
-  
-  /* Modal Content/Box */
-  .modal-content {
-	background-color: #fefefe;
-	margin: 15% auto; /* 15% from the top and centered */
-	padding: 20px;
-	border: 1px solid #888;
-	width: 80%; /* Could be more or less, depending on screen size */
-  }
-  
-  /* The Close Button */
-  .close {
-	color: #aaa;
-	float: right;
-	font-size: 28px;
-	font-weight: bold;
-  }
-  
-  .close:hover,
-  .close:focus {
-	color: black;
-	text-decoration: none;
-	cursor: pointer;
-  }
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    /* background-color: rgb(0, 0, 0); */
+    /* background-color: rgba(0, 0, 0, 0.4); */
+}
 
-  #cs-modal {
-	  position:static;
-	  margin:0px;
-  }
+#disp-heading { 
+    margin: 0.5rem;
+}
 
-  #add-modal {
-	/* width: auto; */
-	width: 50%;
-  }
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
 
-  #edit-modal {
-	/* width: auto; */
-	width: 50%;
-  }
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#add-modal {
+    width: 50%;
+    margin: auto;
+}
+
+#edit-modal {
+    width: 50%;
+    margin: auto;
+}
 
 .slidecontainer {
     width: 80%;
-  }
-  
-  .slider {
+}
+
+.slider {
     -webkit-appearance: none;
     width: 60%;
     margin-left: 20%;
@@ -122,24 +133,84 @@
     opacity: 0.7;
     -webkit-transition: .2s;
     transition: opacity .2s;
-  }
-  
-  .slider:hover {
-    opacity: 1;
-  }
-  
-  .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 25px;
-    height: 25px;
-    background: #04AA6D;
-    cursor: pointer;
-  }
-  
-  .slider::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
-    background: #04AA6D;
-    cursor: pointer;
-  }
+}
+
+
+.v-datalist-title {
+    border-bottom: 0;
+}
+
+.v-collapsible-instruction-container {
+    width: 60%;
+    margin: auto;
+    border-radius: 0.25rem;
+}
+
+.v-collapsible {
+    width: 98%;
+    margin: auto;
+}
+
+.v-collapsible::after {
+    size: 1rem;
+}
+
+.v-button {
+    background-color: #04AA6D;
+    border-radius: 0.5rem;
+    font-size: small;
+}
+
+.instr-font {
+    font-size: 0.9rem;
+}
+
+.coord-dim {
+    width: 100px;
+    margin: 0.25rem;
+}
+
+#add-shape-btn {
+    background-color: #3298dc;
+    border-radius: 0.5rem;
+}
+
+#edit-shape-btn {
+    background-color: #48c774;
+    border-radius: 0.5rem;
+}
+
+#delete-shape-btn {
+    background-color: #f14668;
+    border-radius: 0.5rem;
+}
+
+#move-button {
+    background-color: #48c774;
+    border-radius: 0.5rem;
+}
+
+#set-rotation-axis {
+    background-color: #3298dc;
+    border-radius: 0.5rem;
+}
+
+#checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#checkboxes label {
+    margin: 0.3rem auto;
+
+    display: flex;
+    align-items: flex-start;
+    flex: 40%;
+}
+
+#lock-v #xy-grid #xz-grid #yz-grid {
+    margin: auto 0.1rem;
+    padding: auto 0.1rem;
+}
