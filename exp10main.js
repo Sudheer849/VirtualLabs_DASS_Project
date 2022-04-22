@@ -13,7 +13,6 @@ let height = 600;
 canvas.height = height;
 canvas.width = width;
 
-
 let dy;
 let dx;
 let x = 0,
