@@ -4,7 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.7-b/css/style.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.8-b/css/style.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.5-b/css/style.min.css">
     <link rel="stylesheet" href="exp8main.css">
 </head>
 
@@ -35,11 +36,11 @@
 
     <div class="columns is-centered is-variable is-1-mobile is-flex is-flex-wrap-wrap workspace left">
 
-        <div id="observations" class="column has-text-centered is-2-desktop is-5-tablet is-one-thirds-mobile observations">
+        <div id="left" class="column has-text-centered is-2-desktop is-5-tablet is-one-thirds-mobile apparatus">
             <div class="v-datalist-container">
                 <div class="v-datalist-title">Input</div>
                 <div class="v-datalist-row">
-                    <p class="is-size-7-mobile" style="float: left;">Rectangular Co-ordinates:</p>
+                    <p class="float:left" style="float: left;">Rectangular Co-ordinates:</p>
                     <br> Top Left:
                     <div style="display: flexbox;">
                         <input class="input is-small" style="width:30%" type="number" id="cnt-top-left-x" value="100" placeholder="X">
@@ -72,7 +73,7 @@
             </div>
         </div>
 
-        <div class="column is-centered is-variable column is-8-desktop is-10-tablet is-two-thirds-mobile is-flex-wrap-wrap workspace">
+        <div class="column is-10-desktop is-10-tablet exp">
             <canvas class="v-canvas-container" id="canvas" style="border:2px solid #c3c3c3;"></canvas>
         </div>
         <script src="exp8main.js"></script>
