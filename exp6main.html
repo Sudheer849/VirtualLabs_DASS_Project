@@ -15,17 +15,56 @@
             <div class="v-collapsible">Instructions</div>
             <div id="procedure-message" class="v-content">
                 <li class="instr-font">
-                    This experiment explains how points and co-ordinate systems are used together to represent two and
-                    three dimensional shapes.
+                    The given model consists of 6 parts:
+                    a. Shoulder <br>
+                    b. Arm <br>
+                    c. Elbow <br>
+                    d. Fore-arm <br>
+                    e. Wrist <br>
+                    f. alm <br>
                 </li>
                 <li class="instr-font">
-                    This experiment is designed to teach how points and co-ordinate systems are represented in computer
-                    graphics. Start by editing the co-ordinates of the point and comparing how the point gets displayed.
-                    The co-ordinates can be edited by changing the text
-                    boxes above Also notice how the absolute co-ordinates are displayed.
+                    The model is made of two parts:
+                    The joints, i.e. the shoulder, elbow and wrist are just empty containers that contain other objects
+                    nested within them. Shoulder is at the highest level of hierarchy (Level 1), containing arm and
+                    elbow as its children. Elbow is 2nd level, containing Forearm and Wrist as its children. Finally,
+                    wrist, at Level 3, has palm as its child.
                 </li>
                 <li class="instr-font">
-                    Drag with the right mouse button to rotate the view and use the mouse wheel to zoom in and out.
+                    When transformations are applied to an object at a higher level of hierarchy, the animations are
+                    applied to its descendants as well.
+                </li>
+                <li class="instr-font">
+                    Therefore, in this case, when the slider corresponding to shoulder (level 1) is moved, all the
+                    objects (levels 1, 2 and 3) are moved. Similarly, when the slider corresponding to elbow is moved,
+                    objects in levels 2 and 3 move.
+                </li>
+                <li class="instr-font">
+                    We can observe the values of the transformation matrix changing with change in the position of the
+                    slider. This is the matrix with which the point’s homogeneous coordinates are multiplied to generate
+                    the new coordinates (that produces the scaling effect).
+                </li>
+                <li class="instr-font">
+                    We can move the slider forwards and backwards any number of times, change the no. of frames and the
+                    scaling factors in the X, Y and Z directions in between as well. The slider and animation adjusts
+                    itself accordingly.
+                </li>
+                <li class="instr-font">
+                    You can add new shapes by clicking on the “Add” button with options to select the type of shape and
+                    position. Multiple shapes may be added.
+                </li>
+                <li class="instr-font">
+                    Double click on the object to select it and enable the edit and delete buttons. Clicking on the edit
+                    button allows you to edit the object’s properties. Similarly, clicking on the delete button deletes
+                    the selected object.
+                </li>
+                <li class="instr-font">
+                    Check the corresponding checkboxes to display the xy-grid, yz-grid and xz-grid and similarly uncheck
+                    to remove them from view.
+                </li>
+                <li class="instr-font">
+                    Enabling the Lock Vertices option allows you to translate the whole simulation on left-clicking and
+                    dragging the cursor.
                 </li>
             </div>
         </div>
@@ -69,58 +108,64 @@
                         <button id="delete-shape-btn" style="margin:0.25rem;"
                             class="v-button is-small is-responsive  is-danger">Delete</button>
 
-                            <section id="edit-modal" class="modal is-responsive">
-                                <div class="modal-content">
-                                    <span class="close">&times;</span>
-                                    <p class="v-datalist-title"> Edit Shape Menu</p>
-                                    <div class="select" style="display: inline-block; margin: 0.5rem">
-                                        <select name="" id="shape-edit-dropdown" value="dropdown">
-                                            <option value="Tetrahedron">Tetrahedron</option>
-                                            <option value="Octahedron">Octahedron</option>
-                                            <option value="Dodecahedron">Dodecahedron</option>
-                                            <option value="Cube">Cube</option>
-                                        </select>
-                                    </div>
-            
-                                    <div style="display: block; margin: auto">
-                                        <input class="input coord-dim" id="x" type="number" placeholder="X" step=".01" value="0">
-                                        <input class="input coord-dim" id="y" type="number" placeholder="Y" step=".01" value="0">
-                                        <input class="input coord-dim" id="z" type="number" placeholder="Z" step=".01" value="0">
-                                    </div>
-                                    <div class="control">
-                                        <button class="v-button edit-button" id="modalBox_addsubmit"
-                                            style="width: 10rem; margin: 1rem;">Edit</button>
-                                    </div>
-                                </div>
-            
-                            </section>
-            
+                    <section id="edit-modal" class="modal is-responsive">
+                        <div class="modal-content">
+                            <span class="close">&times;</span>
+                            <p class="v-datalist-title"> Edit Shape Menu</p>
+                            <div class="select" style="display: inline-block; margin: 0.5rem">
+                                <select name="" id="shape-edit-dropdown" value="dropdown">
+                                    <option value="Tetrahedron">Tetrahedron</option>
+                                    <option value="Octahedron">Octahedron</option>
+                                    <option value="Dodecahedron">Dodecahedron</option>
+                                    <option value="Cube">Cube</option>
+                                </select>
+                            </div>
 
-                            <section id="add-modal" class="modal is-responsive is-centered">
-                                <div class="modal-content">
-                                    <span class="close">&times;</span>
-                                    <p class="v-datalist-title"> Add Shape Menu</p>
-                                    <div class="select" style="display: inline-block; margin: 0.5rem">
-                                        <select name="" id="shape-add-dropdown" value="dropdown">
-                                            <option value="Tetrahedron">Tetrahedron</option>
-                                            <option value="Octahedron">Octahedron</option>
-                                            <option value="Dodecahedron">Dodecahedron</option>
-                                            <option value="Cube">Cube</option>
-                                        </select>
-                                    </div>
-            
-                                    <div style="display: block; margin: auto">
-                                        <input class="input coord-dim" id="x1" type="number" placeholder="X" step=".01" value="0">
-                                        <input class="input coord-dim" id="y1" type="number" placeholder="Y" step=".01" value="0">
-                                        <input class="input coord-dim" id="z1" type="number" placeholder="Z" step=".01" value="0">
-                                    </div>
-                                    <div class="control">
-                                        <button class="v-button add-button" id="modalBox_addsubmit"
-                                            style="margin: 1rem;">Add!</button>
-                                    </div>
-                                </div>
-            
-                            </section>
+                            <div style="display: block; margin: auto">
+                                <input class="input coord-dim" id="x" type="number" placeholder="X" step=".01"
+                                    value="0">
+                                <input class="input coord-dim" id="y" type="number" placeholder="Y" step=".01"
+                                    value="0">
+                                <input class="input coord-dim" id="z" type="number" placeholder="Z" step=".01"
+                                    value="0">
+                            </div>
+                            <div class="control">
+                                <button class="v-button edit-button" id="modalBox_addsubmit"
+                                    style="width: 10rem; margin: 1rem;">Edit</button>
+                            </div>
+                        </div>
+
+                    </section>
+
+
+                    <section id="add-modal" class="modal is-responsive is-centered">
+                        <div class="modal-content">
+                            <span class="close">&times;</span>
+                            <p class="v-datalist-title"> Add Shape Menu</p>
+                            <div class="select" style="display: inline-block; margin: 0.5rem">
+                                <select name="" id="shape-add-dropdown" value="dropdown">
+                                    <option value="Tetrahedron">Tetrahedron</option>
+                                    <option value="Octahedron">Octahedron</option>
+                                    <option value="Dodecahedron">Dodecahedron</option>
+                                    <option value="Cube">Cube</option>
+                                </select>
+                            </div>
+
+                            <div style="display: block; margin: auto">
+                                <input class="input coord-dim" id="x1" type="number" placeholder="X" step=".01"
+                                    value="0">
+                                <input class="input coord-dim" id="y1" type="number" placeholder="Y" step=".01"
+                                    value="0">
+                                <input class="input coord-dim" id="z1" type="number" placeholder="Z" step=".01"
+                                    value="0">
+                            </div>
+                            <div class="control">
+                                <button class="v-button add-button" id="modalBox_addsubmit"
+                                    style="margin: 1rem;">Add!</button>
+                            </div>
+                        </div>
+
+                    </section>
                     </p>
                 </div>
                 <div class="v-datalist-row" id="top-border">
@@ -128,30 +173,38 @@
 
                     <div style="display: flexbox; margin-top: 2rem; margin-bottom: 2rem;">
                         X:
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="x-value" value="0" placeholder="X"> 
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="x-value"
+                            value="0" placeholder="X">
                         Y:
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="y-value" value="0" placeholder="Y"> 
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="y-value"
+                            value="0" placeholder="Y">
                         Z:
-                        <input class="input is-responsive is-small" style="width:20%" type="number" id="z-value" value="0" placeholder="Z">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="z-value"
+                            value="0" placeholder="Z">
                     </div>
-                    <input class="button is-responsive is-small is-link" style="margin: 2px;" id="move-button" type="submit" value="Move">
+                    <input class="button is-responsive is-small is-link" style="margin: 2px;" id="move-button"
+                        type="submit" value="Move">
 
                 </div>
                 <div class="v-datalist-row" id="top-border">
                     <div class="v-datalist-title">Animation Controls</div>
 
-                    <div style="margin: 1rem" >
-                        <label for="quantity" style="margin: 1rem" >Frames</label>
-                        <input class="input is-responsive is-small" style="width:40%" type="number" id="frames" name="noofframes" min="1" step="1" value="1000">
+                    <div style="margin: 1rem">
+                        <label for="quantity" style="margin: 1rem">Frames</label>
+                        <input class="input is-responsive is-small" style="width:40%" type="number" id="frames"
+                            name="noofframes" min="1" step="1" value="1000">
                     </div>
 
-                    <div class="v-datalist-row" >
+                    <div class="v-datalist-row">
                         Level 1 (Shoulder)
-                        <input class="v-slider-full is-centered column exptwoslider is-fullwidth" id="shoulder" value="0" type="range">
+                        <input class="v-slider-full is-centered column exptwoslider is-fullwidth" id="shoulder"
+                            value="0" type="range">
                         Level 2 (Elbow)
-                        <input class="v-slider-full is-centered column exptwoslider is-fullwidth" id="elbow" value="0" type="range">
+                        <input class="v-slider-full is-centered column exptwoslider is-fullwidth" id="elbow" value="0"
+                            type="range">
                         Level 3 (Wrist)
-                        <input class="v-slider-full is-centered column exptwoslider is-fullwidth" id="wrist" value="0" type="range">
+                        <input class="v-slider-full is-centered column exptwoslider is-fullwidth" id="wrist" value="0"
+                            type="range">
                     </div>
                 </div>
             </div>
@@ -164,7 +217,7 @@
             </div>
         </div>
     </div>
-    
+
     <script type="module" src="exp6main.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.8-b/js/script.js"></script>
 </body>
