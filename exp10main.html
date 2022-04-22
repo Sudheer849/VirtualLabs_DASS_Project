@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.8-b/css/style.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.5-b/css/style.min.css">
+    <link rel="stylesheet" href="exp10main.css">
+</head>
+
+<body class="page has-text-centered">
+
+    <div class="columns is-centered is-flex ">
+        <div class="column has-text-centered ">
+            <div class="v-collapsible-instruction-container ">
+                <div class="v-collapsible ">Instructions</div>
+                <div id="procedure-message " class="v-content ">
+                    <p style="font-size: 0.9rem; ">
+                        <li>Enter Frame Dimensions in the Input</li>
+                        <li>Enter the point co-ordinates</li>
+                        <li>Submit to see the grid form</li>
+                        <li>Now click next and prev to move to next and previous iterations</li>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+
+    <div class="columns is-centered is-variable is-1-mobile is-flex is-flex-wrap-wrap workspace left ">
+
+        <div id="left" class="column has-text-centered is-2-desktop is-5-tablet is-5-mobile apparatus">
+            <div class="v-datalist-container ">
+                <div class="v-datalist-title is-size-8-mobile">Input</div>
+                <div class="v-datalist-row ">
+                    
+                    <div style="float: left;" class="is-size-7-mobile v-content">Line Co-ordinates:</div>
+                    <div>
+                        <p class="is-size-7-mobile">Point 1:</p> 
+                        <div style="display: flexbox; ">
+                            <input class="input is-small " style="width:30% " type="number" id="x1" value="5" placeholder="X ">
+                            <input class="input is-small " style="width:30% " type="number" id="y1" value="5" placeholder="Y ">
+                        </div>
+                    </div>
+                    <div>
+                    <p class="is-size-7-mobile">Point 2:</p>
+                        <div style="display: flexbox; ">
+                            <input class="input is-small " style="width:30% " type="number" id="x2" value="20" placeholder="X ">
+                            <input class="input is-small " style="width:30% " type="number" id="y2" value="20" placeholder="Y ">
+                        </div>
+                    </div>
+
+                    <button class="v-button is-small is-primary is-responsive" style="margin: 0.5rem;" id="submit">Submit</button>
+                </div>
+                <div class="v-datalist-row " id="top-border">
+                    <div class="v-datalist-title is-size-8-mobile">Iteration Controls</div>
+                    <div class="columns is-centered is-flex is-flex-wrap-wrap button-div "style="margin:auto; width: auto; ">
+                        <button style="margin: 1%; " class="v-button next-btn is-responsive " id="next-button">Next</button>
+                        <button style="margin: 1%; " class="v-button previous-btn is-responsive " id="prev-button">Prev</button>
+                        <button style="margin: 1%; " class="v-button reset-btn is-responsive " id="reset-button">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="column is-10-desktop is-10-tablet is-10-mobile exp">
+            <canvas class="v-canvas-container " id="canvas" style="background-color: black;border:2px solid black; "></canvas>
+        </div>
+
+        <script src="exp10main.js "></script>
+        <script src="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.8-b/js/script.js "></script>
+    </div>
+</body>

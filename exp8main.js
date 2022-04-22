@@ -152,7 +152,7 @@ function check() {
       eqornq = "!=";
     }
     text.innerHTML =
-      "<br> <br> Left edge is selected for clipping the line aganist the left point";
+      "<br> <br> Left edge is selected for clipping the line against the left point";
     logic_text.innerHTML = "0" + "0" + "0" + "1" + " " + "&" + " " + convertToBinary(current_point) + " " + eqornq + " " + "0";
     if (first_point_status == 0) {
       pointstat_text.innerHTML = "First Point is Selected";
