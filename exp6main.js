@@ -20,6 +20,8 @@ let cam_target = new THREE.Vector3(0, 0, 0);
 let modalAdd = document.getElementById("add-modal");
 let modalEdit = document.getElementById("edit-modal");
 let initialPos = [0, 0, 0];
+let container = document.getElementById("canvas-main");
+let lock=0;
 
 let frames = document.getElementById("frames").value;
 
@@ -164,35 +166,78 @@ let buttons = document.getElementsByTagName("button");
 const size = 50;
 const divisions = 25;
 
-document.getElementById("add-shape-btn").onclick = function() {
-    modalAdd.style.display = "block";
+document.getElementById("add-shape-btn").onclick = function () {
+    addModal.style.display = "block";
     modalbutton2.addEventListener("click", () => {
         let xcoord = document.getElementById("x1").value;
         let ycoord = document.getElementById("y1").value;
         let zcoord = document.getElementById("z1").value;
-        // alert(document.getElementById("hi").value);
         noOfShapes++;
-        console.debug(document.getElementById("shape-add-dropdown").value);
-        if (document.querySelector("select").value == "Cube") {
-            createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
-, dragX, dragY, dragZ);
+        if (document.getElementById("shape-add-dropdown").value === "Cube") {
+            createCube(
+                xcoord,
+                ycoord,
+                zcoord,
+                shapes,
+                scene,
+                point,
+                shapeVertex
+,
+                dragX,
+                dragY,
+                dragZ
+            );
         }
-        if (document.querySelector("select").value == "Tetrahedron") {
-            createTetrahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
-, dragX, dragY, dragZ);
+        if (document.getElementById("shape-add-dropdown").value === "Tetrahedron") {
+            createTetrahedron(
+                xcoord,
+                ycoord,
+                zcoord,
+                shapes,
+                scene,
+                point,
+                shapeVertex
+,
+                dragX,
+                dragY,
+                dragZ
+            );
         }
-        if (document.querySelector("select").value == "Octahedron") {
-            createOctahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
-, dragX, dragY, dragZ);
+        if (document.getElementById("shape-add-dropdown").value === "Octahedron") {
+            createOctahedron(
+                xcoord,
+                ycoord,
+                zcoord,
+                shapes,
+                scene,
+                point,
+                shapeVertex
+,
+                dragX,
+                dragY,
+                dragZ
+            );
         }
-        if (document.querySelector("select").value == "Dodecahedron") {
-            createDodecahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
-, dragX, dragY, dragZ);
+        if (
+            document.getElementById("shape-add-dropdown").value === "Dodecahedron"
+        ) {
+            createDodecahedron(
+                xcoord,
+                ycoord,
+                zcoord,
+                shapes,
+                scene,
+                point,
+                shapeVertex
+,
+                dragX,
+                dragY,
+                dragZ
+            );
         }
-        modalAdd.style.display = "none";
+        addModal.style.display = "none";
     });
 };
-
 // Section of mouse control functions
 // --------------------------------------------------------------------------------------------------
 let raycaster = new THREE.Raycaster();
@@ -210,22 +255,16 @@ let point = [];
 let shapeVertex
  = [];
 let hand_comp = [];
-let noOfShapes
- = 0;
+let noOfShapes = 0;
 
 document.addEventListener("dblclick", ondblclick, false);
 // double click
 function ondblclick(event) {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    raycaster1.setFromCamera(mouse, camera);
-    let intersects = raycaster1.intersectObjects(shapes);
+    raycaster.setFromCamera(mouse, camera);
+    let intersects = raycaster.intersectObjects(shapes);
     if (intersects.length > 0) {
-        console.debug(
-            intersects[0].object.position.x,
-            intersects[0].object.position.y,
-            intersects[0].object.position.z
-        );
         const geometry = new THREE.SphereGeometry(1, 32, 16);
         const edges = new THREE.EdgesGeometry(geometry);
         const line = new THREE.LineSegments(
@@ -238,15 +277,15 @@ function ondblclick(event) {
             intersects[0].object.position.z
         );
         scene.add(line);
-        document.getElementById("delete-shape-btn").onclick = function() {
+        document.getElementById("delete-shape-btn").onclick = function () {
             scene.remove(line);
             for (let i = 0; i < intersects.length; i++) {
                 scene.remove(intersects[i].object);
                 noOfShapes--;
             }
         };
-        // geometry.translate(intersects[0].object.position.x,intersects[0].object.position.y,intersects[0].object.position.z);
-        document.getElementById("edit-shape-btn").onclick = function() {
+
+        document.getElementById("edit-shape-btn").onclick = function () {
             document.getElementById("edit-modal").style.display = "block";
             document
                 .querySelector(".edit-button")
@@ -258,20 +297,66 @@ function ondblclick(event) {
                     let xcoord = document.getElementById("x").value;
                     let ycoord = document.getElementById("y").value;
                     let zcoord = document.getElementById("z").value;
-                    // alert(document.querySelector("select").value);
                     noOfShapes++;
                     if (document.querySelector("select").value === "Cube") {
-                        createCube(xcoord, ycoord, zcoord);
-                        // createCube(xcoord, ycoord, zcoord);
+                        createCube(
+                            xcoord,
+                            ycoord,
+                            zcoord,
+                            shapes,
+                            scene,
+                            point,
+                            shapeVertex
+,
+                            dragX,
+                            dragY,
+                            dragZ
+                        );
                     }
                     if (document.querySelector("select").value === "Tetrahedron") {
-                        createTetrahedron(xcoord, ycoord, zcoord);
+                        createTetrahedron(
+                            xcoord,
+                            ycoord,
+                            zcoord,
+                            shapes,
+                            scene,
+                            point,
+                            shapeVertex
+,
+                            dragX,
+                            dragY,
+                            dragZ
+                        );
                     }
                     if (document.querySelector("select").value === "Octahedron") {
-                        createOctahedron(xcoord, ycoord, zcoord);
+                        createOctahedron(
+                            xcoord,
+                            ycoord,
+                            zcoord,
+                            shapes,
+                            scene,
+                            point,
+                            shapeVertex
+,
+                            dragX,
+                            dragY,
+                            dragZ
+                        );
                     }
                     if (document.querySelector("select").value === "Dodecahedron") {
-                        createDodecahedron(xcoord, ycoord, zcoord);
+                        createDodecahedron(
+                            xcoord,
+                            ycoord,
+                            zcoord,
+                            shapes,
+                            scene,
+                            point,
+                            shapeVertex
+,
+                            dragX,
+                            dragY,
+                            dragZ
+                        );
                     }
                     document.getElementById("edit-modal").style.display = "none";
                 });
@@ -279,9 +364,68 @@ function ondblclick(event) {
     }
 }
 
-spanEditModal.onclick = function() {
+spanEditModal.onclick = function () {
     modalEdit.style.display = "none";
 };
+
+document.addEventListener("pointermove", (event) => {
+    const rect = renderer.domElement.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    mouse.x = (x / container.clientWidth) * 2 - 1;
+    mouse.y = (y / container.clientHeight) * -2 + 1;
+    if (mouse.x < 1 && mouse.x > -1 && mouse.y < 1 && mouse.y > -1) {
+        raycaster.setFromCamera(mouse, camera);
+        if (isDragging && lock === 0) {
+            for (let i = 0; i < shapes.length; i++) {
+                raycaster.ray.intersectPlane(plane, planeIntersect);
+                shapes[i].geometry.vertices[0].set(
+                    planeIntersect.x + shift.x,
+                    planeIntersect.y + shift.y,
+                    planeIntersect.z + shift.z
+                );
+                shapes[i].geometry.verticesNeedUpdate = true;
+                shapeVertex[i].position.set(
+                    planeIntersect.x + shift.x - dragX[i],
+                    planeIntersect.y + shift.y - dragY[i],
+                    planeIntersect.z + shift.z - dragZ[i]
+                );
+            }
+            raycaster.ray.intersectPlane(plane, planeIntersect);
+        } else if (isDragging) {
+            raycaster.ray.intersectPlane(plane, planeIntersect);
+        }
+    }
+});
+document.addEventListener("pointerdown", () => {
+    switch (event.which) {
+        case 1:
+            const rect = renderer.domElement.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            mouse.x = (x / container.clientWidth) * 2 - 1;
+            mouse.y = (y / container.clientHeight) * -2 + 1;
+            pNormal.copy(camera.position).normalize();
+            plane.setFromNormalAndCoplanarPoint(pNormal, scene.position);
+            raycaster.setFromCamera(mouse, camera);
+            raycaster.ray.intersectPlane(plane, planeIntersect);
+            let position = new THREE.Vector3(
+                shapeVertex[0].position.x,
+                shapeVertex[0].position.y,
+                shapeVertex[0].position.z
+            );
+            shift.subVectors(position, planeIntersect);
+            isDragging = true;
+            dragObject = shapes[shapes.length - 1];
+            break;
+    }
+});
+document.addEventListener("pointerup", () => {
+    isDragging = false;
+    dragObject = null;
+});
 
 // Shoulder
 // ---------------------------------------------------------------------------------------

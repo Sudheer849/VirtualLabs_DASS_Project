@@ -146,20 +146,16 @@ document.getElementById("add-shape-btn").onclick = function () {
         noOfShapes++;
         console.log(document.getElementById("shape-add-dropdown").value);
         if (document.getElementById("shape-add-dropdown").value === "Cube") {
-            createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
-, dragX, dragY, dragZ);
+            createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex, dragX, dragY, dragZ);
         }
         if (document.getElementById("shape-add-dropdown").value === "Tetrahedron") {
-            createTetrahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
-, dragX, dragY, dragZ);
+            createTetrahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex, dragX, dragY, dragZ);
         }
         if (document.getElementById("shape-add-dropdown").value === "Octahedron") {
-            createOctahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
-, dragX, dragY, dragZ);
+            createOctahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex, dragX, dragY, dragZ);
         }
         if (document.getElementById("shape-add-dropdown").value === "Dodecahedron") {
-            createDodecahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
-, dragX, dragY, dragZ);
+            createDodecahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex, dragX, dragY, dragZ);
         }
         modalAdd.style.display = "none";
     });
@@ -177,9 +173,7 @@ let point = [];
 let shapeVertex
  = [];
 let dotList = [];
-let noOfShapes
- = 0;
-
+let noOfShapes = 0;
 document.addEventListener("dblclick", ondblclick, false);
 // double click
 function ondblclick(event) {
@@ -202,108 +196,89 @@ function ondblclick(event) {
         scene.add(line);
         document.getElementById("delete-shape-btn").onclick = function () {
             scene.remove(line);
-        }
-        var xcoord = document.getElementById("x").value;
-        var ycoord = document.getElementById("y").value;
-        var zcoord = document.getElementById("z").value;
-        // alert(document.querySelector("select").value);
-        noOfShapes++;
-        if (document.querySelector("select").value === "Cube") {
-            createCube(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
-, dragX, dragY, dragZ);
-        }
-        if (document.querySelector("select").value === "Tetrahedron") {
-            createTetrahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
-, dragX, dragY, dragZ);
-        }
-        if (document.querySelector("select").value === "Octahedron") {
-            createOctahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
-, dragX, dragY, dragZ);
-        }
-        if (document.querySelector("select").value === "Dodecahedron") {
-            createDodecahedron(xcoord, ycoord, zcoord, shapes, scene, point, shapeVertex
-, dragX, dragY, dragZ);
-        }
-        document.getElementById("edit-modal").style.display = "none";
-    };
+            for (let i = 0; i < intersects.length; i++) {
+                scene.remove(intersects[i].object);
+                noOfShapes--;
+            }
+        };
 
-    document.getElementById("edit-shape-btn").onclick = function () {
-        document.getElementById("edit-modal").style.display = "block";
-        document
-            .querySelector(".edit-button")
-            .addEventListener("click", () => {
-                for (let i = 0; i < intersects.length; i++) {
-                    scene.remove(intersects[i].object);
-                    scene.remove(line);
-                }
-                let xcoord = document.getElementById("x").value;
-                let ycoord = document.getElementById("y").value;
-                let zcoord = document.getElementById("z").value;
-                // alert(document.querySelector("select").value);
-                noOfShapes++;
-                if (document.querySelector("select").value === "Cube") {
-                    createCube(
-                        xcoord,
-                        ycoord,
-                        zcoord,
-                        shapes,
-                        scene,
-                        point,
-                        shapeVertex
+        document.getElementById("edit-shape-btn").onclick = function () {
+            document.getElementById("edit-modal").style.display = "block";
+            document
+                .querySelector(".edit-button")
+                .addEventListener("click", () => {
+                    for (let i = 0; i < intersects.length; i++) {
+                        scene.remove(intersects[i].object);
+                        scene.remove(line);
+                    }
+                    let xcoord = document.getElementById("x").value;
+                    let ycoord = document.getElementById("y").value;
+                    let zcoord = document.getElementById("z").value;
+                    noOfShapes++;
+                    if (document.querySelector("select").value === "Cube") {
+                        createCube(
+                            xcoord,
+                            ycoord,
+                            zcoord,
+                            shapes,
+                            scene,
+                            point,
+                            shapeVertex
 ,
-                        dragX,
-                        dragY,
-                        dragZ
-                    );
-                }
-                if (document.querySelector("select").value === "Tetrahedron") {
-                    createTetrahedron(
-                        xcoord,
-                        ycoord,
-                        zcoord,
-                        shapes,
-                        scene,
-                        point,
-                        shapeVertex
+                            dragX,
+                            dragY,
+                            dragZ
+                        );
+                    }
+                    if (document.querySelector("select").value === "Tetrahedron") {
+                        createTetrahedron(
+                            xcoord,
+                            ycoord,
+                            zcoord,
+                            shapes,
+                            scene,
+                            point,
+                            shapeVertex
 ,
-                        dragX,
-                        dragY,
-                        dragZ
-                    );
-                }
-                if (document.querySelector("select").value === "Octahedron") {
-                    createOctahedron(
-                        xcoord,
-                        ycoord,
-                        zcoord,
-                        shapes,
-                        scene,
-                        point,
-                        shapeVertex
+                            dragX,
+                            dragY,
+                            dragZ
+                        );
+                    }
+                    if (document.querySelector("select").value === "Octahedron") {
+                        createOctahedron(
+                            xcoord,
+                            ycoord,
+                            zcoord,
+                            shapes,
+                            scene,
+                            point,
+                            shapeVertex
 ,
-                        dragX,
-                        dragY,
-                        dragZ
-                    );
-                }
-                if (document.querySelector("select").value === "Dodecahedron") {
-                    createDodecahedron(
-                        xcoord,
-                        ycoord,
-                        zcoord,
-                        shapes,
-                        scene,
-                        point,
-                        shapeVertex
+                            dragX,
+                            dragY,
+                            dragZ
+                        );
+                    }
+                    if (document.querySelector("select").value === "Dodecahedron") {
+                        createDodecahedron(
+                            xcoord,
+                            ycoord,
+                            zcoord,
+                            shapes,
+                            scene,
+                            point,
+                            shapeVertex
 ,
-                        dragX,
-                        dragY,
-                        dragZ
-                    );
-                }
-                document.getElementById("edit-modal").style.display = "none";
-            });
-    };
+                            dragX,
+                            dragY,
+                            dragZ
+                        );
+                    }
+                    document.getElementById("edit-modal").style.display = "none";
+                });
+        };
+    }
 }
 
 spanEditModal.onclick = function () {
@@ -353,12 +328,9 @@ document.addEventListener("pointerdown", () => {
             raycaster.setFromCamera(mouse, camera);
             raycaster.ray.intersectPlane(plane, planeIntersect);
             let position = new THREE.Vector3(
-                shapeVertex
-[0].position.x,
-                shapeVertex
-[0].position.y,
-                shapeVertex
-[0].position.z
+                shapeVertex[0].position.x,
+                shapeVertex[0].position.y,
+                shapeVertex[0].position.z
             );
             shift.subVectors(position, planeIntersect);
             isDragging = true;
