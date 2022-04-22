@@ -181,8 +181,7 @@ document.getElementById("add-shape-btn").onclick = function () {
                 shapes,
                 scene,
                 point,
-                shapeVertex
-,
+                shapeVertex,
                 dragX,
                 dragY,
                 dragZ
@@ -196,8 +195,7 @@ document.getElementById("add-shape-btn").onclick = function () {
                 shapes,
                 scene,
                 point,
-                shapeVertex
-,
+                shapeVertex,
                 dragX,
                 dragY,
                 dragZ
@@ -211,8 +209,7 @@ document.getElementById("add-shape-btn").onclick = function () {
                 shapes,
                 scene,
                 point,
-                shapeVertex
-,
+                shapeVertex,
                 dragX,
                 dragY,
                 dragZ
@@ -228,8 +225,7 @@ document.getElementById("add-shape-btn").onclick = function () {
                 shapes,
                 scene,
                 point,
-                shapeVertex
-,
+                shapeVertex,
                 dragX,
                 dragY,
                 dragZ
@@ -306,8 +302,7 @@ function ondblclick(event) {
                             shapes,
                             scene,
                             point,
-                            shapeVertex
-,
+                            shapeVertex,
                             dragX,
                             dragY,
                             dragZ
@@ -321,8 +316,7 @@ function ondblclick(event) {
                             shapes,
                             scene,
                             point,
-                            shapeVertex
-,
+                            shapeVertex,
                             dragX,
                             dragY,
                             dragZ
@@ -336,8 +330,7 @@ function ondblclick(event) {
                             shapes,
                             scene,
                             point,
-                            shapeVertex
-,
+                            shapeVertex,
                             dragX,
                             dragY,
                             dragZ
@@ -351,8 +344,7 @@ function ondblclick(event) {
                             shapes,
                             scene,
                             point,
-                            shapeVertex
-,
+                            shapeVertex,
                             dragX,
                             dragY,
                             dragZ
