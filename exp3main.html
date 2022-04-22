@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.8-b/css/style.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.5-b/css/style.min.css">
     <link rel="stylesheet" href="exp3main.css">
@@ -61,108 +60,106 @@
                     </div>
                 </div>
 
-                <div class="v-datalist-title" id="top-border">Shape Controls</div>
-                <p>
-                    <button id="add-shape-btn" style="margin:0.25rem;" class="v-button is-small is-responsive is-info" onclick="addShape()">Add</button>
-                    <button id="edit-shape-btn" style="margin:0.25rem;" class="v-button is-small is-responsive  is-success" onclick="editShape()">Edit</button>
-                    <button id="delete-shape-btn" style="margin:0.25rem;" class="v-button is-small is-responsive  is-danger" onclick="deleteShape()">Delete</button>
+                <div class="v-datalist-row" id="top-border">
+                    <div class="v-datalist-title">Shape Controls</div>
+                    <p>
+                        <button id="add-shape-btn" style="margin:0.25rem;" class="v-button is-small is-responsive is-info" onclick="addShape()">Add</button>
+                        <button id="edit-shape-btn" style="margin:0.25rem;" class="v-button is-small is-responsive  is-success" onclick="editShape()">Edit</button>
+                        <button id="delete-shape-btn" style="margin:0.25rem;" class="v-button is-small is-responsive  is-danger" onclick="deleteShape()">Delete</button>
 
-                    <div id="edit-modal" class="modal is-responsive">
-                        <div class="modal-content">
-                            <span class="close">&times;</span>
-                            <p>
-                                <input class="input" style="width:auto; float: left;" id="name" type="text" placeholder="Instance Name">
-                                <div id="Addshape" class="control" value="hi">
-                                    <div class="select" style="float:left;">
-                                        <select name="" id="shape-edit-dropdown" value="dropdown">
-                                    <option value="Tetrahedron">Tetrahedron</option>
-                                    <option value="Octahedron">Octahedron</option>
-                                    <option value="Dodecahedron">Dodecahedron</option>
-                                    <option value="Cube">Cube</option>
-                                    <option value="Sphere">Sphere</option>
-                                </select>
-                                    </div>
+                        <section id="edit-modal" class="modal is-responsive">
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <p class="v-datalist-title"> Edit Shape Menu</p>
+                                <div class="select" style="display: inline-block; margin: 0.5rem">
+                                    <select name="" id="shape-edit-dropdown" value="dropdown">
+                                        <option value="Tetrahedron">Tetrahedron</option>
+                                        <option value="Octahedron">Octahedron</option>
+                                        <option value="Dodecahedron">Dodecahedron</option>
+                                        <option value="Cube">Cube</option>
+                                    </select>
                                 </div>
-                                </br>
-                                </br>
-
-                                <input class="input " style="width: 200px; float:left" id="x" type="number" placeholder="X" step=".01" value="0">
-                                <input class="input " style="width: 200px; float:left" id="y" type="number" placeholder="Y" step=".01" value="0">
-                                <input class="input " style="width: 200px; float:left" id="z" type="number" placeholder="Z" step=".01" value="0">
-
+        
+                                <div style="display: block; margin: auto">
+                                    <input class="input coord-dim" id="x" type="number" placeholder="X" step=".01" value="0">
+                                    <input class="input coord-dim" id="y" type="number" placeholder="Y" step=".01" value="0">
+                                    <input class="input coord-dim" id="z" type="number" placeholder="Z" step=".01" value="0">
+                                </div>
                                 <div class="control">
-                                    <button class="edit-button" style="width: 200px; float:left">Edit</button>
+                                    <button class="v-button edit-button" id="modalBox_addsubmit"
+                                        style="width: 10rem; margin: 1rem;">Edit</button>
                                 </div>
-                            </p>
-                        </div>
+                            </div>
+        
+                        </section>
 
-                    </div>
-
-                    <div id="add-modal" class="modal is-responsive">
-                        <div class="modal-content">
-                            <span class="close">&times;</span>
-                            <p>
+                        <section id="add-modal" class="modal is-responsive is-centered">
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
                                 <p class="v-datalist-title"> Add Shape Menu</p>
-                                <div id="ShapeAdd" class="control">
-                                    <div class="select" style="float:left;">
-                                        <select name="" id="shape-add-dropdown" value="dropdown">
-                                            <option value="Tetrahedron">Tetrahedron</option>
-                                            <option value="Octahedron">Octahedron</option>
-                                            <option value="Dodecahedron">Dodecahedron</option>
-                                            <option value="Cube">Cube</option>
-                                </select>
-                                    </div>
+                                <div class="select" style="display: inline-block; margin: 0.5rem">
+                                    <select name="" id="shape-add-dropdown" value="dropdown">
+                                        <option value="Tetrahedron">Tetrahedron</option>
+                                        <option value="Octahedron">Octahedron</option>
+                                        <option value="Dodecahedron">Dodecahedron</option>
+                                        <option value="Cube">Cube</option>
+                                    </select>
                                 </div>
-                                </br>
-                                </br>
-
-                                <input class="input " style="width: 100px; float:left; margin: 0.25rem;" id="x1" type="number" placeholder="X" step=".01" value="0">
-                                <input class="input " style="width: 100px; float:left;margin: 0.25rem;" id="y1" type="number" placeholder="Y" step=".01" value="0">
-                                <input class="input " style="width: 100px; float:left;margin: 0.25rem;" id="z1" type="number" placeholder="Z" step=".01" value="0">
+        
+                                <div style="display: block; margin: auto">
+                                    <input class="input coord-dim" id="x1" type="number" placeholder="X" step=".01" value="0">
+                                    <input class="input coord-dim" id="y1" type="number" placeholder="Y" step=".01" value="0">
+                                    <input class="input coord-dim" id="z1" type="number" placeholder="Z" step=".01" value="0">
+                                </div>
                                 <div class="control">
-                                    <button class="add-button" id="modalBox_addsubmit" style="width: 10rem; float:left; margin: 1rem;">Add!</button>
+                                    <button class="v-button add-button" id="modalBox_addsubmit"
+                                        style="margin: 1rem;">Add!</button>
                                 </div>
-                            </p>
+                            </div>
+        
+                        </section>
+                    </p>
+                </div>
+                
+                <div class="v-datalist-row" id="top-border">
+                    <div class="v-datalist-title">Point Co-ordinates</div>
+
+                    <div style="display: flexbox;" class="field-div">
+                        X:
+                        <input class="input fields is-responsive is-small" style="width:20%" type="number" id="quantityx" step="0.01" value="3" placeholder="X"> Y:
+                        <input class="input fields is-responsive is-small" style="width:20%" type="number" id="quantityy" step="0.01" value="3" placeholder="Y"> Z:
+                        <input class="input fields is-responsive is-small" style="width:20%" type="number" id="quantityz" step="0.01" value="3" placeholder="Z">
+                    </div>
+
+                    <input class="v-button is-responsive is-small is-link" style="margin: 2px;" id="move-button" type="submit" value="Move">
+                </div>
+                <div class="v-datalist-row" id="top-border">
+                    <div class="v-datalist-title">Rotation Controls</div>
+                    <div style="margin: 1rem;">
+                        <div class="select" >
+                            <select name="" id="axis-change-dropdown" value="dropdown">
+                                <option value="0">X</option>
+                                <option value="1">Y</option>
+                                <option value="2">Z</option>
+                            </select>
+                        </div>
+                        <input class="v-button is-responsive is-small" style="margin: 0.5rem;" id="set-rotation-axis" type="submit" value="Change Axis">    
+                    </div>
+                    
+                    <div style="vertical-align: middle; margin: 1rem;">
+                        <div style="margin: 1rem; text-align: center;">
+                            <label for="frames">Frames</label>
+                            <input class="input is-responsive is-small" style="width:30%;" type="number" id="frames" min="1" value="100" step="1" placeholder="Frames">
                         </div>
 
-                    </div>
-                </p>
-
-                <div class="v-datalist-title" id="top-border">Point Co-ordinates</div>
-
-                <div style="display: flexbox;">
-                    X:
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="quantityx" step="0.01" value="3" placeholder="X"> Y:
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="quantityy" step="0.01" value="3" placeholder="Y"> Z:
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="quantityz" step="0.01" value="3" placeholder="Z">
-                </div>
-
-                <input class="v-button is-responsive is-small is-link" style="margin: 2px;" id="move-button" type="submit" value="Move">
-
-                <div class="v-datalist-title" id="top-border">Rotation Controls</div>
-
-                <div class="select" style="float:left;">
-                    <select name="" id="axis-change-dropdown" value="dropdown">
-                        <option value="0">X</option>
-                        <option value="1">Y</option>
-                        <option value="2">Z</option>
-                    </select>
-                </div>
-                <input class="v-button is-responsive is-small" style="margin: 0.5rem;" id="set-rotation-axis" type="submit" value="Change Axis">
-
-                <div style="vertical-align: middle; ">
-                    <div style="margin: 0.2rem; text-align: center;">
-                        <label for="quantity" style="margin: 0.5rem;">Frames</label>
-                        <input class="input is-responsive is-small" style="width:30%;" type="number" id="frames" min="1" value="100" step="1" placeholder="Frames">
+                        <div style="margin: 1rem; text-align: center;">
+                            <label for="theta">Theta<nbsp></nbsp></label>
+                            <input class="input is-responsive is-small" style="width:30%;" type="number" id="theta" value="180" step="0.01" placeholder="Theta">
+                        </div>
                     </div>
 
-                    <div style="margin: 0.2rem; text-align: center;">
-                        <label for="quantity" style="margin: 0.5rem;">Theta<nbsp></nbsp></label>
-                        <input class="input is-responsive is-small" style="width:30%;" type="number" id="theta" value="180" step="0.01" placeholder="Theta">
-                    </div>
                 </div>
-
-
+                
             </div>
         </aside>
 
@@ -174,44 +171,35 @@
 
         <div id="observations" class="column has-text-centered is-2-desktop is-5-tablet is-5-mobile right">
             <div class="v-datalist-container">
-                <div class="v-datalist-title">World and Instances</div>
-
-
-                <div class="v-datalist-title" id="top-border">Transformation Matrix</div>
-                <div style="display: flexbox;">
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-00" value="1" step="0.01" placeholder="X" readonly>
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-01" value="0" step="0.01" placeholder="X" readonly>
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-02" value="0" step="0.01" placeholder="X" readonly>
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-03" value="0" step="0.01" placeholder="X" readonly>
-                </div>
-                <div style="display: flexbox;">
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-10" value="0" step="0.01" placeholder="X" readonly>
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-11" value="1" step="0.01" placeholder="X" readonly>
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-12" value="0" step="0.01" placeholder="X" readonly>
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-13" value="0" step="0.01" placeholder="X" readonly>
-                </div>
-                <div style="display: flexbox;">
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-20" value="0" step="0.01" placeholder="X" readonly>
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-21" value="0" step="0.01" placeholder="X" readonly>
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-22" value="1" step="0.01" placeholder="X" readonly>
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-23" value="0" step="0.01" placeholder="X" readonly>
-                </div>
-                <div style="display: flexbox;">
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-30" value="0" step="0.01" placeholder="X" readonly>
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-31" value="0" step="0.01" placeholder="X" readonly>
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-32" value="0" step="0.01" placeholder="X" readonly>
-                    <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-33" value="1" step="0.01" placeholder="X" readonly>
-                </div>
-
-                <div class="v-datalist-row v-bold" id="output1"></div>
-                <div class="v-datalist-row v-bold" id="output2"></div>
                 <div class="v-datalist-row">
-                    <div class="v-table-wrap">
-                        <table id="table" class="table is-bordered is-fullwidth">
-
-                        </table>
+                    <div class="v-datalist-title">Transformation Matrix</div>
+                    <div style="display: flexbox;">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-00" value="1" step="0.01" placeholder="X" readonly>
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-01" value="0" step="0.01" placeholder="X" readonly>
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-02" value="0" step="0.01" placeholder="X" readonly>
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-03" value="0" step="0.01" placeholder="X" readonly>
                     </div>
+                    <div style="display: flexbox;">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-10" value="0" step="0.01" placeholder="X" readonly>
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-11" value="1" step="0.01" placeholder="X" readonly>
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-12" value="0" step="0.01" placeholder="X" readonly>
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-13" value="0" step="0.01" placeholder="X" readonly>
+                    </div>
+                    <div style="display: flexbox;">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-20" value="0" step="0.01" placeholder="X" readonly>
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-21" value="0" step="0.01" placeholder="X" readonly>
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-22" value="1" step="0.01" placeholder="X" readonly>
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-23" value="0" step="0.01" placeholder="X" readonly>
+                    </div>
+                    <div style="display: flexbox;">
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-30" value="0" step="0.01" placeholder="X" readonly>
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-31" value="0" step="0.01" placeholder="X" readonly>
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-32" value="0" step="0.01" placeholder="X" readonly>
+                        <input class="input is-responsive is-small" style="width:20%" type="number" id="matrix-33" value="1" step="0.01" placeholder="X" readonly>
+                    </div>
+    
                 </div>
+               
             </div>
         </div>
     </main>
