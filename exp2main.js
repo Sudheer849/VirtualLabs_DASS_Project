@@ -135,7 +135,7 @@ document.getElementById("add-shape-btn").onclick = function () {
         let xcoord = document.getElementById("x1").value;
         let ycoord = document.getElementById("y1").value;
         let zcoord = document.getElementById("z1").value;
-        no_of_shapes++;
+        noOfShapes++;
         if (document.getElementById("shape-add-dropdown").value === "Cube") {
             createCube(
                 xcoord,
@@ -144,8 +144,7 @@ document.getElementById("add-shape-btn").onclick = function () {
                 shapes,
                 scene,
                 point,
-                shapeVertex
-,
+                shapeVertex,
                 dragX,
                 dragY,
                 dragz
@@ -159,8 +158,7 @@ document.getElementById("add-shape-btn").onclick = function () {
                 shapes,
                 scene,
                 point,
-                shapeVertex
-,
+                shapeVertex,
                 dragX,
                 dragY,
                 dragz
@@ -174,8 +172,7 @@ document.getElementById("add-shape-btn").onclick = function () {
                 shapes,
                 scene,
                 point,
-                shapeVertex
-,
+                shapeVertex,
                 dragX,
                 dragY,
                 dragz
@@ -191,8 +188,7 @@ document.getElementById("add-shape-btn").onclick = function () {
                 shapes,
                 scene,
                 point,
-                shapeVertex
-,
+                shapeVertex,
                 dragX,
                 dragY,
                 dragz
@@ -214,7 +210,7 @@ let dragObject;
 let point = [];
 let shapeVertex = [];
 let dotList = [];
-let no_of_shapes = 0;
+let noOfShapes = 0;
 
 document.addEventListener("dblclick", ondblclick, false);
 // double click
@@ -240,7 +236,7 @@ function ondblclick(event) {
             scene.remove(line);
             for (let i = 0; i < intersects.length; i++) {
                 scene.remove(intersects[i].object);
-                no_of_shapes--;
+                noOfShapes--;
             }
         };
 
@@ -256,7 +252,7 @@ function ondblclick(event) {
                     let xcoord = document.getElementById("x").value;
                     let ycoord = document.getElementById("y").value;
                     let zcoord = document.getElementById("z").value;
-                    no_of_shapes++;
+                    noOfShapes++;
                     if (document.querySelector("select").value === "Cube") {
                         createCube(
                             xcoord,
@@ -265,8 +261,7 @@ function ondblclick(event) {
                             shapes,
                             scene,
                             point,
-                            shapeVertex
-,
+                            shapeVertex,
                             dragX,
                             dragY,
                             dragz
@@ -280,8 +275,7 @@ function ondblclick(event) {
                             shapes,
                             scene,
                             point,
-                            shapeVertex
-,
+                            shapeVertex,
                             dragX,
                             dragY,
                             dragz
@@ -295,8 +289,7 @@ function ondblclick(event) {
                             shapes,
                             scene,
                             point,
-                            shapeVertex
-,
+                            shapeVertex,
                             dragX,
                             dragY,
                             dragz
@@ -310,8 +303,7 @@ function ondblclick(event) {
                             shapes,
                             scene,
                             point,
-                            shapeVertex
-,
+                            shapeVertex,
                             dragX,
                             dragY,
                             dragz
@@ -345,8 +337,7 @@ document.addEventListener("pointermove", (event) => {
                     planeIntersect.z + shift.z
                 );
                 shapes[i].geometry.verticesNeedUpdate = true;
-                shapeVertex
-[i].position.set(
+                shapeVertex[i].position.set(
                     planeIntersect.x + shift.x - dragX[i],
                     planeIntersect.y + shift.y - dragY[i],
                     planeIntersect.z + shift.z - dragz[i]

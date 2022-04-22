@@ -36,6 +36,7 @@ let reset_button = document.getElementById("reset_button");
 let text = document.getElementById("text");
 let logic_text = document.getElementById("logic_text");
 let pointstat_text = document.getElementById("pointstat_text");
+let linestat_text = document.getElementById("linestat_text");
 const PointsX = [], PointsY = [], initialPointsX = [], initialPointsY = [], dupPointsX = [], dupPointsY = [], lineCoordinatesX = [], lineCoordinatesY = [];
 const prevPointsX = [], prevPointsY = [], prevdupPointsX = [], prevdupPointsY = [];
 for (let i = 0; i < noofLines; i++) {
@@ -107,6 +108,24 @@ function draw_line(x1, y1, x2, y2, width, color) {
     ctx.lineWidth = width;
     ctx.strokeStyle = color;
     ctx.stroke();
+}
+function choose_line() {
+    if (no_of_linesclipped == 0) {
+        linestat_text.innerHTML = "Clipping line 1";
+    }
+    else if (no_of_linesclipped == 1) {
+        linestat_text.innerHTML = "Clipping line 2";
+    }
+    else if (no_of_linesclipped == 2) {
+        linestat_text.innerHTML = "Clipping line 3";
+    }
+    else if (no_of_linesclipped == 3) {
+        linestat_text.innerHTML = "Clipping line 4";
+    }
+    else if (no_of_linesclipped == 4) {
+        linestat_text.innerHTML = "Clipping line 5";
+    }
+
 }
 function point(colour1, colour2, colour3) {
     for (let i = 0; i < noofLines; i++) {
@@ -180,18 +199,18 @@ function check() {
             is_clipped = 1;
             return;
         }
-        text.innerHTML = "<br><br>Line is Clipped";
-        logic_text.innerHTML = "";
-        pointstat_text.innerHTML = "";
+        // text.innerHTML = "<br><br>Line is Clipped";
+        // logic_text.innerHTML = "";
+        // pointstat_text.innerHTML = "";
         move_to_next_line();
     }
     if (current_point == 0 && first_point_status == 0) {
         current_point = second_point;
         first_point_status = 1;
-        console.log("Hello I am herjiwiw", no_of_iterations);
         transition_iteration = no_of_iterations;
     }
     if (status == 0) {
+        console.log(current_point);
         let eqornq = "==";
         if ((left_side & current_point) != 0) {
             eqornq = "!=";
@@ -205,6 +224,7 @@ function check() {
         else {
             pointstat_text.innerHTML = "Second Point is Selected";
         }
+        choose_line();
         if (is_dark == 0) {
             draw_line(topleft_rect_x, topleft_rect_y, topleft_rect_x, bottomright_rect_y, 2, "violet");
             is_dark = 1;
@@ -236,6 +256,7 @@ function check() {
         } else {
             pointstat_text.innerHTML = "Second Point is Selected";
         }
+        choose_line();
         if (is_dark == 0) {
             draw_line(bottomright_rect_x, topleft_rect_y, bottomright_rect_x, bottomright_rect_y, 2, "violet");
             is_dark = 1;
@@ -263,6 +284,7 @@ function check() {
         } else {
             pointstat_text.innerHTML = "Second Point is Selected";
         }
+        choose_line();
         if (is_dark == 0) {
             draw_line(topleft_rect_x, bottomright_rect_y, bottomright_rect_x, bottomright_rect_y, 2, "violet");
             is_dark = 1;
@@ -292,6 +314,7 @@ function check() {
         } else {
             pointstat_text.innerHTML = "Second Point is Selected";
         }
+        choose_line();
         if (is_dark == 0) {
             draw_line(topleft_rect_x, topleft_rect_y, bottomright_rect_x, topleft_rect_y, 2, "violet");
             is_dark = 1;
@@ -726,29 +749,70 @@ reset_button.addEventListener("click", () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.beginPath();
     ctx.rect(0, 0, canvas.width, canvas.height);
-    PointsX[currentLine] = initialPointsX[currentLine];
-    PointsY[currentLine] = initialPointsY[currentLine];
-    PointsX[(currentLine + 1) % noofLines] = initialPointsX[(currentLine + 1) % noofLines];
-    PointsY[(currentLine + 1) % noofLines] = initialPointsY[(currentLine + 1) % noofLines];
-    dupPointsX[currentLine] = PointsX[currentLine];
-    dupPointsY[currentLine] = PointsY[currentLine];
-    dupPointsX[(currentLine + 1) % noofLines] = PointsX[(currentLine + 1) % noofLines];
-    dupPointsY[(currentLine + 1) % noofLines] = PointsY[(currentLine + 1) % noofLines];
+    ctx.fillStyle = "black";
+    ctx.fill();
+    grid();
+    for (let i = 0; i < noofLines; i++) {
+        PointsX[i] = initialPointsX[i];
+        PointsY[i] = initialPointsY[i];
+        dupPointsX[i] = initialPointsX[i];
+        dupPointsY[i] = initialPointsY[i];
+    }
+    for (let i = 0; i < noofLines; i++) {
+        draw_line(PointsX[i], PointsY[i], PointsX[(i + 1) % noofLines], PointsY[(i + 1) % noofLines], 2, "white");
+    }
+    status = 0;
+    statusPrev = [];
+    statusPrev[0] = status;
+    currentLine = 0;
+    previousLine = 0;
+    //  prevPointsX = [], prevPointsY = [], prevdupPointsX = [], prevdupPointsY = [];
+    for (let i = 0; i < noofLines; i++) {
+        prevPointsX[i] = [];
+        prevPointsY[i] = [];
+        prevdupPointsX[i] = [];
+        prevdupPointsY[i] = [];
+    }
+    intersection_x, intersection_y, previousIntersection_x = [], previousIntersection_y = [];
+    first_point = 0;
+    second_point = 0;
+    if (PointsX[0] - topleft_rect_x < 0) {
+        first_point = first_point + Math.pow(2, 0);
+    }
+    if (PointsX[0] - bottomright_rect_x > 0) {
+        first_point = first_point + Math.pow(2, 1);
+    }
+    if (PointsY[0] - bottomright_rect_y > 0) {
+        first_point = first_point + Math.pow(2, 2);
+    }
+    if (PointsY[0] - topleft_rect_y < 0) {
+        first_point = first_point + Math.pow(2, 3);
+    }
+
+    if (PointsX[1] - topleft_rect_x < 0) {
+        second_point = second_point + Math.pow(2, 0);
+    }
+    if (PointsX[1] - bottomright_rect_x > 0) {
+        second_point = second_point + Math.pow(2, 1);
+    }
+    if (PointsY[1] - bottomright_rect_y > 0) {
+        second_point = second_point + Math.pow(2, 2);
+    }
+    if (PointsY[1] - topleft_rect_y < 0) {
+        second_point = second_point + Math.pow(2, 3);
+    }
     current_point = first_point;
     inside = 0; // 0000
     is_dark = 0;
     if_completed = 0;
     first_point_status = 0;
-    no_of_iterations = 0;
-    status = 0;
-    ctx.fillStyle = "black";
-    ctx.fill();
-    grid();
-    draw_line(PointsX[currentLine], PointsY[currentLine], PointsX[(currentLine + 1) % noofLines], PointsY[(currentLine + 1) % noofLines], 2, "white");
-    text.innerHTML = "";
-    logic_text.innerHTML = "";
-    pointstat_text.innerHTML = "";
     is_clipped = 0;
+    no_of_iterations = 0,
+        previousno_of_iterations = [];
+    transition_iteration = 0,
+        previoustransition_iteration = [];
+    no_of_linesclipped = 0;
+
     //
 });
 function resize(canvas) {
@@ -776,7 +840,6 @@ function previous_linechange() {
         }
     }
     findintersection(initialPointsX[currentLine], initialPointsX[(currentLine + 1) % noofLines], initialPointsY[currentLine], initialPointsY[(currentLine + 1) % noofLines], "white");
-    console.log("WHoooo");
     console.log(intersection_x, intersection_y, previousIntersection_x, previousIntersection_y);
     first_point_status = 1;
     if (currentLine == 0) {

@@ -261,7 +261,6 @@ spanEditModal.onclick = function () {
   modalEdit.style.display = "none";
 };
 
-// mouse drag
 document.addEventListener("pointermove", (event) => {
   const rect = renderer.domElement.getBoundingClientRect();
   const x = event.clientX - rect.left;
@@ -270,75 +269,56 @@ document.addEventListener("pointermove", (event) => {
   mouse.x = (x / container.clientWidth) * 2 - 1;
   mouse.y = (y / container.clientHeight) * -2 + 1;
   if (mouse.x < 1 && mouse.x > -1 && mouse.y < 1 && mouse.y > -1) {
-    raycaster.setFromCamera(mouse, camera);
-    if (isDragging && lock === 0) {
-      for (let i = 0; i < shapes.length; i++) {
-        raycaster.ray.intersectPlane(plane, planeIntersect);
-        shapes[i].geometry.vertices[0].set(
-          planeIntersect.x + shift.x,
-          planeIntersect.y + shift.y,
-          planeIntersect.z + shift.z
-        );
-        shapes[i].geometry.verticesNeedUpdate = true;
-        shapeVertex
-[i].position.set(
-          planeIntersect.x + shift.x - dragX[i],
-          planeIntersect.y + shift.y - dragY[i],
-          planeIntersect.z + shift.z - dragZ[i]
-        );
+      raycaster.setFromCamera(mouse, camera);
+      if (isDragging && lock === 0) {
+          for (let i = 0; i < shapes.length; i++) {
+              raycaster.ray.intersectPlane(plane, planeIntersect);
+              shapes[i].geometry.vertices[0].set(
+                  planeIntersect.x + shift.x,
+                  planeIntersect.y + shift.y,
+                  planeIntersect.z + shift.z
+              );
+              shapes[i].geometry.verticesNeedUpdate = true;
+              shapeVertex[i].position.set(
+                  planeIntersect.x + shift.x - dragX[i],
+                  planeIntersect.y + shift.y - dragY[i],
+                  planeIntersect.z + shift.z - dragZ[i]
+              );
+          }
+          raycaster.ray.intersectPlane(plane, planeIntersect);
+      } else if (isDragging) {
+          raycaster.ray.intersectPlane(plane, planeIntersect);
       }
-      raycaster.ray.intersectPlane(plane, planeIntersect);
-    } else if (isDragging) {
-      raycaster.ray.intersectPlane(plane, planeIntersect);
-    }
   }
 });
-
-// mouse click
-
 document.addEventListener("pointerdown", () => {
   switch (event.which) {
-    case 1:
-      //  Left mouse button pressed
-      const rect = renderer.domElement.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
+      case 1:
+          const rect = renderer.domElement.getBoundingClientRect();
+          const x = event.clientX - rect.left;
+          const y = event.clientY - rect.top;
 
-      mouse.x = (x / container.clientWidth) * 2 - 1;
-      mouse.y = (y / container.clientHeight) * -2 + 1;
-      pNormal.copy(camera.position).normalize();
-      plane.setFromNormalAndCoplanarPoint(pNormal, scene.position);
-      raycaster.setFromCamera(mouse, camera);
-      raycaster.ray.intersectPlane(plane, planeIntersect);
-      // shift.subVectors(dotList[0].geometry.getAttribute('position').array, planeIntersect);
-      let position = new THREE.Vector3(
-        shapeVertex
-[0].position.x,
-        shapeVertex
-[0].position.y,
-        shapeVertex
-[0].position.z
-      );
-      // position.x = shapeVertex
-[0].position.x;
-      // position.y = shapeVertex
-[0].position.y;
-      // position.z =  shapeVertex
-[0].position.z;
-
-      // console.log(position)
-      shift.subVectors(position, planeIntersect);
-      isDragging = true;
-      dragObject = shapes[shapes.length - 1];
-      break;
+          mouse.x = (x / container.clientWidth) * 2 - 1;
+          mouse.y = (y / container.clientHeight) * -2 + 1;
+          pNormal.copy(camera.position).normalize();
+          plane.setFromNormalAndCoplanarPoint(pNormal, scene.position);
+          raycaster.setFromCamera(mouse, camera);
+          raycaster.ray.intersectPlane(plane, planeIntersect);
+          let position = new THREE.Vector3(
+              shapeVertex[0].position.x,
+              shapeVertex[0].position.y,
+              shapeVertex[0].position.z
+          );
+          shift.subVectors(position, planeIntersect);
+          isDragging = true;
+          dragObject = shapes[shapes.length - 1];
+          break;
   }
 });
-// mouse release
 document.addEventListener("pointerup", () => {
   isDragging = false;
   dragObject = null;
 });
-
 // Slider Implementation
 // ---------------------------------------------------------------------------------------
 function movePoint(e) {
