@@ -1,10 +1,18 @@
 .page {
     overflow: hidden;
+} 
+
+.smol-font {
+   font-size: x-small; 
 }
 
 .v-datalist-container {
     height: 100%;
     padding: 0;
+}
+
+#disp-heading { 
+    margin: 0.5rem;
 }
 
 .v-instruction-container {
@@ -80,10 +88,6 @@
     overflow: hidden;
     /* background-color: rgb(0, 0, 0); */
     /* background-color: rgba(0, 0, 0, 0.4); */
-}
-
-#disp-heading { 
-    margin: 0.5rem;
 }
 
 .modal-content {

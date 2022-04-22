@@ -1,9 +1,18 @@
 .page {
     overflow: hidden;
+} 
+
+.smol-font {
+   font-size: x-small; 
 }
 
 .v-datalist-container {
     height: 100%;
+    padding: 0;
+}
+
+#disp-heading { 
+    margin: 0.5rem;
 }
 
 .v-canvas-container {
@@ -163,10 +172,6 @@
     size: 1rem;
 }
 
-.v-checkbox {
-    margin-bottom: 0.1rem;
-}
-
 .v-button {
     background-color: #04AA6D;
     border-radius: 0.5rem;
@@ -196,4 +201,24 @@
 #set-rotation-axis {
     background-color: #3298dc;
     border-radius: 0.5rem;
+}
+
+#checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#checkboxes label {
+    margin: 0.3rem auto;
+
+    display: flex;
+    align-items: flex-start;
+    flex: 40%;
+}
+
+#lock-v #xy-grid #xz-grid #yz-grid {
+    margin: auto 0.1rem;
+    padding: auto 0.1rem;
 }

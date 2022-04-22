@@ -1,5 +1,9 @@
 .page {
     overflow: hidden;
+} 
+
+.smol-font {
+   font-size: x-small; 
 }
 
 .v-datalist-container {
