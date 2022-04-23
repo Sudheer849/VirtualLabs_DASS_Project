@@ -33,9 +33,9 @@ slider.step =
     document.getElementById("frames").value;
 
 let final_pos = [
-    document.getElementById("finalx").value,
-    document.getElementById("finaly").value,
-    document.getElementById("finalz").value,
+    parseFloat(document.getElementById("finalx").value),
+    parseFloat(document.getElementById("finaly").value),
+    parseFloat(document.getElementById("finalz").value),
 ];
 
 let trans_matrix = new THREE.Matrix4();
@@ -383,9 +383,9 @@ document.addEventListener("pointerup", () => {
     dragObject = null;
 });
 moveButton.addEventListener("click", () => {
-    let x = document.getElementById("quantityx").value;
-    let y = document.getElementById("quantityy").value;
-    let z = document.getElementById("quantityz").value;
+    let x = parseFloat(document.getElementById("quantityx").value);
+    let y = parseFloat(document.getElementById("quantityy").value);
+    let z = parseFloat(document.getElementById("quantityz").value);
     let translate_M = new THREE.Matrix4();
     translate_M.makeTranslation(
         x - dotList[0].geometry.getAttribute("position").array[0],

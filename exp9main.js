@@ -278,6 +278,7 @@ function check() {
         if ((bottom_side & current_point) != 0) {
             eqornq = "!=";
         }
+        text.innerHTML = "<br> <br> Bottom edge is selected for clipping";
         logic_text.innerHTML = "0" + "1" + "0" + "0" + " " + "&" + " " + convertToBinary(current_point) + " " + eqornq + " " + "0";
         if (first_point_status == 0) {
             pointstat_text.innerHTML = "First Point is Selected";

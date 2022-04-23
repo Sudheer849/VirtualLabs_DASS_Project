@@ -58,9 +58,7 @@ let scene,
     dragY = [],
     dragZ = [],
     lock = 0,
-    dir = [],
-    
-    
+    dir = [],    
     arrowHelper = [];
 
 let trans_matrix = new THREE.Matrix4();
@@ -405,10 +403,8 @@ function movePoint(e) {
 
 document.getElementById("frames").onchange = function () {
     let new_value = document.getElementById("frames").value; // new value
-    var target = e.target ? e.target : e.srcElement;
-    let rot_angle =
-        (target.value * parseFloat(document.getElementById("theta").value)) /
-        target.max -
+    let target = document.getElementById("slider");
+    let rot_angle = (target.value * parseFloat(document.getElementById("theta").value)) / new_value -
         present_theta;
 
     let quat = new THREE.Quaternion();
@@ -453,6 +449,9 @@ document.getElementById("frames").onchange = function () {
     document.getElementById("matrix-33").value = trans_matrix.elements[15];
 
     present_theta += rot_angle;
+
+    document.getElementById("slider").max = new_value;
+    
 }
 
 document.getElementById("theta").onchange = function () {
