@@ -10,63 +10,61 @@
 </head>
 
 <body class="page" style="margin:1rem;">
+    <section class="columns is-centered is-flex column">
+        <div class="v-collapsible-instruction-container">
+            <div class="v-collapsible">Instructions</div>
+            <div id="procedure-message" class="v-content">
+                <li class="instr-font">
+                    The initial coordinates of the given triangle can be set in the point-coordinates section.
+                </li>
+                <li class="instr-font">
+                    The scaling factors can be changed in the x, y and z directions in the scaling factor section.
+                </li>
+                <li class="instr-font">
+                    The no. of frames for the animation may be changed in the Frames field.
+                </li>
+                <li class="instr-font">
+                    On moving the slider forward and backward, the triangle scales along the x, y and z directions
+                    by the specified scaling factors.
+                </li>
+                <li class="instr-font">
+                    We can observe the values of the transformation matrix changing with change in the position of
+                    the slider. This is the matrix with which the point’s homogeneous coordinates are multiplied to
+                    generate the new coordinates (that produces the scaling effect).
+                </li>
+                <li class="instr-font">
+                    We can move the slider forwards and backwards any number of times, change the no. of frames and
+                    the scaling factors in the X, Y and Z directions in between as well. The slider and animation
+                    adjusts itself accordingly.
+                </li>
+                <li class="instr-font">
+                    You can add new shapes by clicking on the “Add” button with options to select the type of shape
+                    and position. Multiple shapes may be added.
+                </li>
+                <li class="instr-font">
+                    Double click on the object to select it and enable the edit and delete buttons. Clicking on the
+                    edit button allows you to edit the object’s properties. Similarly, clicking on the delete button
+                    deletes the selected object.
+                </li>
+                <li class="instr-font">
+                    Check the corresponding checkboxes to display the xy-grid, yz-grid and xz-grid and similarly
+                    uncheck to remove them from view.
+                </li>
+                <li class="instr-font">
+                    Enabling the Lock Vertices option allows you to translate the whole simulation on left-clicking
+                    and dragging the cursor.
 
-    <div class="columns is-centered is-flex">
-        <div class="column has-text-centered">
-            <div class="v-collapsible-instruction-container">
-                <div class="v-collapsible">Instructions</div>
-                <div id="procedure-message" class="v-content">
-                    <li style="font-size: 0.9rem;">
-                        The initial coordinates of the given triangle can be set in the point-coordinates section.
-                    </li>
-                    <li style="font-size: 0.9rem;">
-                        The scaling factors can be changed in the x, y and z directions in the scaling factor section.
-                    </li>
-                    <li style="font-size: 0.9rem;">
-                        The no. of frames for the animation may be changed in the Frames field.
-                    </li>
-                    <li style="font-size: 0.9rem;">
-                        On moving the slider forward and backward, the triangle scales along the x, y and z directions
-                        by the specified scaling factors.
-                    </li>
-                    <li style="font-size: 0.9rem;">
-                        We can observe the values of the transformation matrix changing with change in the position of
-                        the slider. This is the matrix with which the point’s homogeneous coordinates are multiplied to
-                        generate the new coordinates (that produces the scaling effect).
-                    </li>
-                    <li style="font-size: 0.9rem;">
-                        We can move the slider forwards and backwards any number of times, change the no. of frames and
-                        the scaling factors in the X, Y and Z directions in between as well. The slider and animation
-                        adjusts itself accordingly.
-                    </li>
-                    <li style="font-size: 0.9rem;">
-                        You can add new shapes by clicking on the “Add” button with options to select the type of shape
-                        and position. Multiple shapes may be added.
-                    </li>
-                    <li style="font-size: 0.9rem;">
-                        Double click on the object to select it and enable the edit and delete buttons. Clicking on the
-                        edit button allows you to edit the object’s properties. Similarly, clicking on the delete button
-                        deletes the selected object.
-                    </li>
-                    <li style="font-size: 0.9rem;">
-                        Check the corresponding checkboxes to display the xy-grid, yz-grid and xz-grid and similarly
-                        uncheck to remove them from view.
-                    </li>
-                    <li style="font-size: 0.9rem;">
-                        Enabling the Lock Vertices option allows you to translate the whole simulation on left-clicking
-                        and dragging the cursor.
-
-                    </li>
-                </div>
+                </li>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="columns is-centered is-variable is-1-mobile is-flex is-flex-wrap-wrap workspace">
-        <div id="left" class="column is-2-desktop is-5-tablet is-5-mobile apparatus">
+    <main class="columns is-centered is-variable is-1-mobile is-flex is-flex-wrap-wrap workspace">
+        <aside id="left" class="column is-2-desktop is-5-tablet is-5-mobile apparatus">
             <div class="v-datalist-container">
-                <div class="v-datalist-title" id="disp-heading">Display Settings</div>
-                <div style="align-content: center;">
+                <div class="v-datalist-row">
+                    <div class="v-datalist-title" id="disp-heading">Display Settings</div>
+
                     <div id="checkboxes" style="margin-top:1rem">
                         <label id="lock-v" class="v-checkbox">
                             <input type="checkbox" id="lock-vertices-cb">
@@ -219,7 +217,7 @@
                 </div>
 
             </div>
-        </div>
+        </aside>
 
         <div class="column is-8-desktop is-10-tablet is-10-mobile exp">
             <div class="v-canvas-container" id="canvas-main">
@@ -278,11 +276,13 @@
             </div>
 
         </div>
-    </div>
+    </main>
 
     <input class="v-slider-full is-centered column exptwoslider is-fullwidth" id="slider" step="1" min="0" max="100"
         value="0" type="range">
 
+    
+    <script src="https://cdn.jsdelivr.net/gh/virtual-labs/virtual-style@0.0.8-b/js/script.js"></script>
     <script type="module" src="exp4main.js"></script>
 </body>
 

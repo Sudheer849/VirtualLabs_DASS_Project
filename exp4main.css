@@ -123,6 +123,7 @@
     margin: auto;
 }
 
+
 .v-datalist-title {
     border-bottom: 0;
 }
@@ -146,6 +147,7 @@
     background-color: #04AA6D;
     border-radius: 0.5rem;
     font-size: small;
+    margin: 1rem;
 }
 
 .instr-font {
